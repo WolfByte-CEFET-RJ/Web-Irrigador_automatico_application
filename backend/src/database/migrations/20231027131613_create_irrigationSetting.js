@@ -4,7 +4,6 @@ exports.up = function(knex) {
         table.increments("id").primary();
         table.string("name").notNullable();
         table.integer("userId").unsigned().references("id").inTable("user").onDelete("CASCADE");
-        //table.foreign("userId").references("id").inTable("user").onDelete("CASCADE");
     })
 };
 

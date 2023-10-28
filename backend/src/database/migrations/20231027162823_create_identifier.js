@@ -3,7 +3,6 @@ exports.up = function(knex) {
         table.increments("id").primary();
         table.string("value").notNullable();
         table.integer("gardenId").unsigned().references("id").inTable("garden");
-        //table.foreign("gardenId").references("id").inTable("garden");
     })
 };
 
