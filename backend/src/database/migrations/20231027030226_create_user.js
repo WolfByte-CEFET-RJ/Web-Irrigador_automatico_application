@@ -2,11 +2,11 @@
 exports.up = function(knex) {
     return knex.schema.createTable("user", (table) => {
         table.increments("id").primary();
-        table.string("name").notNull();
-        table.string("email").notNull().unique();
-        table.string("passsword").notNull();
-        table.boolean("humidityNotification").notNull();
-        table.boolean("waterNotification").notNull();
+        table.string("name").notNullable();
+        table.string("email").notNullable().unique();
+        table.string("password").notNullable();
+        table.boolean("humidityNotification").notNullable();
+        table.boolean("waterNotification").notNullable();
     })
 };
 

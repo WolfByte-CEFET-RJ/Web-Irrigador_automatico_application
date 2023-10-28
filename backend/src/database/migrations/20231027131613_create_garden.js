@@ -4,7 +4,7 @@ exports.up = function(knex) {
         table.increments("id").primary();
         table.string("name").notNullable();
         table.string("description");
-        table.string("identifier").notNull(); //rever lógica
+        table.string("identifier").notNullable(); //rever lógica
         table.integer("userId").references("id").inTable("user").onDelete("CASCADE");
         table.integer("configId").references("id").inTable("irrigationSettings").onDelete("CASCADE");
     })
