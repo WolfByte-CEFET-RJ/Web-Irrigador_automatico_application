@@ -3,7 +3,8 @@ exports.up = function(knex) {
     return knex.schema.createTable("irrigationHistory", (table) => {
         table.increments("id").primary();
         table.timestamp("date").notNullable();
-        table.integer("gardenId").references("id").inTable("garden").onDelete("CASCADE");
+        table.integer("gardenId").unsigned().references("id").inTable("garden").onDelete("CASCADE");
+        //table.foreign("gardenId").references("id").inTable("garden").onDelete("CASCADE");
     })
 };
 

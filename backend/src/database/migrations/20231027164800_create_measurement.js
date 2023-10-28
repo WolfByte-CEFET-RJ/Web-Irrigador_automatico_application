@@ -4,8 +4,9 @@ exports.up = function(knex) {
     table.increments("id").primary();
     table.string("measurement").notNullable();
     table.timestamp("date").notNullable();
-    table.integer("sensorId").unsigned().notNullable();
-    table.integer("userId").references("id").inTable("garden").onDelete("CASCADE");
+    table.integer("sensorId").unsigned()
+    table.integer("userId").unsigned().notNullable().references("id").inTable("garden").onDelete("CASCADE");;
+    //table.foreign("userId").references("id").inTable("garden").onDelete("CASCADE");
   })
 };
 

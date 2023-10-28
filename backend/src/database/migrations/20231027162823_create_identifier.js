@@ -2,7 +2,8 @@ exports.up = function(knex) {
     return knex.schema.createTable("identifier", (table) => {
         table.increments("id").primary();
         table.string("value").notNullable();
-        table.integer("gardenId").references("id").inTable("garden").defaultTo(null);
+        table.integer("gardenId").unsigned().references("id").inTable("garden");
+        //table.foreign("gardenId").references("id").inTable("garden");
     })
 };
 
