@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     marginTop: 20,
-    marginBottom: 70,
+    marginBottom: 40,
   },
   return_button_container:{
     // borderColor: 'red',

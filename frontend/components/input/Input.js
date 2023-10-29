@@ -1,24 +1,43 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text } from 'react-native';
+import { View, TextInput, Text, KeyboardAvoidingView } from 'react-native';
 import { styles } from './sytles'
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-const Input = ({ label }) => {
+
+const Input = ({ label, isPassword }) => {
   const [inputText, setInputText] = useState('');
 
   const handleInputChange = (text) => {
     setInputText(text);
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Testets</Text>
+      <View style={styles.label_container}>
+        <Text style={styles.label}>{label}</Text>
+      </View>
+
       <TextInput
         style={styles.input}
         placeholder={label}
         placeholderTextColor={"rgba(64,81,59,0.6)"} 
         onChangeText={handleInputChange}
         value={inputText}
+        secureTextEntry={isPassword && !showPassword}
       />
+      {
+        isPassword && (
+          <Ionicons 
+            style={styles.icon} 
+            name={showPassword ? 'eye-off-outline' : 'eye-outline'} 
+            size={24} 
+            color={'#609966'}
+            onPress={() => setShowPassword(!showPassword)}
+            />
+        )
+      }
     </View>
   );
 };

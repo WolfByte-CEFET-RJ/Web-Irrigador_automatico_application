@@ -6,10 +6,7 @@ import { styles } from './styles'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function SignUp(){
-    const handleButtonPress = () => {
-        // Lógica a ser executada quando o botão for pressionado
-        console.log('Botão pressionado!');
-      };
+
   return(
     <View style={styles.cadastro_container}>
       <StatusBar/>
@@ -28,13 +25,13 @@ export default function SignUp(){
         </View>
         <View style={styles.input_container}>
           {/* Inputs */}
-          <Input label="Nome"/>
+          <Input label="Nome" />
           <Input label="E-mail"/>
-          <Input label="Senha"/>
-          <Input label="Confirme sua senha"/>
+          <Input label="Senha" isPassword={true}/>
+          <Input label="Confirme sua senha" isPassword={true}/>
         </View>
         <View style={styles.button_container}>
-          <Button onPress={handleButtonPress} title="Cadastrar"/>
+          <Button title="Cadastrar"/>
         </View>
       </View>
     </View>
