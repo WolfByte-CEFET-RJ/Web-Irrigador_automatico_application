@@ -44,5 +44,23 @@ module.exports = {
         })
 
         return "Usuário cadastrado!"
-    }
+    },
+    async updateUser(userId, userData) {
+        const user = await this.getOneUser(userId); 
+        if (!user){
+            throw new Error('Este usuário não existe!')
+        }
+        return knex('user').where({ id: userId }).update(userData);
+      
+       
+      },
+      async deleteUser(userId) {
+        
+        const user = await this.getOneUser(userId); 
+        if (!user){
+            throw new Error('Este usuário não existe!')
+        }
+        return knex('user').where({ id: userId }).del();
+      
+      }
 };

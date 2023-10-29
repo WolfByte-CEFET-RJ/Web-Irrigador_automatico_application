@@ -4,7 +4,7 @@ exports.up = function(knex) {
     table.increments("id").primary();
     table.string("measurement").notNullable();
     table.timestamp("date").notNullable();
-    table.integer("sensorId").unsigned()
+    table.integer("sensorId").unsigned().references("id").inTable("sensor").onDelete("CASCADE");
     table.integer("userId").unsigned().notNullable().references("id").inTable("garden").onDelete("CASCADE");
   })
 };

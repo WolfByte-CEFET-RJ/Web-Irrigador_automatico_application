@@ -27,5 +27,32 @@ module.exports = {
         } catch (error) {
           return res.status(400).json({message: error.message});
         }
+    },
+    async updateUser(req, res) {
+        const { id } = req.params;
+        const userData = req.body;
+        try {
+           
+            const user = await userService.updateUser(id, userData);
+            if(user){
+                res.json({message: 'Usuário atualizado com sucesso'})
+            }
+
+        } catch (error) {
+            return res.status(400).json({message: error.message});
+        }
+    },
+    async deleteUser(req, res) {
+        const { id } = req.params;
+        try {
+          
+            const user = await userService.deleteUser(id);
+            if(user){
+                res.json({message: 'Usuário deletado com sucesso!'})
+            }
+
+        } catch (error) {
+            return res.status(400).json({message: error.message});
+        }
     }
 };
