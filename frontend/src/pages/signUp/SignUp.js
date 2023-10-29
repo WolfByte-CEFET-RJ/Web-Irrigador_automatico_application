@@ -1,12 +1,15 @@
-import { View, Text, Image, Alert } from "react-native";
+import { View, Text, Image, Alert, TouchableOpacity } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import Input from '../../components/input/Input';
 import Button from "../../components/button/Button";
 import { styles } from './styles'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from "react";
+import { useNavigation } from '@react-navigation/native';
 
 export default function SignUp(){
+
+  const navigation = useNavigation();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -30,7 +33,7 @@ export default function SignUp(){
       confirmPassword,
     }
     console.log(data)
-    
+
   }
 
   return(
@@ -42,7 +45,9 @@ export default function SignUp(){
       <View style={styles.form_container}>
         <View style={styles.header_container}>
           <View style={styles.return_button_container}>
-            <Ionicons name="arrow-back-outline" size={24}/>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Ionicons name="arrow-back-outline" size={24}/>
+            </TouchableOpacity>
           </View>
           <View style={styles.slogan_container}>
             <Text style={styles.app_name}>SmartGarden</Text>
