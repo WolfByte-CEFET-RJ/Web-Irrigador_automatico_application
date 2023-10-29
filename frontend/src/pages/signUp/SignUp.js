@@ -40,7 +40,7 @@ export default function SignUp(){
     <View style={styles.cadastro_container}>
       <StatusBar/>
       <View style={styles.logo_container}>
-        <Image style={styles.logo} source={require('../../assets/android-chrome-192x192.png')}/>
+        <Image style={styles.logo} source={require('../../../assets/android-chrome-192x192.png')}/>
       </View>
       <View style={styles.form_container}>
         <View style={styles.header_container}>
