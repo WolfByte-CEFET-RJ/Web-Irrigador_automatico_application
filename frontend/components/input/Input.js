@@ -4,12 +4,12 @@ import { styles } from './sytles'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 
-const Input = ({ label, isPassword }) => {
-  const [inputText, setInputText] = useState('');
+const Input = ({ label, isPassword, value, onChangeText }) => {
+  // const [inputText, setInputText] = useState('');
 
-  const handleInputChange = (text) => {
-    setInputText(text);
-  };
+  // const handleInputChange = (text) => {
+  //   setInputText(text);
+  // };
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -23,8 +23,8 @@ const Input = ({ label, isPassword }) => {
         style={styles.input}
         placeholder={label}
         placeholderTextColor={"rgba(64,81,59,0.6)"} 
-        onChangeText={handleInputChange}
-        value={inputText}
+        onChangeText={onChangeText}
+        value={value}
         secureTextEntry={isPassword && !showPassword}
       />
       {
