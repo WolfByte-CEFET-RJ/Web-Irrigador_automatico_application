@@ -45,7 +45,7 @@ export default function SignUp(){
       <View style={styles.form_container}>
         <View style={styles.header_container}>
           <View style={styles.return_button_container}>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
               <Ionicons name="arrow-back-outline" size={24}/>
             </TouchableOpacity>
           </View>
