@@ -5,9 +5,9 @@ const yup = require("yup");
 
 module.exports = {
     async login(email, password){
-        userValidation = yup.object({
+        const userValidation = yup.object({
             email: yup.string().email("O email inserido não está em um formato válido."),
             password: yup.string()
-        })
+        });
     }
 }
