@@ -2,6 +2,7 @@ const { compareSync } = require("bcrypt");
 const knex = require("../database/");
 const jwt = require("jsonwebtoken");
 const yup = require("yup");
+require("dotenv").config();
 
 module.exports = {
     async login(email, password){
@@ -12,7 +13,7 @@ module.exports = {
 
         await userValidation.validate({email, password});
 
-        const user = (await knex("user").select("email", "password").where({email}).first());
+        const user = (await knex("user").select("id", "name", "email", "password").where({email}).first());
 
         if (!user){
             throw new Error("O email informado não foi cadastrado!");
@@ -21,5 +22,13 @@ module.exports = {
         if (!(compareSync(password, user.password))){
             throw new Error("Senha incorreta!");
         }
+
+        const token = jwt.sign(
+            {id: user.id, name: user.name, email: user.email}, 
+            process.env.TOKEN_KEY,
+            {expiresIn: '48h'}
+        );
+
+        return token;
     }
 }
