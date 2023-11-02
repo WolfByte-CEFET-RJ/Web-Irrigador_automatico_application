@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   },
   logo_container:{
     marginBottom: 40,
-    marginTop: 200,
+    marginTop: 100,
   },
   logo: {
     width: 50,
@@ -28,14 +28,13 @@ export const styles = StyleSheet.create({
     // borderColor: 'red',
     // borderWidth: 1,
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     marginTop: 20,
     marginBottom: 40,
   },
   return_button_container:{
-    // borderColor: 'red',
-    // borderWidth: 1,
-    
+    position: 'absolute',
+    left: '5%',
   },
   slogan_container:{
     // borderColor: 'red',
@@ -44,7 +43,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 55,
   },
   app_name:{
     fontSize: 24,

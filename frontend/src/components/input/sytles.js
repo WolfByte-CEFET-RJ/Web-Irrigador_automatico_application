@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
   },
   icon:{
     position: 'absolute',
-    right: 60,
-    bottom: 15,
+    right: '15%',
+    bottom: '17%',
   },
 });

@@ -24,7 +24,7 @@ export default function SignUp(){
       alert('Senhas não coincidem');
     }
     else {
-      console.log('foi para a home');
+      navigation.navigate('SignIn');
     }
 
     const data = {
