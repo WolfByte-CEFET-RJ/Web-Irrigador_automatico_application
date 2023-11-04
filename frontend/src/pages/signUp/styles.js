@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   form_container:{
     width: '100%',
     height: '90%',
-    backgroundColor: 'rgba(157, 192, 139, 0.26)',
+    backgroundColor: '#d9e5c3',
     borderTopLeftRadius: 15, 
     borderTopRightRadius: 15,
   },

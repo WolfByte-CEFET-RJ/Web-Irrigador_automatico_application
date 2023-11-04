@@ -37,15 +37,15 @@ services:
     #     - backend
     #   build:
     #     context: ./frontend
-    #     dockerfile: dockerfile
+    #     dockerfile: Dockerfile
     #   ports:
-    #     - "3000:3000"
+    #     - "19006:19006"
     #   volumes:
     #     - ./frontend:/home/app
     #   environment:
     #     HOST: "0.0.0.0"
     #     PORT: "3000"
-    #     API_URL: "backend:5000"
+    #     API_URL: "http://backend:5000"
 
 volumes:
   datalake:
