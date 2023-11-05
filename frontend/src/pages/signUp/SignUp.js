@@ -16,14 +16,21 @@ export default function SignUp(){
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
+  const [humidityNotification, setHumidityNotification] = useState(1);
+  const [waterNotification, setWaterNotification] = useState(1);
+
 
   const handleSubmit = async () => {
 
     const data = {
       name,
       email,
-      confirmPassword,
+      password,
+      humidityNotification,
+      waterNotification,
     }
+
+    console.log(data);
 
     if(name === '' || email === '' || password === '' || confirmPassword === '') {
       alert('Preencha todos os campos');
@@ -33,13 +40,16 @@ export default function SignUp(){
     }
     else {
       try { 
-        const response = await axios.post('URL', data) //solicitação POST (criar dados) para a URL do backend
+        const response = await axios.post('http://localhost:3000/user', data) //solicitação POST (criar dados) para a URL do backend
         console.log(response.data);
-        navigation.navigate('Home'); //usuário cadastrado com sucesso
+        Alert.alert('Sucesso', 'Usuário cadastrado');
+        // navigation.navigate('Home'); //usuário cadastrado com sucesso -> vai para a Home
       }
       catch (error) {
         //caso ocorra um erro na solicitação
         //mensagem de erro -> usuário já cadastrado
+        Alert.alert('Erro', 'Usuário já cadastrado');
+        console.log(error, 'Usuário já cadastrado');
       }
     }
 
