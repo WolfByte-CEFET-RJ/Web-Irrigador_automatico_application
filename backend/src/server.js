@@ -1,14 +1,15 @@
-const express = require('express')
-const cors = require('cors')
-const routes = require('./routes')
-const app = express()
+const express = require('express');
+const cors = require('cors');
+const routes = require('./routes');
+const app = express();
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use("/", routes);
 
-const port = 3000
+const port = process.env.PORT;
+const host = process.env.HOST;
 
-app.listen(port, () => {
-  console.log(`App listening on port ${port}`)
+app.listen(port || 5000, host, () => {
+  console.log(`App listening on port ${port}`);
 })

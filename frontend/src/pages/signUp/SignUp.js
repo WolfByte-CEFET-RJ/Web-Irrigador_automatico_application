@@ -52,7 +52,6 @@ export default function SignUp(){
         console.log(error, 'Usuário já cadastrado');
       }
     }
-
   }
 
   return(
