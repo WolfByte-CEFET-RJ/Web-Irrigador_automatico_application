@@ -6,6 +6,7 @@ import { styles } from './styles'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
 
 export default function SignUp(){
 
@@ -16,7 +17,14 @@ export default function SignUp(){
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+
+    const data = {
+      name,
+      email,
+      confirmPassword,
+    }
+
     if(name === '' || email === '' || password === '' || confirmPassword === '') {
       alert('Preencha todos os campos');
     }
@@ -24,15 +32,16 @@ export default function SignUp(){
       alert('Senhas não coincidem');
     }
     else {
-      navigation.navigate('SignIn');
+      try { 
+        const response = await axios.post('URL', data) //solicitação POST (criar dados) para a URL do backend
+        console.log(response.data);
+        navigation.navigate('Home'); //usuário cadastrado com sucesso
+      }
+      catch (error) {
+        //caso ocorra um erro na solicitação
+        //mensagem de erro -> usuário já cadastrado
+      }
     }
-
-    const data = {
-      name,
-      email,
-      confirmPassword,
-    }
-    console.log(data)
 
   }
 
