@@ -6,6 +6,7 @@ import { styles } from './styles'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
 
 export default function SignUp(){
 
@@ -15,8 +16,22 @@ export default function SignUp(){
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
+  const [humidityNotification, setHumidityNotification] = useState(1);
+  const [waterNotification, setWaterNotification] = useState(1);
 
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
+
+    const data = {
+      name,
+      email,
+      password,
+      humidityNotification,
+      waterNotification,
+    }
+
+    console.log(data);
+
     if(name === '' || email === '' || password === '' || confirmPassword === '') {
       alert('Preencha todos os campos');
     }
@@ -24,15 +39,19 @@ export default function SignUp(){
       alert('Senhas não coincidem');
     }
     else {
-      navigation.navigate('SignIn');
+      try { 
+        const response = await axios.post('http://localhost:3000/user', data) //solicitação POST (criar dados) para a URL do backend
+        console.log(response.data);
+        Alert.alert('Sucesso', 'Usuário cadastrado');
+        // navigation.navigate('Home'); //usuário cadastrado com sucesso -> vai para a Home
+      }
+      catch (error) {
+        //caso ocorra um erro na solicitação
+        //mensagem de erro -> usuário já cadastrado
+        Alert.alert('Erro', 'Usuário já cadastrado');
+        console.log(error, 'Usuário já cadastrado');
+      }
     }
-
-    const data = {
-      name,
-      email,
-      confirmPassword,
-    }
-    console.log(data)
 
   }
 

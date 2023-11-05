@@ -31,9 +31,10 @@ export const styles = StyleSheet.create({
   },
   input_container:{
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: '100%',
     
+    borderColor: 'blue',
+    borderWidth: 1,
   },
   remember_forgot:{
     display: 'flex',

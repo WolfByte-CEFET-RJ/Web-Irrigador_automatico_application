@@ -5,19 +5,19 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EDF1D6',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   logo_container:{
     marginBottom: 40,
-    marginTop: 100,
+    marginTop: 50,
   },
   logo: {
     width: 50,
     height: 50,
   },
   form_container:{
+    flex: 1,
     width: '100%',
-    height: '90%',
     backgroundColor: 'rgba(157, 192, 139, 0.26)',
     borderTopLeftRadius: 15, 
     borderTopRightRadius: 15,
@@ -48,6 +48,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight:  'bold',
     color: '#40513B',
+    // fontFamily: 'Montserrat-Regular',  
   },
   app_slogan:{
     fontSize: 12,
@@ -63,5 +64,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 20,
   },
 });
