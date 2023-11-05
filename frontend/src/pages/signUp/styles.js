@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight:  'bold',
     color: '#40513B',
-    // fontFamily: 'Montserrat-Regular',  
+    //fontFamily: 'Montserrat-Regular',  
   },
   app_slogan:{
     fontSize: 12,
