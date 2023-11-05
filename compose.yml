@@ -32,20 +32,20 @@ services:
         DB_PASSWORD: ${DB_PASSWORD}
         
 
-    frontend:
-      depends_on:
-        - backend
-      build:
-        context: ./frontend
-        dockerfile: Dockerfile
-      ports:
-        - "3000:3000"
-      volumes:
-        - ./frontend:/home/app
-      environment:
-        HOST: "0.0.0.0"
-        PORT: "3000"
-        API_URL: "backend:5000"
+    # frontend:
+    #   depends_on:
+    #     - backend
+    #   build:
+    #     context: ./frontend
+    #     dockerfile: dockerfile
+    #   ports:
+    #     - "3000:3000"
+    #   volumes:
+    #     - ./frontend:/home/app
+    #   environment:
+    #     HOST: "0.0.0.0"
+    #     PORT: "3000"
+    #     API_URL: "backend:5000"
 
 volumes:
   datalake:
