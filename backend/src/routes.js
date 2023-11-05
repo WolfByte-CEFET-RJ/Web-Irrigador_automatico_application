@@ -1,15 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('./controllers/userController');
-
+const authController = require('./controllers/authController');
+const auth = require('./middleware/auth');
 router
-      .get('/', async (req, res) => {
-        res.send('Hello World!')
-      })
-      .get('/user/:id?', userController.getUsers)
+      .get('/user/:id?',auth, userController.getUsers)
+
       .post('/user', userController.createUser)
-      .patch('/user/:id', userController.updateUser)
-      .delete('/user/:id', userController.deleteUser);
+      .post('/login', authController.login)
+
+      .patch('/user',auth, userController.updateUser)
+
+      .delete('/user/',auth, userController.deleteUser)
       
 
 module.exports = router;

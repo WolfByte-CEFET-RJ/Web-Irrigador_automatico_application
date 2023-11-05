@@ -29,7 +29,9 @@ module.exports = {
         }
     },
     async updateUser(req, res) {
-        const { id } = req.params;
+
+        const id = req.user_id;
+       
         const userData = req.body;
         try {
            
@@ -43,7 +45,8 @@ module.exports = {
         }
     },
     async deleteUser(req, res) {
-        const { id } = req.params;
+        const id = req.user_id;
+
         try {
           
             const user = await userService.deleteUser(id);
