@@ -46,12 +46,17 @@ module.exports = {
         return "Usuário cadastrado!"
     },
     async updateUser(userId, userData) {
+        await userSchema.validate(userData, {abortEarly: false});
         const user = await this.getOneUser(userId); 
         if (!user){
             throw new Error('Este usuário não existe!')
         }
-        return knex('user').where({ id: userId }).update(userData);
-      
+
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash(userData.password, salt);
+
+        return await knex('user').where({ id: userId }).update({name: userData.name, email: userData.email, password: hash, humidityNotification: userData.humidityNotification, waterNotification: userData.waterNotification} );
+        
        
       },
       async deleteUser(userId) {
