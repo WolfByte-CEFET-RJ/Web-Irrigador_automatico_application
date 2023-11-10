@@ -24,7 +24,21 @@ export const styles = StyleSheet.create({
   writeTaskWrapper:{
     
   },
-  input: {
+  inputLogin: {
+    height: 40,
+    backgroundColor: '#EDF1D6',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingLeft: 60,
+    width: '77%',
+    height: 60,
+    padding: 10,
+    color: 'rgba(64,81,59,0.6)',
+    borderColor: "#609966",
+    borderWidth: 2,
+    fontWeight: 'bold',
+  },
+  inputCadastro: {
     height: 40,
     backgroundColor: '#EDF1D6',
     borderRadius: 8,
@@ -33,10 +47,16 @@ export const styles = StyleSheet.create({
     height: 60,
     padding: 10,
     color: 'rgba(64,81,59,0.6)',
+    fontWeight: 'bold',
   },
-  icon:{
+  iconCadastro:{
     position: 'absolute',
     right: '15%',
     bottom: '17%',
+  },
+  iconLogin:{
+    position: 'absolute',
+    left: '15%',
+    bottom: '21%',
   },
 });

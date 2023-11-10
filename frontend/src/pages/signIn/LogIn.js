@@ -27,8 +27,8 @@ const LogIn = () => {
       </View>
       <Image style={styles.logo} source={require('../../../assets/android-chrome-512x512.png')}/>
       <View style={styles.input_container}>
-        <Input label="E-mail" value={email} onChangeText={text=>setEmail(text)}/>
-        <Input label="Senha" value={password} onChangeText={text=>setPassword(text)} isPassword={true}/>
+        <Input placeHolder="Insera o seu email" value={email} onChangeText={text=>setEmail(text)} isLogin={true} isEmail={true}/>
+        <Input placeHolder="Insera sua senha" value={password} onChangeText={text=>setPassword(text)} isPassword={true} isLogin={true} isEmail={false}/>
       </View>
       <View style={styles.remember_forgot}>
         <Text style={styles.forgot_password}>Esqueceu a senha?</Text>

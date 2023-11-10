@@ -4,7 +4,7 @@ import { styles } from './sytles'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 
-const Input = ({ label, isPassword, value, onChangeText }) => {
+const Input = ({ label, isPassword, value, onChangeText, isLogin, isEmail, placeHolder }) => {
   // const [inputText, setInputText] = useState('');
 
   // const handleInputChange = (text) => {
@@ -20,8 +20,8 @@ const Input = ({ label, isPassword, value, onChangeText }) => {
         </View>
 
         <TextInput
-          style={styles.input}
-          placeholder={label}
+          style={isLogin ? styles.inputLogin : styles.inputCadastro}
+          placeholder={placeHolder}
           placeholderTextColor={"rgba(64,81,59,0.6)"} 
           onChangeText={onChangeText}
           value={value}
@@ -30,8 +30,19 @@ const Input = ({ label, isPassword, value, onChangeText }) => {
         {
           isPassword && (
             <Ionicons 
-              style={styles.icon} 
+              style={styles.iconCadastro} 
               name={showPassword ? 'eye-off-outline' : 'eye-outline'} 
+              size={24} 
+              color={'#609966'}
+              onPress={() => setShowPassword(!showPassword)}
+              />
+          )
+        }
+        {
+          isLogin && (
+            <Ionicons 
+              style={styles.iconLogin} 
+              name={isEmail ? "mail" : "lock"} 
               size={24} 
               color={'#609966'}
               onPress={() => setShowPassword(!showPassword)}

@@ -1,4 +1,4 @@
-const { compareSync } = require("bcrypt");
+const { compareSync } = require("bcryptjs");
 const knex = require("../database/");
 const jwt = require("jsonwebtoken");
 const yup = require("yup");

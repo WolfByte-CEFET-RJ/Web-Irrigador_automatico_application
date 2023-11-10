@@ -74,10 +74,10 @@ export default function SignUp(){
         </View>
         <View style={styles.input_container}>
           {/* Inputs */}
-          <Input label="Nome" value={name} onChangeText={text=>setName(text)}/>
-          <Input label="E-mail" value={email} onChangeText={text=>setEmail(text)}/>
-          <Input label="Senha" value={password} onChangeText={text=>setPassword(text)} isPassword={true}/>
-          <Input label="Confirme sua senha" value={confirmPassword} onChangeText={text=>setconfirmPassword(text)} isPassword={true}/>
+          <Input label="Nome" placeHolder="Digite seu nome" value={name} onChangeText={text=>setName(text)}/>
+          <Input label="E-mail" placeHolder="Digite um email" value={email} onChangeText={text=>setEmail(text)}/>
+          <Input label="Senha" placeHolder="Digite uma senha" value={password} onChangeText={text=>setPassword(text)} isPassword={true}/>
+          <Input label="Confirme sua senha" placeHolder="Confirme sua senha" value={confirmPassword} onChangeText={text=>setconfirmPassword(text)} isPassword={true}/>
         </View>
         <View style={styles.button_container}>
           <Button title="Cadastrar" onPress={()=>handleSubmit()}/>

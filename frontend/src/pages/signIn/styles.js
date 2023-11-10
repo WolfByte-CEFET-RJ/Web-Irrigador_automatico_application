@@ -33,16 +33,16 @@ export const styles = StyleSheet.create({
     display: 'flex',
     width: '100%',
     
-    borderColor: 'blue',
-    borderWidth: 1,
+    // borderColor: 'blue',
+    // borderWidth: 1,
   },
   remember_forgot:{
     display: 'flex',
     flexDirection:'row',
     justifyContent: 'space-between',
     width: '77%',
-    borderColor: 'red',
-    borderWidth: 1,
+    // borderColor: 'red',
+    // borderWidth: 1,
   },
   forgot_password:{
     fontWeight:'bold',
