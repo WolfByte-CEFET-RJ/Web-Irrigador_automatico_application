@@ -1,26 +1,43 @@
 require('dotenv').config();
 const mqtt = require('mqtt')
-const client = mqtt.connect("mqtt://localhost") 
-const topicName = 'test/connection2' 
+//const client = mqtt.connect("mqtt://localhost") 
 
-/*const clientId = 'emqx_nodejs_' + Math.random().toString(16).substring(2, 8)
-const username = 'emqx_test'
-const password = 'emqx_test'
-
-const clientTest = mqtt.connect('mqtt://broker.emqx.io:1883', {
+const { connectOptions } = require('../use_mqtts.js')
+const clientId = 'teste_nodejs_' + Math.random().toString(16).substring(2, 8)
+const options = {
   clientId,
-  username,
-  password,
-  // ...other options
-})*/
+  clean: true,
+  connectTimeout: 4000,
+  username: 'backend',
+  password: 'backend123',
+  reconnectPeriod: 1000,
+  rejectUnauthorized: true,
+}
+
+const {protocol, host, port} = connectOptions
+
+let connectUrl = `${protocol}://${host}:${port}`
+
+const client = mqtt.connect(connectUrl, options)
+
+const topicName = 'test/sensor'
+const payload = '{"message": "Hello World"}'
+const qos = 0
 
 // connect to same client and subscribe to same topic name  
 client.on('connect', () => { 
-  client.subscribe(topicName, (err, granted) => { 
+  console.log(`${protocol}: Connected`)
+  client.subscribe(topicName, {qos}, (err, granted) => { 
       if(err) { 
           console.log(err, 'err'); 
       } 
       console.log(granted, 'granted') 
+
+      client.publish(topicName, payload, { qos }, (error) => {
+        if (error) {
+          console.error(error)
+        }
+      })
   }) 
 }) 
 
@@ -32,12 +49,10 @@ client.on('message', (topic, message, packet) => {
   if(topic === topicName) { 
     try {
       const jsonMessage = JSON.parse(message);
-      console.log(jsonMessage)
+      console.log('Conteudo:', jsonMessage)
     } catch (error) {
       console.error('Erro ao analisar a mensagem como JSON:', error);
       console.log('Conteúdo da mensagem:', message.toString());
     }
   } 
 }) 
-
-
