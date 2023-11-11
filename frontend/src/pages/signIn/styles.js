@@ -39,7 +39,6 @@ export const styles = StyleSheet.create({
   remember_forgot:{
     display: 'flex',
     flexDirection:'row',
-    justifyContent: 'space-between',
     width: '77%',
     // borderColor: 'red',
     // borderWidth: 1,
@@ -48,6 +47,7 @@ export const styles = StyleSheet.create({
     fontWeight:'bold',
     fontSize: 10,
     color: '#40513B',
+    marginLeft: '4%',
   },
   cadastrar_container:{
     display: 'flex',
