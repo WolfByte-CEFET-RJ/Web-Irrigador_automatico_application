@@ -18,7 +18,6 @@ const Input = ({ label, isPassword, value, onChangeText, isLogin, isEmail, place
         <View style={styles.label_container}>
           <Text style={styles.label}>{label}</Text>
         </View>
-
             <TextInput
               style={isLogin ? styles.inputLogin : styles.inputCadastro}
               placeholder={placeHolder}
@@ -49,8 +48,7 @@ const Input = ({ label, isPassword, value, onChangeText, isLogin, isEmail, place
                   />
               )
             }
-
-    </View>
+        </View>
   );
 };
 

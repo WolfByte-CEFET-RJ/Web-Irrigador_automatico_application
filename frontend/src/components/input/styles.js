@@ -58,7 +58,7 @@ export const styles = StyleSheet.create({
   },
   iconLogin:{
     position: 'absolute',
-    left: '15%',
+    left: '14%',
     bottom: '25%',
   },
 });
