@@ -28,11 +28,12 @@ export const styles = StyleSheet.create({
   logo:{
     width: 178,
     height: 178,
+    marginBottom: '5%',
+    marginTop: '5%',
   },
   input_container:{
     display: 'flex',
     width: '100%',
-    
     // borderColor: 'blue',
     // borderWidth: 1,
   },
@@ -40,14 +41,26 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection:'row',
     width: '77%',
+    marginBottom: '5%',
+    justifyContent: 'space-between',
     // borderColor: 'red',
     // borderWidth: 1,
   },
-  forgot_password:{
+  remember: {
+    display:'flex',
+    flexDirection: 'row',
+    width: '50%',
+  },
+  remember_text:{
     fontWeight:'bold',
     fontSize: 10,
     color: '#40513B',
-    marginLeft: '4%',
+    marginLeft: '5%',
+  },
+  forgot_text:{
+    fontWeight:'bold',
+    fontSize: 10,
+    color: '#40513B',
   },
   cadastrar_container:{
     display: 'flex',
@@ -55,6 +68,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: '5%',
   },
   cadastrar_text:{
     fontWeight:'bold',

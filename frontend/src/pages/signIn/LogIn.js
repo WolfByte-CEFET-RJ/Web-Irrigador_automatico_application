@@ -34,12 +34,16 @@ const LogIn = () => {
         <Input placeHolder="Insira sua senha" value={password} onChangeText={text=>setPassword(text)} isPassword={true} isLogin={true} isEmail={false}/>
       </View>
       <View style={styles.remember_forgot}>
-          <CheckBox
+        <View style={styles.remember}>
+            <CheckBox
               value={isSelected}
               onValueChange={setSelection}
               style={styles.checkbox}
-          />
-        <Text style={styles.forgot_password}>Esqueceu a senha?</Text>
+            />
+            <Text style={styles.remember_text}>Lembre de mim</Text>
+        </View>
+
+        <Text style={styles.forgot_text}>Esqueceu a senha?</Text>
       </View>
       <Button title="Acessar" onPress={()=>handleSubmit()}/>
 

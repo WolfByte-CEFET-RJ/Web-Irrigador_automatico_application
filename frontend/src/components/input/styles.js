@@ -48,15 +48,17 @@ export const styles = StyleSheet.create({
     padding: 10,
     color: 'rgba(64,81,59,0.6)',
     fontWeight: 'bold',
+    alignItems: 'center',
   },
   iconCadastro:{
     position: 'absolute',
     right: '15%',
-    bottom: '17%',
+    //top: '50%',
+    bottom: '22%',
   },
   iconLogin:{
     position: 'absolute',
     left: '15%',
-    bottom: '21%',
+    bottom: '25%',
   },
 });
