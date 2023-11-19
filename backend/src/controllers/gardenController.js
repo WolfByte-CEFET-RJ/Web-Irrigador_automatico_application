@@ -20,7 +20,8 @@ module.exports = {
     },
 
     async createGarden(req, res) {
-        const { name, description, identifier, userId, configId } = req.body;
+        const { name, description, identifier, configId } = req.body;
+        const userId = req.user_id;
 
         try {
             const response = await gardenService.createGarden(name, description, identifier, userId, configId);
@@ -33,12 +34,13 @@ module.exports = {
 
     async updateGarden(req, res) {
         const {id} = req.params; 
+        const myId = req.user_id
 
         const gardenData = req.body;
         try {
-            const garden = await gardenService.updateGarden(id, gardenData);
+            const garden = await gardenService.updateGarden(myId, id, gardenData);
             if (garden) {
-                res.json({ message: 'Horta atualizado com sucesso' });
+                res.json({ message: garden });
             }
 
         } catch (error) {
@@ -48,11 +50,12 @@ module.exports = {
 
     async deleteGarden(req, res) {
         const {id} = req.params; 
-
+        const myId = req.user_id;
+        
         try {
-            const garden = await gardenService.deleteGarden(id);
+            const garden = await gardenService.deleteGarden(myId, id);
             if (garden) {
-                res.json({ message: 'Horta deletado com sucesso!' });
+                res.json({ message: garden });
             }
 
         } catch (error) {
