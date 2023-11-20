@@ -14,10 +14,23 @@ const LogIn = () => {
   const navigation = useNavigation();
   const [isSelected, setSelection] = useState(false);
 
-  const handleSubmit = () => {
+  const data = {
+    email,
+    password,
+  }
+
+  const handleSubmit = async () => {
 
     if(email === '' || password === '') {
       alert('Preencha todos os campos');
+    } 
+    else {
+      try {
+        const response = await axios.post('http://localhost:3000/login', data);
+      }
+      catch (error) {
+
+      }
     }
   }
 
