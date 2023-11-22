@@ -4,7 +4,7 @@ const yup = require('yup');
 const gardenSchema = yup.object().shape({
     name: yup.string().min(3, 'O nome deve ter pelo menos 3 caracteres').required(),
     description: yup.string(),
-    identifier: yup.string().required(), 
+    identifier: yup.string().required().min(11, 'O identificar deve ter 11 caracteres.').matches(/^[0-9]$/, 'O identificador deve conter apenas números.'), 
     userId: yup.number().integer().positive().required(),
     configId: yup.number().integer().positive().required(),
   });
@@ -28,6 +28,12 @@ module.exports = {
        
         if (userSetting.userId != userId){throw new Error('Essa configuração não pertence à você!')}
 
+        const identifierExists = await knex('identifier').select("id", "gardenId").where({ value: identifier }).first();
+
+        if (!identifierExists){throw new Error('O identificador inserido não pertence a uma horta existente!')}
+
+        if (identifierExists.gardenId != null){throw new Error('O identificador inserido já pertence a uma horta!')}
+
         await knex('garden').insert({
             name,
             description,
@@ -35,6 +41,11 @@ module.exports = {
             userId,
             configId
         });
+
+        const garden = await knex('garden').select("id").where({ identifier: identifier }).first();
+
+        await knex('identifier').where({id: identifierExists.id}).update({gardenId: garden.id});
+
         return "Horta cadastrada!"
     },
 
