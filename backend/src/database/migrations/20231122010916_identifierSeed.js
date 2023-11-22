@@ -5,10 +5,10 @@ const GenSeed = require("../../utils/identifierSeed");
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  return [
+  return Promise.all([
     knex('identifier').insert({value:GenSeed(1)}),
     knex('identifier').insert({value:GenSeed(2)}),
-  ]
+  ])
 };
 
 /**
