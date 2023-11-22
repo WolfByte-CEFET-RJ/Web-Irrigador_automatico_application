@@ -5,8 +5,8 @@ exports.up = function(knex) {
         table.string("name").notNullable();
         table.string("email").notNullable().unique();
         table.string("password").notNullable();
-        table.boolean("humidityNotification").notNullable();
-        table.boolean("waterNotification").notNullable();
+        table.tinyint("humidityNotification").notNullable().defaultTo(1);
+        table.tinyint("waterNotification").notNullable().defaultTo(1);
     })
 };
 
