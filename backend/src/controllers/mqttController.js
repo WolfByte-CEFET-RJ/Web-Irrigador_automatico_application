@@ -1,4 +1,5 @@
 require('dotenv').config();
+const knex = require('../database');
 const mqtt = require('mqtt')
 //const client = mqtt.connect("mqtt://localhost") 
 
@@ -49,6 +50,15 @@ client.on('message', (topic, message, packet) => {
   if(topic === topicName) { 
     try {
       const jsonMessage = JSON.parse(message);
+
+      /*
+        "identificador": "12312345675",
+        "Sensor": "Umidade",
+        "Medida": "10"
+      */
+
+        // Necessário procurar qual horta pertence ao identificador e pegar o id dela. Se umidade, então sensor 1. 
+        
       console.log('Conteudo:', jsonMessage)
     } catch (error) {
       console.error('Erro ao analisar a mensagem como JSON:', error);
