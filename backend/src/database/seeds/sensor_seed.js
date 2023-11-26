@@ -7,8 +7,8 @@ exports.seed = async function(knex) {
   return knex('sensor').del()
   .then(function () {
     return knex('sensor').insert([
-      { name: 'Umidade', unitOfMeasurement: "%" },
-      { name: 'Temperatura', unitOfMeasurement: "%" }
+      { id: 1, name: 'Umidade', unitOfMeasurement: "%" },
+      { id: 2, name: 'Temperatura', unitOfMeasurement: "%" }
     ]);
   });
 };
