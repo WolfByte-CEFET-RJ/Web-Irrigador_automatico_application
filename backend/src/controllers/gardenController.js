@@ -20,11 +20,11 @@ module.exports = {
     },
 
     async createGarden(req, res) {
-        const { name, description, identifier, configId } = req.body;
+        const { name, description, identifier} = req.body;
         const userId = req.user_id;
 
         try {
-            const response = await gardenService.createGarden(name, description, identifier, userId, configId);
+            const response = await gardenService.createGarden(name, description, identifier, userId);
             return res.status(201).json({ message: response });
 
         } catch (error) {
