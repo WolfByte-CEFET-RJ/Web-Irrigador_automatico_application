@@ -10,7 +10,7 @@ module.exports = {
             return res.status(200).json(settings);
         }
 
-        const setting = await irrigationSettingService.getSettings(id);
+        const setting = await irrigationSettingService.getOneSetting(id);
         return res.status(200).json(setting);
 
     } catch (error) {
