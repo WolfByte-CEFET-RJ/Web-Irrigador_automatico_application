@@ -52,7 +52,7 @@ client.on('message', async (topic, message, packet) => {
       const jsonMessage = JSON.parse(message);
       console.log('Conteudo:', jsonMessage)
 
-      await mqttService.insertData(jsonMessage);
+      //await mqttService.insertData(jsonMessage);
 
       /*
         Estruturada considerada: 
