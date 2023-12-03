@@ -1,4 +1,4 @@
-import { View, Text, Image, Alert, TouchableOpacity } from "react-native";
+import { View, Text, Image, Alert, TouchableOpacity, KeyboardAvoidingView, ScrollView} from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import Input from '../../components/input/Input';
 import Button from "../../components/button/Button";
@@ -55,7 +55,9 @@ export default function SignUp(){
   }
 
   return(
-    <View style={styles.cadastro_container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.cadastro_container} >
       <StatusBar/>
       <View style={styles.logo_container}>
         <Image style={styles.logo} source={require('../../../assets/android-chrome-192x192.png')}/>
@@ -83,6 +85,6 @@ export default function SignUp(){
           <Button title="Cadastrar" onPress={()=>handleSubmit()}/>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
