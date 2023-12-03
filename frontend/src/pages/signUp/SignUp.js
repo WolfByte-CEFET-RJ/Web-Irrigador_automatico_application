@@ -1,4 +1,4 @@
-import { View, Text, Image, Alert, TouchableOpacity, KeyboardAvoidingView, ScrollView} from "react-native";
+import { View, Text, Image, Alert, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import Input from '../../components/input/Input';
 import Button from "../../components/button/Button";
@@ -54,37 +54,44 @@ export default function SignUp(){
     }
   }
 
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   return(
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.cadastro_container} >
-      <StatusBar/>
-      <View style={styles.logo_container}>
-        <Image style={styles.logo} source={require('../../../assets/android-chrome-192x192.png')}/>
-      </View>
-      <View style={styles.form_container}>
-        <View style={styles.header_container}>
-          <View style={styles.return_button_container}>
-            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-              <Ionicons name="arrow-back-outline" size={24}/>
-            </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={dismissKeyboard}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -50}
+        style={styles.cadastro_container} >
+        <StatusBar/>
+        <View style={styles.logo_container}>
+          <Image style={styles.logo} source={require('../../../assets/android-chrome-192x192.png')}/>
+        </View>
+        <View style={styles.form_container}>
+          <View style={styles.header_container}>
+            <View style={styles.return_button_container}>
+              <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+                <Ionicons name="arrow-back-outline" size={24}/>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.slogan_container}>
+              <Text style={styles.app_name}>SmartGarden</Text>
+              <Text style={styles.app_slogan}>Cadastre-se para automatizar sua horta</Text>
+            </View>
           </View>
-          <View style={styles.slogan_container}>
-            <Text style={styles.app_name}>SmartGarden</Text>
-            <Text style={styles.app_slogan}>Cadastre-se para automatizar sua horta</Text>
+          <View style={styles.input_container}>
+            {/* Inputs */}
+            <Input label="Nome" placeHolder="Digite seu nome" value={name} onChangeText={text=>setName(text)}/>
+            <Input label="E-mail" placeHolder="Digite um email" value={email} onChangeText={text=>setEmail(text)}/>
+            <Input label="Senha" placeHolder="Digite uma senha" value={password} onChangeText={text=>setPassword(text)} isPassword={true}/>
+            <Input label="Confirme sua senha" placeHolder="Confirme sua senha" value={confirmPassword} onChangeText={text=>setconfirmPassword(text)} isPassword={true}/>
+          </View>
+          <View style={styles.button_container}>
+            <Button title="Cadastrar" onPress={()=>handleSubmit()}/>
           </View>
         </View>
-        <View style={styles.input_container}>
-          {/* Inputs */}
-          <Input label="Nome" placeHolder="Digite seu nome" value={name} onChangeText={text=>setName(text)}/>
-          <Input label="E-mail" placeHolder="Digite um email" value={email} onChangeText={text=>setEmail(text)}/>
-          <Input label="Senha" placeHolder="Digite uma senha" value={password} onChangeText={text=>setPassword(text)} isPassword={true}/>
-          <Input label="Confirme sua senha" placeHolder="Confirme sua senha" value={confirmPassword} onChangeText={text=>setconfirmPassword(text)} isPassword={true}/>
-        </View>
-        <View style={styles.button_container}>
-          <Button title="Cadastrar" onPress={()=>handleSubmit()}/>
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   )
 }
