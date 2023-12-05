@@ -1,5 +1,6 @@
 require('dotenv').config();
 const mqtt = require('mqtt')
+const mqttService = require('../services/mqttService.js')
 //const client = mqtt.connect("mqtt://localhost") 
 
 const { connectOptions } = require('../use_mqtts.js')
@@ -43,15 +44,27 @@ client.on('connect', () => {
 
 
 // on receive message event
-client.on('message', (topic, message, packet) => { 
+client.on('message', async (topic, message, packet) => { 
   //console.log(packet, packet.payload.toString()); 
   console.log("Mensagem recebiba!")
   if(topic === topicName) { 
     try {
       const jsonMessage = JSON.parse(message);
       console.log('Conteudo:', jsonMessage)
+
+      //await mqttService.insertData(jsonMessage);
+
+      /*
+        Estruturada considerada: 
+
+        "identificador": "12312345675",
+        "sensor": "Umidade",
+        "medida": "10"
+      */
+
+      
     } catch (error) {
-      console.error('Erro ao analisar a mensagem como JSON:', error);
+      console.error('Erro: ', error);
       console.log('Conteúdo da mensagem:', message.toString());
     }
   } 
