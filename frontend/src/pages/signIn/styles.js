@@ -80,4 +80,8 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: '#40513B',
   },
+  errorText: {
+    color: 'red',
+    marginTop: 10,
+  },
 });

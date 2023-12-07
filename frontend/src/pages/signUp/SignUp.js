@@ -40,7 +40,7 @@ export default function SignUp(){
     }
     else {
       try { 
-        const response = await axios.post('http://localhost:3000/user', data) //solicitação POST (criar dados) para a URL do backend
+        const response = await axios.post('http://localhost:5000/user', data) //solicitação POST (criar dados) para a URL do backend
         console.log(response.data);
         Alert.alert('Sucesso', 'Usuário cadastrado');
         // navigation.navigate('Home'); //usuário cadastrado com sucesso -> vai para a Home

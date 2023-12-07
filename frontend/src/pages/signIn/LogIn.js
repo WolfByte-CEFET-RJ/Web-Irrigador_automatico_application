@@ -1,35 +1,46 @@
 import { StatusBar } from 'expo-status-bar';
-import { styles } from './styles'
+import { styles } from './styles';
 import React, { useState } from 'react';
-//import CheckBox from '@react-native-community/checkbox';
-import { View, Text, Image, TouchableOpacity, CheckBox } from 'react-native';
+import { View, Text, Image, TouchableOpacity} from 'react-native';
 import Input from '../../components/input/Input';
-import Button from '../../components/button/Button'
-import { useNavigation } from '@react-navigation/native';;
+import Button from '../../components/button/Button';
+import ErrorComponent from '../../components/Error/ErrorComponent';
+import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
 
 const LogIn = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
-  const [isSelected, setSelection] = useState(false);
+  const [error, setError] = useState('');
 
-  const data = {
+  const handleSubmit = async () => {
+
+    const data = {
     email,
     password,
   }
 
-  const handleSubmit = async () => {
+  console.log(data);
 
     if(email === '' || password === '') {
       alert('Preencha todos os campos');
     } 
     else {
       try {
-        const response = await axios.post('http://localhost:3000/login', data);
+        const response = await axios.post('http://localhost:5000/login', data);
+        const {token} = response.data;
+        console.log(token);
+        navigation.navigate()
       }
       catch (error) {
-
+        console.error(error);
+        setError(error.response.data.message);
+        if (error.response) {
+          console.error('Dados do erro:', error.response.data.message);
+          console.error('Status do erro:', error.response.status);
+        }
       }
     }
   }
@@ -47,26 +58,16 @@ const LogIn = () => {
         <Input placeHolder="Insira sua senha" value={password} onChangeText={text=>setPassword(text)} isPassword={true} isLogin={true} isEmail={false}/>
       </View>
       <View style={styles.remember_forgot}>
-        <View style={styles.remember}>
-            <CheckBox
-              value={isSelected}
-              onValueChange={setSelection}
-              style={styles.checkbox}
-            />
-            <Text style={styles.remember_text}>Lembre de mim</Text>
-        </View>
-
         <Text style={styles.forgot_text}>Esqueceu a senha?</Text>
       </View>
-      <Button title="Acessar" onPress={()=>handleSubmit()}/>
-
+      <Button title="Acessar" onPress={()=>handleSubmit()} />
       <View style={styles.cadastrar_container}>
         <Text style={styles.cadastrar_text}>Não possui conta?</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
           <Text style={styles.cadastrar_navegacao}> Cadastre-se</Text>
         </TouchableOpacity>
       </View>
-
+      {error && <ErrorComponent message={error} />}
     </View>
   );
 };
