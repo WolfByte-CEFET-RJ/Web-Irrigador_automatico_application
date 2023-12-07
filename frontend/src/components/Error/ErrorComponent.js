@@ -5,18 +5,18 @@ import { styles } from './styles';
 const ErrorComponent = ({ message, duration = 3000, onTimeout }) => {
   const [visible, setVisible] = useState(true);
 
-//   useEffect(() => {
-//     const timeoutId = setTimeout(() => {
-//       setVisible(false);
-//       if (onTimeout) {
-//         onTimeout(); // Chama a função de callback quando o tempo limite é atingido
-//       }
-//     }, duration);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setVisible(false);
+      if (onTimeout) {
+        onTimeout();
+      }
+    }, duration);
 
-//     return () => {
-//       clearTimeout(timeoutId);
-//     };
-//   }, [duration, onTimeout]);
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [duration, onTimeout]);
 
   return visible ? (
     <View style={styles.container}>

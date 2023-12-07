@@ -45,6 +45,10 @@ const LogIn = () => {
     }
   }
 
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   return (
     <View style={styles.login_container}>
       <StatusBar/>
