@@ -5,6 +5,7 @@ import Button from "../../components/button/Button";
 import { styles } from './styles'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from "react";
+import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 
