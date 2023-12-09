@@ -2,8 +2,10 @@ version: "3.9"
 services:
     datalake:
       image: bitnami/mariadb
+      env_file: 
+        - .env
       ports:
-        - 3306:3306
+        - "3306:3306"
       volumes:
         - datalake:/bitnami/mariadb
       environment:
