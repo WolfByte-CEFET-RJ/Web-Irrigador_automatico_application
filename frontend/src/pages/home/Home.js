@@ -20,12 +20,63 @@ export default function Home(){
       <View style={styles.search_container}>
         <TextInput
           style={styles.searcher}
-          placeholder={"hello"}
+          placeholder={"Buscar por nome da horta"}
+          placeholderTextColor={"rgba(64,81,59,0.6)"} 
         />
+        <Ionicons 
+            style={styles.iconHome} 
+            name={'search'} 
+            size={24} 
+            color={'rgba(64, 81, 59, 0.6)'}
+          />
       </View>
-      <Text>Minhas hortas</Text>
+      <Text style={styles.minhasHortas}>Minhas hortas</Text>
       <View style={styles.hortas_container}>
-        <TouchableOpacity style={styles.horta}></TouchableOpacity>
+        <TouchableOpacity style={styles.horta}>
+          <View>
+            <Text style={styles.textoSuperior}>Horta #001</Text>
+          </View>
+          <View style={styles.textoInferiorContainer}>
+            <Text style={styles.textoInferior}>Umidade: 25</Text>
+            <Text style={styles.textoInferior}>Água: 27</Text>
+          </View>
+          <Ionicons 
+            style={styles.iconHorta} 
+            name={'close-circle'} 
+            size={30} 
+            color={'#9DC08B'}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.horta}>
+          <View>
+            <Text style={styles.textoSuperior}>Horta #002</Text>
+          </View>
+          <View style={styles.textoInferiorContainer}>
+            <Text style={styles.textoInferior}>Umidade: 25</Text>
+            <Text style={styles.textoInferior}>Água: 27</Text>
+          </View>
+          <Ionicons 
+            style={styles.iconHorta} 
+            name={'close-circle'} 
+            size={30} 
+            color={'#9DC08B'}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.horta}>
+          <View>
+            <Text style={styles.textoSuperior}>Horta #003</Text>
+          </View>
+          <View style={styles.textoInferiorContainer}>
+            <Text style={styles.textoInferior}>Umidade: 25</Text>
+            <Text style={styles.textoInferior}>Água: 27</Text>
+          </View>
+          <Ionicons 
+            style={styles.iconHorta} 
+            name={'close-circle'} 
+            size={30} 
+            color={'#9DC08B'}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.bottomBar_container}>
         <BottomBar/>
