@@ -5,12 +5,12 @@ services:
       env_file: 
         - .env
       ports:
-        - "3306:3306"
+        - 4000:3306
       volumes:
         - datalake:/bitnami/mariadb
       environment:
         MARIADB_DATABASE: ${DB_NAME}
-        ALLOW_EMPTY_PASSWORD: "yes"
+        ALLOW_EMPTY_PASSWORD: true
         MARIADB_ROOT_USER: ${DB_USER}
         MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
 
