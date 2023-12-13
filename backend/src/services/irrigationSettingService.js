@@ -10,15 +10,20 @@ module.exports = {
 
         return setting;
     },
-    async createIrrigationSetting(name, userId) {
+    async createIrrigationSetting(name, userId, humidityValue, waterValue) {
         
-
 
         await knex('irrigationSetting').insert({
             name,
             userId
         });
 
+        const irrigationId = await knex('irrigationSetting').select("id").where({ name }).first();
+
+        await knex('configSensor').insert([
+           {irrigationId: irrigationId.id, sensorId: 1, value: humidityValue},
+           {irrigationId: irrigationId.id, sensorId: 2, value: waterValue}
+        ])
 
         return "Configuração cadastrada!"
     },

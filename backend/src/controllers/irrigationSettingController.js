@@ -18,11 +18,11 @@ module.exports = {
         }   
     },
     async createIrrigationSetting(req, res) {
-        const { name } = req.body;
+        const { name, humidityValue, waterValue } = req.body;
         const userId = req.user_id;
 
         try {
-            const response = await irrigationSettingService.createIrrigationSetting(name, userId);
+            const response = await irrigationSettingService.createIrrigationSetting(name, userId, humidityValue, waterValue);
             return res.status(201).json({ message: response });
 
         } catch (error) {

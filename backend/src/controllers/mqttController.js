@@ -20,25 +20,24 @@ const {protocol, host, port} = connectOptions
 let connectUrl = `${protocol}://${host}:${port}`
 
 const client = mqtt.connect(connectUrl, options)
-
 const topicName = 'test/sensor'
 const payload = '{"message": "Hello World"}'
 const qos = 0
 
 // connect to same client and subscribe to same topic name  
 client.on('connect', () => { 
-  console.log(`${protocol}: Connected`)
+  //console.log(`${protocol}: Connected`)
   client.subscribe(topicName, {qos}, (err, granted) => { 
       if(err) { 
           console.log(err, 'err'); 
       } 
       console.log(granted, 'granted') 
 
-      client.publish(topicName, payload, { qos }, (error) => {
+      /*client.publish(topicName, payload, { qos }, (error) => {
         if (error) {
           console.error(error)
         }
-      })
+      })*/
   }) 
 }) 
 
@@ -52,7 +51,7 @@ client.on('message', async (topic, message, packet) => {
       const jsonMessage = JSON.parse(message);
       console.log('Conteudo:', jsonMessage)
 
-      //await mqttService.insertData(jsonMessage);
+      await mqttService.insertData(jsonMessage);
 
       /*
         Estruturada considerada: 
