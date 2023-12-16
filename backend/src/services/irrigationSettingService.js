@@ -2,26 +2,42 @@ const knex = require('../database');
 
 module.exports = {
     async getSettings() {
-        return await knex('irrigationSetting').select('*');
+        const settings = await knex('irrigationSetting')
+        .select(
+            'irrigationSetting.id as id',
+            'irrigationSetting.name as name',
+            'irrigationSetting.userId as userId',
+            knex.raw('JSON_ARRAYAGG(JSON_OBJECT(\'sensorId\', configSensor.sensorId, \'value\', configSensor.value)) as sensors')
+        )
+        .join('configSensor', 'irrigationSetting.id', '=', 'configSensor.irrigationId')
+        .groupBy('irrigationSetting.id')
+        .orderBy('irrigationSetting.id', 'asc');
+
+        const finalSetting = settings.map(setting => ({
+            id: setting.id,
+            name: setting.name,
+            userId: setting.userId,
+            humidityValue: JSON.parse(setting.sensors)[0].value,
+            waterValue: JSON.parse(setting.sensors)[1].value
+        }))
+
+        return finalSetting;
     },
     async getOneSetting(id) {
-        //const setting = await knex('irrigationSetting').select('*').join('configSensor', 'irrigationSetting.id', '=', 'configSensor.irrigationId').where({ id });
-        const setting = await knex('irrigationSetting').select('*').where({ id }).first();
-        if (!setting){throw new Error('Esta config não existe')};
+        const setting = await knex('irrigationSetting').select('irrigationSetting.id', 'irrigationSetting.name', 'irrigationSetting.userId', 'configSensor.value')
+        .join('configSensor', 'irrigationSetting.id', '=', 'configSensor.irrigationId').where({ id });
 
-        //const finalSetting = Object.assign(setting[0], setting[1])
+        const finalSetting = {
+            id: setting[0].id,
+            name: setting[0].name,
+            userId: setting[0].userId,
+            humidityValue: setting[0].value,
+            waterValue: setting[1].value
+        }
 
-        const humidity = await knex('configSensor').select('value').where({irrigationId: setting.id, sensorId: 1}).first();
-        const water = await knex('configSensor').select('value').where({irrigationId: setting.id, sensorId: 2}).first();
-
-        setting.humidityValue = humidity.value
-        setting.waterValue = water.value
-
-        return setting;
+        return finalSetting;
     },
     async createIrrigationSetting(name, userId, humidityValue, waterValue) {
-        
-
         await knex('irrigationSetting').insert({
             name,
             userId
@@ -37,7 +53,6 @@ module.exports = {
         return "Configuração cadastrada!"
     },
     async updateIrrigationSetting(myId, id, settingData) {
-        
         const settingInfo = await this.getOneSetting(id);
 
         if (myId != settingInfo.userId){throw new Error("Você só pode atualizar sua própria config")}
@@ -61,7 +76,6 @@ module.exports = {
         return "Configuração atualizada com sucesso!"
     },
     async deleteIrrigationSetting(settingId, userId) {
-        
         const setting = await this.getOneSetting(settingId); 
         if (!setting){
             throw new Error('Esta config não existe!')
@@ -76,7 +90,5 @@ module.exports = {
         if (!deleteName){throw new Error('Erro ao apagar nome da configuração!')}
 
         return 'Configuração apagada com sucesso!'
-      
       }
-
 };
