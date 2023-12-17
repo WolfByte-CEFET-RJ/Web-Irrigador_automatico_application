@@ -1,5 +1,19 @@
 const knex = require('../database');
+const yup = require('yup');
 
+const settingSchema = yup.object().shape({
+    name: yup.string().min(3, 'O nome deve ter pelo menos 3 caracteres').required(), 
+    userId: yup.number().integer().positive().required(),
+    humidityValue: yup.string().required(), 
+    waterValue: yup.string().required()
+  });
+
+  const updateSettingSchema = yup.object().shape({
+    name: yup.string().min(3, 'O nome deve ter pelo menos 3 caracteres'), 
+    userId: yup.number().integer().positive(),
+    humidityValue: yup.string(), 
+    waterValue: yup.string()
+  });
 module.exports = {
     async getSettings() {
         const settings = await knex('irrigationSetting')
@@ -38,6 +52,10 @@ module.exports = {
         return finalSetting;
     },
     async createIrrigationSetting(name, userId, humidityValue, waterValue) {
+        await settingSchema.validate({name, userId, humidityValue, waterValue})
+        const settingInfo = await knex('irrigationSetting').where({name}).first();
+        if(settingInfo){throw new Error('Já existe uma config com este nome!')}
+
         await knex('irrigationSetting').insert({
             name,
             userId
@@ -53,9 +71,11 @@ module.exports = {
         return "Configuração cadastrada!"
     },
     async updateIrrigationSetting(myId, id, settingData) {
+        await updateSettingSchema.validate(settingData, {abortEarly: false})
         const settingInfo = await this.getOneSetting(id);
 
         if (myId != settingInfo.userId){throw new Error("Você só pode atualizar sua própria config")}
+        if(settingInfo.id === 1){throw new Error('Você não pode alterar uma configuração padrão')}
         if(settingData.userId){throw new Error('Você não pode alterar o userId')}
 
         if (settingData.name){
@@ -80,6 +100,8 @@ module.exports = {
         if (!setting){
             throw new Error('Esta config não existe!')
         }
+        if(setting.id === 1){throw new Error('Você não pode apagar uma configuração padrão')}
+        if (setting.userId != userId){throw new Error('Esta config não pertence a você!')}
 
         const deleteValues = await knex('configSensor').where({irrigationId: settingId}).del();
 
