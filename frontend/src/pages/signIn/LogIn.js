@@ -40,7 +40,7 @@ const LogIn = () => {
         if (error.response) {
           console.error('Dados do erro:', error.response.data.message);
           console.error('Status do erro:', error.response.status);
-        }
+        }
       }
     }
   }

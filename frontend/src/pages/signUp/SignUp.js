@@ -82,7 +82,6 @@ export default function SignUp(){
             </View>
           </View>
           <View style={styles.input_container}>
-            {/* Inputs */}
             <Input label="Nome" placeHolder="Digite seu nome" value={name} onChangeText={text=>setName(text)}/>
             <Input label="E-mail" placeHolder="Digite um email" value={email} onChangeText={text=>setEmail(text)}/>
             <Input label="Senha" placeHolder="Digite uma senha" value={password} onChangeText={text=>setPassword(text)} isPassword={true}/>
