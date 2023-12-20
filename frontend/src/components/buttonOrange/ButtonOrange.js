@@ -2,7 +2,7 @@ import React from 'react';
 import { styles } from './styles'
 import { Pressable, Text } from 'react-native';
 
-const Button = ({ onPress, title }) => {
+const ButtonOrange = ({ onPress, title }) => {
   return (
     <Pressable style={styles.button} onPress={onPress}>
       <Text style={styles.buttonText}>{title}</Text>
@@ -10,4 +10,4 @@ const Button = ({ onPress, title }) => {
   );
 };
 
-export default Button;
+export default ButtonOrange;

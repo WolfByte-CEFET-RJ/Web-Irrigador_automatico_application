@@ -1,4 +1,4 @@
-import { View, Text, Image, Alert, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, Image, Alert, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import Input from '../../components/input/Input';
 import Button from "../../components/button/Button";
@@ -72,9 +72,9 @@ export default function SignUp(){
         <View style={styles.form_container}>
           <View style={styles.header_container}>
             <View style={styles.return_button_container}>
-              <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+              <Pressable onPress={() => navigation.navigate('SignIn')}>
                 <Ionicons name="arrow-back-outline" size={24}/>
-              </TouchableOpacity>
+              </Pressable>
             </View>
             <View style={styles.slogan_container}>
               <Text style={styles.app_name}>SmartGarden</Text>

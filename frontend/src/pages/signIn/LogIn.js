@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { styles } from './styles';
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity} from 'react-native';
+import { View, Text, Image, Pressable} from 'react-native';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import ErrorComponent from '../../components/Error/ErrorComponent';
@@ -67,9 +67,9 @@ const LogIn = () => {
       <Button title="Acessar" onPress={()=>handleSubmit()} />
       <View style={styles.cadastrar_container}>
         <Text style={styles.cadastrar_text}>Não possui conta?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+        <Pressable onPress={() => navigation.navigate('SignUp')}>
           <Text style={styles.cadastrar_navegacao}> Cadastre-se</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
       {error && <ErrorComponent message={error} />}
     </View>

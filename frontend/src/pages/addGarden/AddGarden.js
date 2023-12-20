@@ -5,6 +5,7 @@ import { styles } from './styles';
 import BottomBar from '../../components/bottomBar/BottomBar';
 import Button from "../../components/button/Button";
 import InputDark from '../../components/inputDark/InputDark';
+import { Platform } from 'react-native';
 
 const AddGarden = () => {
 

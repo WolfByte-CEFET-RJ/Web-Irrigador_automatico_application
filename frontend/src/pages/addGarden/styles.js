@@ -21,7 +21,6 @@ export const styles = StyleSheet.create({
     },
     subtitle:{
         color: '#40513B',
-        // fontFamily: 'Montserrat',
         fontSize: 17,
         fontStyle: 'normal',
         fontWeight: '700',

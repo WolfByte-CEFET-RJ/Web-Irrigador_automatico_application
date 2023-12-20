@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, Alert, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TextInput, SafeAreaView } from "react-native";
-import { StatusBar } from 'expo-status-bar';
-import Button from "../../components/button/Button";
-import { styles } from './styles'
+import { View, Text, Image, Alert, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TextInput} from "react-native";
+// import { StatusBar } from 'expo-status-bar';
+// import Button from "../../components/button/Button";
+import { styles } from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import BottomBar from '../../components/bottomBar/BottomBar'
+import DeleteGardenModal from "../../components/deleteModal/DeleteGardenModal";
 
 // !ATENÇÃO: Para fazer as hortas rodarem você tem que digitar "json-server --watch hortas.json --port 3001" na pasta data
 const API_URL = 'http://localhost:3001';
 
 export default function Home(){
+  
 
   const [hortas, setHortas] = useState([]);
   const [burcarHorta, setBurcarHorta] = useState('');
@@ -34,6 +35,19 @@ export default function Home(){
       const numeroFinalHorta = horta.nome.slice(-3);
       return numeroFinalHorta.includes(burcarHorta);
     });
+  };
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const handleDeleteIconPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleDelete = () => {
+    // Lógica para deletar a horta, ver na integração
+
+    // Fechar o modal após a ação de deletar
+    setModalVisible(false);
   };
 
   return(
@@ -59,7 +73,7 @@ export default function Home(){
       <Text style={styles.minhasHortas}>Minhas hortas</Text>
       <View style={styles.hortas_container}>
       {filtrarHortas().map((horta) => (
-          <TouchableOpacity key={horta.id} style={styles.horta}>
+          <Pressable key={horta.id} style={styles.horta}>
             <View>
               <Text style={styles.textoSuperior}>{horta.nome}</Text>
             </View>
@@ -72,8 +86,10 @@ export default function Home(){
               name={'close-circle'}
               size={30}
               color={'#9DC08B'}
+              onPress={handleDeleteIconPress}
             />
-          </TouchableOpacity>
+            <DeleteGardenModal visible={isModalVisible} onClose={() => setModalVisible(false)} onDelete={handleDelete}/>
+          </Pressable>
         ))}
       </View>
       <View style={styles.bottomBar_container}>

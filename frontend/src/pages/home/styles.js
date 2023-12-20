@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { useFonts } from 'expo-font';
 
 export const styles = StyleSheet.create({
   home_container: {
@@ -21,6 +22,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#40513B',
+    // fontFamily: 'Poppins-Bold',
   },
   logo: {
     width: 50,
