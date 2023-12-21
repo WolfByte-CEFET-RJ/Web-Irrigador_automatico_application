@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, Alert, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TextInput} from "react-native";
-// import { StatusBar } from 'expo-status-bar';
-// import Button from "../../components/button/Button";
+import { View, Text, Image, Pressable,TextInput} from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from "axios";
 import BottomBar from '../../components/bottomBar/BottomBar'
 import DeleteGardenModal from "../../components/deleteModal/DeleteGardenModal";
+import { StatusBar } from 'expo-status-bar';
 
 // !ATENÇÃO: Para fazer as hortas rodarem você tem que digitar "json-server --watch hortas.json --port 3001" na pasta data
 const API_URL = 'http://localhost:3001';
 
 export default function Home(){
   
-
+  const navigation = useNavigation();
   const [hortas, setHortas] = useState([]);
   const [burcarHorta, setBurcarHorta] = useState('');
 
@@ -43,15 +43,22 @@ export default function Home(){
     setModalVisible(true);
   };
 
-  const handleDelete = () => {
-    // Lógica para deletar a horta, ver na integração
-
-    // Fechar o modal após a ação de deletar
-    setModalVisible(false);
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/hortas/${id}`);
+      setHortas((prevHortas) => prevHortas.filter((horta) => horta.id !== id));
+      setModalVisible(false);
+    } catch (error) {
+      console.error('Erro ao excluir horta:', error);
+    }
   };
 
+  // TODO: renderizar o nome do usuário
+  // TODO: filtrar por nome 
+  
   return(
     <View style={styles.home_container}>
+      <StatusBar style="dark-content"/>
       <View style={styles.home_title_container}>
         <Text style={styles.home_title}>Bem-vindo, username</Text>
         <Image style={styles.logo} source={require('../../../assets/android-chrome-192x192.png')}/>
@@ -73,7 +80,11 @@ export default function Home(){
       <Text style={styles.minhasHortas}>Minhas hortas</Text>
       <View style={styles.hortas_container}>
       {filtrarHortas().map((horta) => (
-          <Pressable key={horta.id} style={styles.horta}>
+          <Pressable 
+            key={horta.id} 
+            style={styles.horta}
+            onPress={() => navigation.navigate('ViewGarden', { horta })}
+          >
             <View>
               <Text style={styles.textoSuperior}>{horta.nome}</Text>
             </View>
@@ -88,7 +99,12 @@ export default function Home(){
               color={'#9DC08B'}
               onPress={handleDeleteIconPress}
             />
-            <DeleteGardenModal visible={isModalVisible} onClose={() => setModalVisible(false)} onDelete={handleDelete}/>
+            <DeleteGardenModal
+              visible={isModalVisible}
+              onClose={() => setModalVisible(false)}
+              onDelete={(horta) => handleDelete(horta)}
+              hortaToDelete={horta}
+            />
           </Pressable>
         ))}
       </View>

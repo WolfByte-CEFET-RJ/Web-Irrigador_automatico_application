@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { useFonts } from 'expo-font';
 
 export const styles = StyleSheet.create({
   home_container: {
@@ -22,15 +21,12 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#40513B',
-    // fontFamily: 'Poppins-Bold',
   },
   logo: {
     width: 50,
     height: 50,
   },
   search_container: {
-    // borderColor: 'red',
-    // borderWidth: 1,
     width: '77%',
     height: 45,
     marginTop: 40,
@@ -59,8 +55,6 @@ export const styles = StyleSheet.create({
     marginTop: 32,
   },
   hortas_container: {
-    borderColor: 'red',
-    borderWidth: 3,
     display: 'flex',
     overflow: 'scroll',    
     alignItems:  'center',

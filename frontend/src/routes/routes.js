@@ -4,7 +4,7 @@ import SignUp from './../pages/signUp/SignUp';
 import LogIn from './../pages/signIn/LogIn';
 import Home from './../pages/home/Home';
 import AddGarden from '../pages/addGarden/AddGarden';
-import globalStyles from '../style/globalStyles';
+import ViewGarden from '../pages/viewGarden/ViewGarden';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +16,7 @@ const Navigation = () => {
         <Stack.Screen name="SignIn" component={LogIn} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="AddGarden" component={AddGarden} />
+        <Stack.Screen name="ViewGarden" component={ViewGarden} />
       </Stack.Navigator>
     </NavigationContainer>
   );

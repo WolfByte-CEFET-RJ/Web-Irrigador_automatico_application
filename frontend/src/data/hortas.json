@@ -1,8 +1,25 @@
 {
   "hortas": [
-    { "id": 1, "nome": "Horta #001", "umidade": 25, "agua": 27 },
-    { "id": 2, "nome": "Horta #002", "umidade": 30, "agua": 20 },
-    { "id": 3, "nome": "Horta #003", "umidade": 40, "agua": 20 }
-
+    {
+      "id": 1,
+      "nome": "Horta #001",
+      "umidade": 25,
+      "agua": 27,
+      "descricao": "aaa"
+    },
+    {
+      "id": 2,
+      "nome": "Horta #002",
+      "umidade": 30,
+      "agua": 20,
+      "descricao": "bbb"
+    },
+    {
+      "id": 3,
+      "nome": "Horta #003",
+      "umidade": 40,
+      "agua": 20,
+      "descricao": "ccc"
+    }
   ]
 }

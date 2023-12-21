@@ -18,18 +18,43 @@ const AddGarden = () => {
   const [id, setId] = useState('');
 
   const handleSubmit = async () => {
-    const data = {
-        name,
-        description,
-        id,
+    if (name === '' || description === '' || id === '') {
+      alert('Preencha todos os campos');
+      return;
+    } else if (isNaN(id)) {
+      alert('O ID deve ser um número inteiro');
+      return;
     }
-
-    console.log(data);
-
-    if(name === '' || description === '' || id === '') {
-        alert('Preencha todos os campos');
+    
+    // TODO: verificar se o id já existe
+  
+    const newHorta = {
+      id: parseInt(id),
+      nome: name,
+      descricao: description,
+      umidade: 30, // Valor padrão
+      agua: 30,    // Valor padrão
+    };
+  
+    // Adicionar a nova horta ao arquivo hortas.json
+    try {
+      const response = await fetch('http://localhost:3001/hortas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newHorta),
+      });
+  
+      if (response.ok) {
+        console.log('Horta adicionada com sucesso!');
+      } else {
+        console.error('Erro ao adicionar horta:', response.status);
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
     }
-  }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>

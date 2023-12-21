@@ -4,7 +4,7 @@ import { Modal, View, Text} from 'react-native';
 import ButtonOrange from '../buttonOrange/ButtonOrange';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const DeleteGardenModal = ({ visible, onClose, onDelete }) => {
+const DeleteGardenModal = ({ visible, onClose, onDelete, hortaToDelete }) => {
     return (
       <Modal
         visible={visible}
@@ -23,7 +23,7 @@ const DeleteGardenModal = ({ visible, onClose, onDelete }) => {
             />
             <Text style={styles.message}>Deseja mesmo excluir esta horta?</Text>
             <View style={styles.buttonContainer}>
-              <ButtonOrange title="Excluir" onPress={onDelete}/>
+              <ButtonOrange title="Excluir" onPress={() => onDelete(hortaToDelete.id)} />
             </View>
           </View>
         </View>
