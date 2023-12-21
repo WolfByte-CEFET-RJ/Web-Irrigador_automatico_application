@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Pressable, SafeAreaView, ScrollView} from 'react-native';
 import { styles } from './styles';
 import Svg, { Rect } from 'react-native-svg';
@@ -6,6 +6,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import BottomBar from '../../components/bottomBar/BottomBar';
 import { StatusBar } from 'expo-status-bar';
+import Button from "../../components/button/Button";
+import { Platform } from 'react-native';
 
 const ViewGarden = ({ route }) => {
   const { horta } = route.params || {};
@@ -15,10 +17,8 @@ const ViewGarden = ({ route }) => {
 
   const navigation = useNavigation();   
 
-  // TODO: renderizar a descrição da horta
-  // TODO: text que mostra qual configuração está sendo usada
   // TODO: consertar as barras que mostram os níveis de umidade e de água
-  // TODO: botão editar horta que abre o modal EditModal.js
+  // TODO: adicionar mensagem que mostra o estado da horta (tudo certo, nível de água/umidade baixo/alto)
 
   return (
     
@@ -36,30 +36,37 @@ const ViewGarden = ({ route }) => {
             <Text style={styles.view_title}>{horta.nome}</Text>
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
-            
-
-            {/* Barra de Umidade */}
-            <Svg height="200" width="40">
-                <Rect
-                    x="10"
-                    y={200 - (porcentagemUmidade * 2)}
-                    width="20"
-                    height={porcentagemUmidade * 2}
-                    fill="#609966"
-                />
-            </Svg>
-            <Text>Umidade: {porcentagemUmidade}%</Text>
-            {/* Barra de Água */}
-            <Svg height="200" width="40">
-                <Rect
-                    x="10"
-                    y={200 - (porcentagemAgua * 2)}
-                    width="20"
-                    height={porcentagemAgua * 2}
-                    fill="#609966"
-                />
-            </Svg>
-            <Text>Água: {porcentagemAgua}%</Text>
+            <SafeAreaView style={styles.view_description}>
+                <Text style={styles.descriptionText}>{horta.descricao}</Text>
+            </SafeAreaView>
+            <Text style={styles.config_Text}>Configuração: <b>{horta.config}</b></Text>
+            <SafeAreaView style={styles.view_bars}>
+                {/* Barra de Umidade */}
+                <Svg height="200" width="40">
+                    <Rect
+                        x="10"
+                        y={200 - (porcentagemUmidade * 2)}
+                        width="20"
+                        height={porcentagemUmidade * 2}
+                        fill="#609966"
+                    />
+                </Svg>
+                <Text>Umidade: {porcentagemUmidade}%</Text>
+                {/* Barra de Água */}
+                <Svg height="200" width="40">
+                    <Rect
+                        x="10"
+                        y={200 - (porcentagemAgua * 2)}
+                        width="20"
+                        height={porcentagemAgua * 2}
+                        fill="#609966"
+                    />
+                </Svg>
+                <Text>Água: {porcentagemAgua}%</Text>
+            </SafeAreaView> 
+            <SafeAreaView style={styles.btndiv}>
+                <Button title="Editar"/>
+            </SafeAreaView >
         </ScrollView>
         <View style={styles.bottomBar_container}>
             <BottomBar/>

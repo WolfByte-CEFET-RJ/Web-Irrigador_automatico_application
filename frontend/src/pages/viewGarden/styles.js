@@ -21,14 +21,14 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: '10%',
+        marginTop: '12%',
+        marginBottom: '10%'
     },
 
     view_title: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#40513B',
-    // fontFamily: 'Poppins-Bold',
     },
 
     bottomBar_container: {
@@ -48,4 +48,30 @@ export const styles = StyleSheet.create({
     contentContainer:{
         flexGrow: 1, // isso que faz o scrollview funcionar 
     },
+
+    view_description: {
+        backgroundColor: '#D8E4C2',
+        borderRadius: 8,
+        alignSelf: 'center',
+        marginBottom: '10%',
+        width: '80%',
+    },
+
+    descriptionText:{
+        color: '#40513B',
+        fontWeight: 'bold',
+        padding: 14
+    },
+
+    config_Text: {
+        color: '#40513B',
+        fontSize: 16,
+        alignSelf: 'center',
+        marginBottom: '10%',
+    },
+
+    view_bars: {
+        display: 'flex',
+        flexDirection: 'row',
+    }
 });

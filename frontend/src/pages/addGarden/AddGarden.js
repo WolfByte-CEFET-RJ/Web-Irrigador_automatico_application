@@ -34,6 +34,7 @@ const AddGarden = () => {
       descricao: description,
       umidade: 30, // Valor padrão
       agua: 30,    // Valor padrão
+      config: "default" // valor padrão
     };
   
     // Adicionar a nova horta ao arquivo hortas.json
@@ -88,7 +89,10 @@ const AddGarden = () => {
           <SafeAreaView style={styles.subtitle_container}>
             <Text style={styles.subtitle}>Configuração de irrigação</Text>
           </SafeAreaView>
-          <InputDark placeHolder="default" editable={false}/>
+          <InputDark 
+            placeHolder="default" 
+            editable={false}
+          />
           <SafeAreaView style={styles.btndiv}>
             <Button title="Adicionar horta" onPress={()=>handleSubmit()}/>
           </SafeAreaView >
