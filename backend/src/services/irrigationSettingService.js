@@ -53,15 +53,16 @@ module.exports = {
     },
     async createIrrigationSetting(name, userId, humidityValue, waterValue) {
         await settingSchema.validate({name, userId, humidityValue, waterValue})
-        const settingInfo = await knex('irrigationSetting').where({name}).first();
-        if(settingInfo){throw new Error('Já existe uma config com este nome!')}
+        const settingInfo = await knex('irrigationSetting').select("id").where({ name, userId }).first();
+
+        if(settingInfo){throw new Error('Você já criou uma configuração de irrigação com este nome!')}
 
         await knex('irrigationSetting').insert({
             name,
             userId
         });
 
-        const irrigationId = await knex('irrigationSetting').select("id").where({ name }).first();
+        const irrigationId = await knex('irrigationSetting').select("id").where({ name, userId }).first();
 
         await knex('configSensor').insert([
            {irrigationId: irrigationId.id, sensorId: 1, value: humidityValue},
@@ -79,8 +80,11 @@ module.exports = {
         if(settingData.userId){throw new Error('Você não pode alterar o userId')}
 
         if (settingData.name){
+            const settingInfo = await knex('irrigationSetting').select("id").where({ name: settingData.name, userId: myId }).first();
+            if (settingInfo){throw new Error('Já existe uma configuração com esse nome!')}
+
             const settingForChange = await knex('irrigationSetting').where({ id }).update({name: settingData.name});
-            if (!settingForChange){throw new Error('Esta configuração não existe')}
+            if (!settingForChange){throw new Error('Esta configuração não existe!')}
         }
        
         if (settingData.humidityValue){
