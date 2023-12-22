@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     view_container: {
         flex: 1,
         backgroundColor: '#EDF1D6',
-        alignItems: 'center',
+        // alignItems: 'center',
         justifyContent: 'flex-start',
         height: '100vh',
     },
@@ -73,5 +73,21 @@ export const styles = StyleSheet.create({
     view_bars: {
         display: 'flex',
         flexDirection: 'row',
-    }
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        width: '100%',
+    },
+
+    view_bars_status: {
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+
+    btndiv: {
+        alignItems: 'center',
+        display: 'flex',
+        marginTop: '40%',
+    },
+
+
 });

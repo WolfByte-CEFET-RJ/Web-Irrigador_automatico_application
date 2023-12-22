@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, SafeAreaView, ScrollView} from 'react-native';
 import { styles } from './styles';
-import Svg, { Rect } from 'react-native-svg';
+import Svg, { Rect, Circle } from 'react-native-svg';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import BottomBar from '../../components/bottomBar/BottomBar';
@@ -40,30 +40,36 @@ const ViewGarden = ({ route }) => {
                 <Text style={styles.descriptionText}>{horta.descricao}</Text>
             </SafeAreaView>
             <Text style={styles.config_Text}>Configuração: <b>{horta.config}</b></Text>
+            
             <SafeAreaView style={styles.view_bars}>
                 {/* Barra de Umidade */}
-                <Svg height="200" width="40">
-                    <Rect
-                        x="10"
-                        y={200 - (porcentagemUmidade * 2)}
-                        width="20"
-                        height={porcentagemUmidade * 2}
-                        fill="#609966"
-                    />
-                </Svg>
-                <Text>Umidade: {porcentagemUmidade}%</Text>
+                <View style={styles.view_bars_status}>
+                    <Svg height="200" width="40" >
+                        <Rect
+                            x="0"
+                            y={200 - (porcentagemUmidade * 2)}
+                            width="40"
+                            height={porcentagemUmidade * 2}
+                            fill="#609966"
+                        />
+                    </Svg>
+                    <Text>Umidade: {porcentagemUmidade}%</Text>
+                </View>
                 {/* Barra de Água */}
-                <Svg height="200" width="40">
-                    <Rect
-                        x="10"
-                        y={200 - (porcentagemAgua * 2)}
-                        width="20"
-                        height={porcentagemAgua * 2}
-                        fill="#609966"
-                    />
-                </Svg>
-                <Text>Água: {porcentagemAgua}%</Text>
+                <View style={styles.view_bars_status}>
+                    <Svg height="200" width="40">
+                        <Rect
+                            x="0"
+                            y={200 - (porcentagemAgua * 2)}
+                            width="40"
+                            height={porcentagemAgua * 2}
+                            fill="#609966"
+                        />
+                    </Svg>
+                    <Text>Água: {porcentagemAgua}%</Text> 
+                </View>
             </SafeAreaView> 
+
             <SafeAreaView style={styles.btndiv}>
                 <Button title="Editar"/>
             </SafeAreaView >
