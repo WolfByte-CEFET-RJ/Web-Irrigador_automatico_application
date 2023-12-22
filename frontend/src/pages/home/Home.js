@@ -15,7 +15,7 @@ export default function Home(){
   
   const navigation = useNavigation();
   const [hortas, setHortas] = useState([]);
-  const [burcarHorta, setBurcarHorta] = useState('');
+  const [buscarHorta, setBurcarHorta] = useState('');
 
   useEffect(() => {
     async function fetchHortas() {
@@ -31,10 +31,9 @@ export default function Home(){
   }, []);
 
   const filtrarHortas = () => {
-    return hortas.filter((horta) => {
-      const numeroFinalHorta = horta.nome.slice(-3);
-      return numeroFinalHorta.includes(burcarHorta);
-    });
+    return hortas.filter((horta) =>
+      horta.nome.toLowerCase().includes(buscarHorta.toLowerCase())
+    );
   };
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -114,12 +113,3 @@ export default function Home(){
     </View>
   )
 }
-
-/*FILTRO POR NOME
-
-const filtrarHortas = () => {
-    return hortas.filter((horta) =>
-      horta.nome.toLowerCase().includes(termoBusca.toLowerCase())
-    );
-  };
-*/ 
