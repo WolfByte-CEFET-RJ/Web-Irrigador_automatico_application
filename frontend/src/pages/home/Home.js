@@ -7,6 +7,7 @@ import axios from "axios";
 import BottomBar from '../../components/bottomBar/BottomBar'
 import DeleteGardenModal from "../../components/deleteModal/DeleteGardenModal";
 import { StatusBar } from 'expo-status-bar';
+import EditModal from "../../components/editModal/EditModal";
 
 // !ATENÇÃO: Para fazer as hortas rodarem você tem que digitar "json-server --watch hortas.json --port 3001" na pasta data
 const API_URL = 'http://localhost:3001';

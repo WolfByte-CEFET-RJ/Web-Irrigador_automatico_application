@@ -19,25 +19,17 @@
     {
       "id": 3,
       "nome": "Horta #003",
-      "umidade": 40,
+      "umidade": 30,
       "agua": 20,
-      "descricao": "ccc",
+      "descricao": "bbb",
       "config": "default"
     },
     {
       "id": 4,
-      "nome": "horta de alface",
-      "descricao": "solo fértil, luz abundante, fileiras paralelas",
+      "nome": "Horta #004",
       "umidade": 30,
-      "agua": 30,
-      "config": "default"
-    },
-    {
-      "id": 5,
-      "nome": "horta de beterraba",
-      "descricao": "solo fértil, fileiras organizadas, irrigação suave, luz solar adequada, colheita contínua, frescor e nutrientes",
-      "umidade": 30,
-      "agua": 30,
+      "agua": 20,
+      "descricao": "bbb",
       "config": "default"
     }
   ]
