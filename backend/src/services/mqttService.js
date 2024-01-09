@@ -23,20 +23,20 @@ function createMqttClient() {
 module.exports = {
     async insertData(data){
 
-        const { identificador, sensor, medida } = data;
+        let message = data.split(",");
+
+        const [identificador, valorUmidade, valorAgua] = message;
 
         const garden = await knex('garden').select("id").where({identifier: identificador}).first();
 
         if (!garden){throw new Error('O identificador informado não pertence a uma horta!');}
 
-        let sensorId = sensor === "Umidade" ? 1 : 2;
+        const date = knex.fn.now();
         
-        await knex('measurement').insert({
-            measurement: medida,
-            date: knex.fn.now(),
-            sensorId: sensorId,
-            gardenId: garden.id
-        });
+        await knex('measurement').insert([
+            {measurement: valorUmidade, date, sensorId: 1, gardenId: garden.id},
+            {measurement: valorAgua, date, sensorId: 2, gardenId: garden.id}
+        ]);
     },
 
     async checkAndSendIrrigationMessage(data){

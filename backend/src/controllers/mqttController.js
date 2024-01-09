@@ -22,9 +22,10 @@ client.on('message', async (topic, message, packet) => {
   console.log("Mensagem recebiba!")
   if(topic === topicName) { 
     try {
-      const jsonMessage = JSON.parse(message);
-      console.log('Conteudo:', jsonMessage);
-      await mqttService.insertData(jsonMessage);
+      //"identificador,umidade,agua"
+      const stringMessage = message.toString();
+      console.log('Conteudo:', stringMessage);
+      await mqttService.insertData(stringMessage);
       await mqttService.checkAndSendIrrigationMessage(jsonMessage);
     } catch (error) {
       console.error('Erro: ', error);
