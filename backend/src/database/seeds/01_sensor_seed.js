@@ -9,7 +9,7 @@ exports.seed = async function(knex) {
      await trx('sensor').del();
      await trx('sensor').insert([
        { id: 1, name: 'Umidade', unitOfMeasurement: "%" },
-       { id: 2, name: 'Temperatura', unitOfMeasurement: "%" }
+       { id: 2, name: 'NivelAgua', unitOfMeasurement: "%" }
      ]);
  
      await trx.raw('SET FOREIGN_KEY_CHECKS = 1');
