@@ -15,22 +15,6 @@
       "agua": 20,
       "descricao": "bbb",
       "config": "default"
-    },
-    {
-      "id": 3,
-      "nome": "Horta #003",
-      "umidade": 30,
-      "agua": 20,
-      "descricao": "bbb",
-      "config": "default"
-    },
-    {
-      "id": 4,
-      "nome": "Horta #004",
-      "umidade": 30,
-      "agua": 20,
-      "descricao": "bbb",
-      "config": "default"
     }
   ]
 }
