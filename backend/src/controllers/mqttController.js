@@ -26,7 +26,7 @@ client.on('message', async (topic, message, packet) => {
       const stringMessage = message.toString();
       console.log('Conteudo:', stringMessage);
       await mqttService.insertData(stringMessage);
-      await mqttService.checkAndSendIrrigationMessage(jsonMessage);
+      await mqttService.checkAndSendIrrigationMessage(stringMessage);
     } catch (error) {
       console.error('Erro: ', error);
       console.log('Conteúdo da mensagem:', message.toString());
