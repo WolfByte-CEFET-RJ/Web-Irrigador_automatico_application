@@ -34,17 +34,23 @@ export default function SignUp(){
     console.log(data);
 
     if(name === '' || email === '' || password === '' || confirmPassword === '') {
-      alert('Preencha todos os campos');
+      Alert.alert('Preencha todos os campos');
+    }
+    else if (name.length < 3){
+      Alert.alert('O nome de usuário deve ter mais de 2 letras');
+    } 
+    else if(password.length < 6){
+      Alert.alert('A senha deve ter mais de 5 caracteres');
     }
     else if(password !== confirmPassword) {
-      alert('Senhas não coincidem');
-    }
+      Alert.alert('Senhas não coincidem');
+    } 
     else {
       try { 
         const response = await axios.post('http://localhost:5000/user', data) //solicitação POST (criar dados) para a URL do backend
         console.log(response.data);
         Alert.alert('Sucesso', 'Usuário cadastrado');
-        // navigation.navigate('Home'); //usuário cadastrado com sucesso -> vai para a Home
+        navigation.navigate('SignIn'); //usuário cadastrado com sucesso -> vai para a Home
       }
       catch (error) {
         //caso ocorra um erro na solicitação

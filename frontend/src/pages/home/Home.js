@@ -54,7 +54,7 @@ export default function Home(){
   };
 
   // TODO: renderizar o nome do usuário
-  // TODO: filtrar por nome 
+  // TODO: filtrar por nome (Feito ~terencio)
   
   return(
     <View style={styles.home_container}>
