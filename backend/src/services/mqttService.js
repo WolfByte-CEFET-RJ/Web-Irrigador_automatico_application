@@ -20,7 +20,7 @@ function createMqttClient() {
     return mqtt.connect(connectUrl, options);
 }
 
-function extractValuesFromString() {
+function extractValuesFromString(message) {
     const [identificador, valorUmidade, valorAgua] = message.split(',');
     return { identificador, valorUmidade, valorAgua };
 }
@@ -33,7 +33,7 @@ module.exports = {
 
         if (!garden){throw new Error('O identificador informado não pertence a uma horta!');}
 
-        const date = knex.fn.now();
+        const date = new Date();
         
         await knex('measurement').insert([
             {measurement: valorUmidade, date, sensorId: 1, gardenId: garden.id},
