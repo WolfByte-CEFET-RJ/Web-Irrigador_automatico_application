@@ -20,12 +20,14 @@ function createMqttClient() {
     return mqtt.connect(connectUrl, options);
 }
 
+function extractValuesFromString() {
+    const [identificador, valorUmidade, valorAgua] = message.split(',');
+    return { identificador, valorUmidade, valorAgua };
+}
+
 module.exports = {
     async insertData(data){
-
-        let message = data.split(",");
-
-        const [identificador, valorUmidade, valorAgua] = message;
+        const {identificador, valorUmidade, valorAgua} = extractValuesFromString(data);
 
         const garden = await knex('garden').select("id").where({identifier: identificador}).first();
 
@@ -39,10 +41,11 @@ module.exports = {
         ]);
     },
 
-    async checkAndSendIrrigationMessage(data){
-
-        const { identificador, sensor, medida } = data;
-        console.log(medida)
+    async checkAndSendIrrigationMessage(data, mqttClient){
+        const {identificador, valorUmidade, valorAgua} = extractValuesFromString(data);
+        
+        console.log(`Nível de Umidade: ${valorUmidade}, Nível da Água: ${valorAgua}`)
+        
         const garden = await knex('garden')
             .select('id', 'configId')
             .where({identifier: identificador})
@@ -52,34 +55,45 @@ module.exports = {
             throw new Error('O identificador informado não pertence a uma horta!');
         }
 
-        const configSensor = await knex('configSensor')
+        const configSensorUmidade = await knex('configSensor')
             .select('value')
             .where({
-                sensorId: knex('sensor').select('id').where({name: sensor}),
+                sensorId: knex('sensor').select('id').where({ name: 'Umidade' }),
                 irrigationId: garden.configId
             })
             .first();
-        
-        if (!configSensor){
+
+        const configSensorAgua = await knex('configSensor')
+            .select('value')
+            .where({
+                sensorId: knex('sensor').select('id').where({ name: 'NivelAgua' }),
+                irrigationId: garden.configId
+            })
+            .first();
+
+        if (!configSensorUmidade || !configSensorAgua) {
             throw new Error('A configuração do sensor não foi encontrada!');
         }
 
-        if (parseFloat(medida) < parseFloat(configSensor.value)) {
-            // Enviar mensagem para o mesmo tópico indicando que a planta deve ser irrigada
-            const client = createMqttClient();
+        if (parseFloat(valorUmidade) < parseFloat(configSensorUmidade.value)) {
+            if (parseFloat(valorAgua) >= parseFloat(configSensorAgua.value)) {
+                // Enviar mensagem para o mesmo tópico indicando que a planta deve ser irrigada
+                const topicName = 'Outros/Estado_Motor';
+                const payload = `{"identificador": "${identificador}", "mensagem": "Planta precisa ser irrigada!"}`;
+                const qos = 0;
 
-            const topicName = 'Outros/Estado_Motor';
-            const payload = `{"identificador": "${identificador}", "mensagem": "Planta precisa ser irrigada!"}`;
-            const qos = 0;
-
-            client.on('connect', () => {
-                console.log(`${client.options.protocol}: Connected`);
-                client.publish(topicName, payload, { qos }, (error) => {
+                mqttClient.publish(topicName, payload, { qos }, (error) => {
                     if (error) {
                         console.error(error);
                     }
                 });
-            });
+            } else {
+                // Avisar ao front-end que precisa encher o reservatório de água
+                console.log('Nível de água no reservatório está baixo. Avisar ao front-end para encher o reservatório.');
+            }
+        } else if (parseFloat(valorAgua) < parseFloat(configSensorAgua.value)) {
+            // Avisar ao front-end que precisa encher o reservatório de água
+            console.log('Nível de água no reservatório está baixo. Avisar ao front-end para encher o reservatório.');
         }
     },
 
