@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
+import ErrorComponent from '../../components/Error/ErrorComponent';
 
 export default function SignUp(){
 
@@ -19,6 +20,7 @@ export default function SignUp(){
   const [confirmPassword, setconfirmPassword] = useState('');
   const [humidityNotification, setHumidityNotification] = useState(1);
   const [waterNotification, setWaterNotification] = useState(1);
+  const [error, setError] = useState('');
 
 
   const handleSubmit = async () => {
@@ -34,29 +36,22 @@ export default function SignUp(){
     console.log(data);
 
     if(name === '' || email === '' || password === '' || confirmPassword === '') {
-      Alert.alert('Preencha todos os campos');
-    }
-    else if (name.length < 3){
-      Alert.alert('O nome de usuário deve ter mais de 2 letras');
+      setError('Preencha todos os campos');
     } 
-    else if(password.length < 6){
-      Alert.alert('A senha deve ter mais de 5 caracteres');
+    else if (password != confirmPassword) {
+      setError('Senhas não coincidem');
     }
-    else if(password !== confirmPassword) {
-      Alert.alert('Senhas não coincidem');
-    } 
     else {
       try { 
-        const response = await axios.post('http://localhost:5000/user', data) //solicitação POST (criar dados) para a URL do backend
-        console.log(response.data);
-        Alert.alert('Sucesso', 'Usuário cadastrado');
+        await axios.post('http://localhost:5000/user', data) //solicitação POST (criar dados) para a URL do backend
         navigation.navigate('SignIn'); //usuário cadastrado com sucesso -> vai para a Home
       }
       catch (error) {
         //caso ocorra um erro na solicitação
         //mensagem de erro -> usuário já cadastrado
-        Alert.alert('Erro', 'Usuário já cadastrado');
-        console.log(error, 'Usuário já cadastrado');
+        // Alert.alert('Erro', 'Usuário já cadastrado');
+        // console.log(error, 'Usuário já cadastrado');
+        setError(error.response.data.message);
       }
     }
   }
@@ -72,6 +67,7 @@ export default function SignUp(){
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -50}
         style={styles.cadastro_container} >
         <StatusBar/>
+        {error && <ErrorComponent message={error} />}
         <View style={styles.logo_container}>
           <Image style={styles.logo} source={require('../../../assets/android-chrome-192x192.png')}/>
         </View>

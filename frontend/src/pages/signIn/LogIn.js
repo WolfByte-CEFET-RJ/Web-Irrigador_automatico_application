@@ -17,30 +17,30 @@ const LogIn = () => {
 
   const handleSubmit = async () => {
 
+    //* Dados de input do usuário 
     const data = {
     email,
     password,
   }
 
-  console.log(data);
-
+    //* Verifica se os inputs foram preenchidos
     if(email === '' || password === '') {
-      alert('Preencha todos os campos');
+      setError("Preencha todos os campos");
     } 
     else {
       try {
-        const response = await axios.post('http://localhost:5000/login', data);
-        const {token} = response.data;
-        console.log(token);
-        navigation.navigate()
+        //* Envia os dados a API e caso esteja cadastrado irá ser redirecionado a tela de Home
+        await axios.post('http://localhost:5000/login', data);
+        navigation.navigate("Home")
       }
       catch (error) {
+        //* Verifica o erro e printa na tela para o usuário
         console.error(error);
         setError(error.response.data.message);
-        if (error.response) {
-          console.error('Dados do erro:', error.response.data.message);
-          console.error('Status do erro:', error.response.status);
-        }
+        // if (error.response) {
+        //   console.error('Dados do erro:', error.response.data.message);
+        //   console.error('Status do erro:', error.response.status);
+        // }
       }
     }
   }
