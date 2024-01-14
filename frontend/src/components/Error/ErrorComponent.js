@@ -2,23 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { styles } from './styles';
 
-const ErrorComponent = ({ message, duration = 3000, onTimeout }) => {
-  const [visible, setVisible] = useState(true);
+const ErrorComponent = ({ message }) => {
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setVisible(false);
-      if (onTimeout) {
-        onTimeout();
-      }
-    }, duration);
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [duration, onTimeout]);
-
-  return visible ? (
+  return message ? (
     <View style={styles.container}>
       <Text style={styles.errorText}>{message}</Text>
     </View>

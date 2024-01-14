@@ -33,17 +33,22 @@ export default function SignUp(){
       waterNotification,
     }
 
-    console.log(data);
-
     if(name === '' || email === '' || password === '' || confirmPassword === '') {
       setError('Preencha todos os campos');
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     } 
     else if (password != confirmPassword) {
       setError('Senhas não coincidem');
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     }
     else {
       try { 
-        await axios.post('http://localhost:5000/user', data) //solicitação POST (criar dados) para a URL do backend
+        response = await axios.post('http://localhost:5000/user', data); //solicitação POST (criar dados) para a URL do backend
+        console.log(response);
         navigation.navigate('SignIn'); //usuário cadastrado com sucesso -> vai para a Home
       }
       catch (error) {
@@ -52,6 +57,9 @@ export default function SignUp(){
         // Alert.alert('Erro', 'Usuário já cadastrado');
         // console.log(error, 'Usuário já cadastrado');
         setError(error.response.data.message);
+        setTimeout(() => {
+          setError('');
+        }, 3000);
       }
     }
   }
@@ -67,7 +75,7 @@ export default function SignUp(){
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -50}
         style={styles.cadastro_container} >
         <StatusBar/>
-        {error && <ErrorComponent message={error} />}
+        <ErrorComponent message={error} />
         <View style={styles.logo_container}>
           <Image style={styles.logo} source={require('../../../assets/android-chrome-192x192.png')}/>
         </View>
