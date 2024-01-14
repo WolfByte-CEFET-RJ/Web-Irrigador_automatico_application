@@ -9,6 +9,7 @@ import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import ErrorComponent from '../../components/Error/ErrorComponent';
+import SucessComponent from "../../components/sucess/SucessComponent";
 
 export default function SignUp(){
 
@@ -21,7 +22,7 @@ export default function SignUp(){
   const [humidityNotification, setHumidityNotification] = useState(1);
   const [waterNotification, setWaterNotification] = useState(1);
   const [error, setError] = useState('');
-
+  const [sucess, setSucess] = useState('')
 
   const handleSubmit = async () => {
 
@@ -29,8 +30,8 @@ export default function SignUp(){
       name,
       email,
       password,
-      humidityNotification,
-      waterNotification,
+      humidityNotification: true,
+      waterNotification: true,
     }
 
     if(name === '' || email === '' || password === '' || confirmPassword === '') {
@@ -47,15 +48,18 @@ export default function SignUp(){
     }
     else {
       try { 
-        response = await axios.post('http://localhost:5000/user', data); //solicitação POST (criar dados) para a URL do backend
-        console.log(response);
-        navigation.navigate('SignIn'); //usuário cadastrado com sucesso -> vai para a Home
+        const response = await axios.post('http://localhost:5000/user', data); //solicitação POST (criar dados) para a URL do backend
+        setSucess('Usuário cadastrado com sucesso!');
+        setTimeout(() => {
+          setSucess('');
+        }, 3000);
       }
       catch (error) {
         //caso ocorra um erro na solicitação
         //mensagem de erro -> usuário já cadastrado
         // Alert.alert('Erro', 'Usuário já cadastrado');
         // console.log(error, 'Usuário já cadastrado');
+        console.log(data);
         setError(error.response.data.message);
         setTimeout(() => {
           setError('');
@@ -76,6 +80,7 @@ export default function SignUp(){
         style={styles.cadastro_container} >
         <StatusBar/>
         <ErrorComponent message={error} />
+        <SucessComponent message={sucess}/>
         <View style={styles.logo_container}>
           <Image style={styles.logo} source={require('../../../assets/android-chrome-192x192.png')}/>
         </View>
@@ -98,7 +103,7 @@ export default function SignUp(){
             <Input label="Confirme sua senha" placeHolder="Confirme sua senha" value={confirmPassword} onChangeText={text=>setconfirmPassword(text)} isPassword={true}/>
           </View>
           <View style={styles.button_container}>
-            <Button title="Cadastrar" onPress={()=>handleSubmit()}/>
+            <Button title="Cadastrar" onPress={()=> handleSubmit()}/>
           </View>
         </View>
       </KeyboardAvoidingView>
