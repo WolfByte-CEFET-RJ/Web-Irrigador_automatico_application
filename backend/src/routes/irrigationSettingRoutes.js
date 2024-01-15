@@ -6,6 +6,7 @@ const IrrigationSettingController = require('../controllers/irrigationSettingCon
 router
   
       .get('/setting/:id?',auth, IrrigationSettingController.getSettings)
+      .get('/userSettings/:id',auth, IrrigationSettingController.getUserSettings)
 
       .post('/setting', auth, IrrigationSettingController.createIrrigationSetting)
 
