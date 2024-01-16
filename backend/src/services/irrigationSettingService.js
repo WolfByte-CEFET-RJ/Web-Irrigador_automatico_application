@@ -1,5 +1,6 @@
 const knex = require('../database');
 const yup = require('yup');
+const gardenService = require('./gardenService')
 
 const settingSchema = yup.object().shape({
     name: yup.string().min(3, 'O nome deve ter pelo menos 3 caracteres').required(), 
@@ -41,6 +42,8 @@ module.exports = {
         const setting = await knex('irrigationSetting').select('irrigationSetting.id', 'irrigationSetting.name', 'irrigationSetting.userId', 'configSensor.value')
         .join('configSensor', 'irrigationSetting.id', '=', 'configSensor.irrigationId').where({ id });
 
+        if (!setting.length) {throw new Error('Esta config não existe!')}
+
         const finalSetting = {
             id: setting[0].id,
             name: setting[0].name,
@@ -51,17 +54,42 @@ module.exports = {
 
         return finalSetting;
     },
+    async getUserSettings(userId) {
+        const settings = await knex('irrigationSetting')
+        .select(
+            'irrigationSetting.id as id',
+            'irrigationSetting.name as name',
+            'irrigationSetting.userId as userId',
+            knex.raw('JSON_ARRAYAGG(JSON_OBJECT(\'sensorId\', configSensor.sensorId, \'value\', configSensor.value)) as sensors')
+        )
+        .where({ userId })
+        .join('configSensor', 'irrigationSetting.id', '=', 'configSensor.irrigationId')
+        .groupBy('irrigationSetting.id')
+        .orderBy('irrigationSetting.id', 'asc');
+
+        const finalSetting = settings.map(setting => ({
+            id: setting.id,
+            name: setting.name,
+            userId: setting.userId,
+            humidityValue: JSON.parse(setting.sensors)[0].value,
+            waterValue: JSON.parse(setting.sensors)[1].value
+        }))
+
+        return finalSetting;
+       
+    },
     async createIrrigationSetting(name, userId, humidityValue, waterValue) {
         await settingSchema.validate({name, userId, humidityValue, waterValue})
-        const settingInfo = await knex('irrigationSetting').where({name}).first();
-        if(settingInfo){throw new Error('Já existe uma config com este nome!')}
+        const settingInfo = await knex('irrigationSetting').select("id").where({ name, userId }).first();
+
+        if(settingInfo){throw new Error('Você já criou uma configuração de irrigação com este nome!')}
 
         await knex('irrigationSetting').insert({
             name,
             userId
         });
 
-        const irrigationId = await knex('irrigationSetting').select("id").where({ name }).first();
+        const irrigationId = await knex('irrigationSetting').select("id").where({ name, userId }).first();
 
         await knex('configSensor').insert([
            {irrigationId: irrigationId.id, sensorId: 1, value: humidityValue},
@@ -79,8 +107,11 @@ module.exports = {
         if(settingData.userId){throw new Error('Você não pode alterar o userId')}
 
         if (settingData.name){
+            const settingInfo = await knex('irrigationSetting').select("id").where({ name: settingData.name, userId: myId }).first();
+            if (settingInfo){throw new Error('Já existe uma configuração com esse nome!')}
+
             const settingForChange = await knex('irrigationSetting').where({ id }).update({name: settingData.name});
-            if (!settingForChange){throw new Error('Esta configuração não existe')}
+            if (!settingForChange){throw new Error('Esta configuração não existe!')}
         }
        
         if (settingData.humidityValue){
@@ -97,12 +128,21 @@ module.exports = {
     },
     async deleteIrrigationSetting(settingId, userId) {
         const setting = await this.getOneSetting(settingId); 
-        if (!setting){
-            throw new Error('Esta config não existe!')
-        }
+
         if(setting.id === 1){throw new Error('Você não pode apagar uma configuração padrão')}
         if (setting.userId != userId){throw new Error('Esta config não pertence a você!')}
 
+        const inUseSettings = await knex('garden').select('id').where({ configId: settingId })
+        if (inUseSettings.length > 0){
+                inUseSettings.forEach(async item => {
+                     gardenId = item.id;
+                    gardenData = {configId: 1}
+                    
+                    await knex('garden').where({ id:gardenId }).update(gardenData);        
+            });
+
+           
+        }
         const deleteValues = await knex('configSensor').where({irrigationId: settingId}).del();
 
         if (!deleteValues){throw new Error('Erro ao apagar valores da configuração!')}

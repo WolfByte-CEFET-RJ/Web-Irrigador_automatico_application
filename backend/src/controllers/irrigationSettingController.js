@@ -17,6 +17,17 @@ module.exports = {
         return res.status(400).json({ message: error.message });
         }   
     },
+    async getUserSettings(req, res) {
+        const { id } = req.params;
+    
+        try {
+            const setting = await irrigationSettingService.getUserSettings(id);
+            return res.status(200).json(setting);
+    
+            } catch (error) {
+            return res.status(400).json({ message: error.message });
+            }   
+        },
     async createIrrigationSetting(req, res) {
         const { name, humidityValue, waterValue } = req.body;
         const userId = req.user_id;
