@@ -42,6 +42,8 @@ module.exports = {
         const setting = await knex('irrigationSetting').select('irrigationSetting.id', 'irrigationSetting.name', 'irrigationSetting.userId', 'configSensor.value')
         .join('configSensor', 'irrigationSetting.id', '=', 'configSensor.irrigationId').where({ id });
 
+        if (!setting.length) {throw new Error('Esta config não existe!')}
+
         const finalSetting = {
             id: setting[0].id,
             name: setting[0].name,
@@ -126,9 +128,7 @@ module.exports = {
     },
     async deleteIrrigationSetting(settingId, userId) {
         const setting = await this.getOneSetting(settingId); 
-        if (!setting){
-            throw new Error('Esta config não existe!')
-        }
+
         if(setting.id === 1){throw new Error('Você não pode apagar uma configuração padrão')}
         if (setting.userId != userId){throw new Error('Esta config não pertence a você!')}
 
