@@ -21,14 +21,16 @@ function createMqttClient() {
 }
 
 function extractValuesFromString(message) {
-    const [identificador, valorUmidade, valorAgua] = message.split(',');
+    const cleanedMessage = message.replace(/["\n\r\s]/g, '').trim();
+    const [identificador, valorUmidade, valorAgua] = cleanedMessage.split(',');
+        
     return { identificador, valorUmidade, valorAgua };
 }
 
 module.exports = {
     async insertData(data){
         const {identificador, valorUmidade, valorAgua} = extractValuesFromString(data);
-
+        
         const garden = await knex('garden').select("id").where({identifier: identificador}).first();
 
         if (!garden){throw new Error('O identificador informado não pertence a uma horta!');}
@@ -43,8 +45,6 @@ module.exports = {
 
     async checkAndSendIrrigationMessage(data, mqttClient){
         const {identificador, valorUmidade, valorAgua} = extractValuesFromString(data);
-        
-        console.log(`Nível de Umidade: ${valorUmidade}, Nível da Água: ${valorAgua}`)
         
         const garden = await knex('garden')
             .select('id', 'configId')
@@ -97,5 +97,20 @@ module.exports = {
         }
     },
 
-    createMqttClient,
+    async recordIrrigationHistory(identificador) {
+        const garden = await knex('garden').select('id').where({ identifier: identificador }).first();
+
+        if (!garden) {
+            throw new Error('O identificador informado não pertence a uma horta!');
+        }
+
+        await knex('irrigationHistory').insert({
+            date: new Date(),
+            gardenId: garden.id,
+        });
+
+        console.log('Histórico de irrigação registrado com sucesso!');
+    },
+
+    createMqttClient, extractValuesFromString,
 };
