@@ -53,6 +53,7 @@ export default function SignUp(){
         setTimeout(() => {
           setSucess('');
         }, 3000);
+        setTimeout(() => navigation.navigate('SignIn'),3000); //retorna à tela de início após cadastro
       }
       catch (error) {
         //caso ocorra um erro na solicitação
