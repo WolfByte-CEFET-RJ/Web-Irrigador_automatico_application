@@ -11,6 +11,10 @@ router
       .patch('/garden/:id',auth, GardenController.updateGarden)
 
       .delete('/garden/:id',auth, GardenController.deleteGarden)
+
+      .get('/measures/garden/:id', auth, GardenController.getMeasuresGarden)
       
+      .get('/measures/garden', auth, GardenController.getMeasuresAllGardens)
+
 
 module.exports = router
