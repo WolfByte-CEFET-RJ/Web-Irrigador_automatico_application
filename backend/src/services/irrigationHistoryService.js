@@ -2,19 +2,20 @@ const knex = require("../database");
 
 module.exports = {
     async getAllUserGardensHistory(userId){
-        // Primeira opção
+        const userGardensHistory = await knex('user as u').select('g.name as gardenName', 'ih.date as date')
+        .join('garden as g', 'g.userId', '=', 'u.id')
+        .join('irrigationHistory as ih', 'ih.gardenId', '=', 'g.id')
+        .where('u.id', userId).orderBy('date', 'asc')
 
-        /*
-        select ih.date from user u
-        join garden g on (g.userId = u.id)
-        join irrigationHistory ih on (ih.gardenId = g.id)
-        where user = userId
-        */
-
-        // Segunda opção:pPegar todas as hortas de um usuário e retornar os históricos comparando esses ids na consulta
+        return userGardensHistory;
     },
 
-    async getOneGardenHistory(gardenId){
+    async getOneGardenHistory(userId, gardenName){
+        /*const userGardenHistory = await knex('user as u').select('g.name as gardenName', 'ih.date as date')
+        .join('garden as g', 'g.userId', '=', 'u.id')
+        .join('irrigationHistory as ih', 'ih.gardenId', '=', 'g.id')
+        .where('u.id', userId).orderBy('date', 'asc')
 
+        return userGardenHistory;*/
     }
 }
