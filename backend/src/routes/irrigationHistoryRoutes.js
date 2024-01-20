@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 
 router
       .get("/history", auth, irrgationHistoryController.getAllUserGardensHistory)
-      .get("/history/name", auth, irrgationHistoryController.getOneGardenHistory)
+      .get("/history/busca", auth, irrgationHistoryController.getOneGardenHistory)
 
 
 
