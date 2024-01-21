@@ -1,6 +1,9 @@
 import Navigation from './src/routes/routes';
 import React, { useState, useEffect } from 'react';
 import { View, Image, ActivityIndicator, StyleSheet, Animated, Text} from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import Routes from './src/routes';
+
 const LoadingScreen = () => {
   const [fadeAnim] = useState(new Animated.Value(0));
 
