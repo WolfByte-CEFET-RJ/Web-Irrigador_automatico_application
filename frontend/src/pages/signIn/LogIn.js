@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { styles } from './styles';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, Image, Pressable, TouchableOpacity} from 'react-native';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import ErrorComponent from '../../components/Error/ErrorComponent';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
+import AuthContext from '../../contexts/auth';
 
 const LogIn = () => {
 
@@ -14,6 +15,13 @@ const LogIn = () => {
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
   const [error, setError] = useState('');
+  const { signed, signIn } = useContext(AuthContext);
+
+  console.log(signed);
+
+  function handleSign() {
+    console.log(signIn);
+  }
 
   const handleSubmit = async () => {
 
@@ -73,7 +81,7 @@ const LogIn = () => {
       <View style={styles.remember_forgot}>
         <Text style={styles.forgot_text}>Esqueceu a senha?</Text>
       </View>
-      <Button title="Acessar" onPress={()=>handleSubmit()} />
+      <Button title="Acessar" onPress={()=>handleSign()} />
       <View style={styles.cadastrar_container}>
         <Text style={styles.cadastrar_text}>Não possui conta?</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>

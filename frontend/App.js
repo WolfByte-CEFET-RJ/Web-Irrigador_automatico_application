@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, ActivityIndicator, StyleSheet, Animated, Text} from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from './src/routes';
+import AuthContext from './src/contexts/auth';
+import { AuthProvider } from './src/contexts/auth';
 
 const LoadingScreen = () => {
   const [fadeAnim] = useState(new Animated.Value(0));
@@ -45,7 +47,7 @@ export default function App() {
 
     fetchData();
   }, []);
-  return (isLoading ? <LoadingScreen /> : <Navigation/>);
+  return (isLoading ? <LoadingScreen /> : <NavigationContainer><AuthProvider value={{signed: true}}><Routes /></AuthProvider></NavigationContainer>);
 }
 
 const styles = StyleSheet.create({
