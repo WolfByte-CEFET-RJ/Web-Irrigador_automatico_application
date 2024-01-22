@@ -79,7 +79,7 @@ module.exports = {
             if (parseFloat(valorAgua) >= parseFloat(configSensorAgua.value)) {
                 // Enviar mensagem para o mesmo tópico indicando que a planta deve ser irrigada
                 const topicName = 'Outros/Estado_Motor';
-                const payload = `{"identificador": "${identificador}", "mensagem": "Planta precisa ser irrigada!"}`;
+                const payload = `"${identificador}"`;
                 const qos = 0;
 
                 mqttClient.publish(topicName, payload, { qos }, (error) => {
