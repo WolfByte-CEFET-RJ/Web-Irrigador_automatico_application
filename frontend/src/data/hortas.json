@@ -1,20 +1,3 @@
 {
-  "hortas": [
-    {
-      "id": 1,
-      "nome": "Horta #001",
-      "umidade": 25,
-      "agua": 27,
-      "descricao": "aaa",
-      "config": "default"
-    },
-    {
-      "id": 2,
-      "nome": "Horta #002",
-      "umidade": 30,
-      "agua": 20,
-      "descricao": "bbb",
-      "config": "default"
-    }
-  ]
+  "hortas": []
 }

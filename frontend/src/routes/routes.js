@@ -7,7 +7,6 @@ import AddGarden from '../pages/addGarden/AddGarden';
 import ViewGarden from '../pages/viewGarden/ViewGarden';
 
 const Stack = createStackNavigator();
-
 const Navigation = () => {
   return (
     <NavigationContainer>

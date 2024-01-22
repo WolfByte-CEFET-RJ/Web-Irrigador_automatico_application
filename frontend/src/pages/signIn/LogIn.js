@@ -7,7 +7,7 @@ import Button from '../../components/button/Button';
 import ErrorComponent from '../../components/Error/ErrorComponent';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
-import AuthContext from '../../contexts/auth';
+import { useAuth } from '../../contexts/AuthContext';
 
 const LogIn = () => {
 
@@ -15,13 +15,9 @@ const LogIn = () => {
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
   const [error, setError] = useState('');
-  const { signed, signIn } = useContext(AuthContext);
+  const { signIn } = useAuth();
+  // console.log(signed);
 
-  console.log(signed);
-
-  function handleSign() {
-    console.log(signIn);
-  }
 
   const handleSubmit = async () => {
 
@@ -44,6 +40,7 @@ const LogIn = () => {
         const response = await axios.post('http://localhost:5000/login', data);
         console.log(response);
         const token = response.data.token;
+        signIn(token);
         navigation.navigate("Home")
       }
       catch (error) {
@@ -81,7 +78,7 @@ const LogIn = () => {
       <View style={styles.remember_forgot}>
         <Text style={styles.forgot_text}>Esqueceu a senha?</Text>
       </View>
-      <Button title="Acessar" onPress={()=>handleSign()} />
+      <Button title="Acessar" onPress={()=>handleSubmit()} />
       <View style={styles.cadastrar_container}>
         <Text style={styles.cadastrar_text}>Não possui conta?</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
