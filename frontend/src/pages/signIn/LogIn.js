@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { styles } from './styles';
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity} from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, Image, Pressable, TouchableOpacity} from 'react-native';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import ErrorComponent from '../../components/Error/ErrorComponent';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
+import { useAuth } from '../../contexts/AuthContext';
 
 const LogIn = () => {
 
@@ -14,33 +15,46 @@ const LogIn = () => {
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
   const [error, setError] = useState('');
+  const { signIn } = useAuth();
+  // console.log(signed);
+
 
   const handleSubmit = async () => {
 
+    //* Dados de input do usuário 
     const data = {
     email,
     password,
   }
 
-  console.log(data);
-
+    //* Verifica se os inputs foram preenchidos
     if(email === '' || password === '') {
-      alert('Preencha todos os campos');
+      setError("Preencha todos os campos");
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     } 
     else {
       try {
+        //* Envia os dados a API e caso esteja cadastrado irá ser redirecionado a tela de Home
         const response = await axios.post('http://localhost:5000/login', data);
-        const {token} = response.data;
-        console.log(token);
-        navigation.navigate()
+        console.log(response);
+        const token = response.data.token;
+        signIn(token);
+        navigation.navigate("Home")
       }
       catch (error) {
+        //* Verifica o erro e printa na tela para o usuário
+        
         console.error(error);
         setError(error.response.data.message);
-        if (error.response) {
-          console.error('Dados do erro:', error.response.data.message);
-          console.error('Status do erro:', error.response.status);
-        }
+        setTimeout(() => {
+          setError('');
+        }, 3000);
+        // if (error.response) {
+        //   console.error('Dados do erro:', error.response.data.message);
+        //   console.error('Status do erro:', error.response.status);
+        // }
       }
     }
   }
@@ -71,7 +85,7 @@ const LogIn = () => {
           <Text style={styles.cadastrar_navegacao}> Cadastre-se</Text>
         </TouchableOpacity>
       </View>
-      {error && <ErrorComponent message={error} />}
+      <ErrorComponent message={error} />
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import { View, Text, Image, Alert, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, Image, Alert, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import Input from '../../components/input/Input';
 import Button from "../../components/button/Button";
@@ -8,6 +8,8 @@ import { useState } from "react";
 import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
+import ErrorComponent from '../../components/Error/ErrorComponent';
+import SucessComponent from "../../components/sucess/SucessComponent";
 
 export default function SignUp(){
 
@@ -19,7 +21,8 @@ export default function SignUp(){
   const [confirmPassword, setconfirmPassword] = useState('');
   const [humidityNotification, setHumidityNotification] = useState(1);
   const [waterNotification, setWaterNotification] = useState(1);
-
+  const [error, setError] = useState('');
+  const [sucess, setSucess] = useState('')
 
   const handleSubmit = async () => {
 
@@ -27,30 +30,41 @@ export default function SignUp(){
       name,
       email,
       password,
-      humidityNotification,
-      waterNotification,
+      humidityNotification: true,
+      waterNotification: true,
     }
-
-    console.log(data);
 
     if(name === '' || email === '' || password === '' || confirmPassword === '') {
-      alert('Preencha todos os campos');
-    }
-    else if(password !== confirmPassword) {
-      alert('Senhas não coincidem');
+      setError('Preencha todos os campos');
+      setTimeout(() => {
+        setError('');
+      }, 3000);
+    } 
+    else if (password != confirmPassword) {
+      setError('Senhas não coincidem');
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     }
     else {
       try { 
-        const response = await axios.post('http://localhost:5000/user', data) //solicitação POST (criar dados) para a URL do backend
-        console.log(response.data);
-        Alert.alert('Sucesso', 'Usuário cadastrado');
-        // navigation.navigate('Home'); //usuário cadastrado com sucesso -> vai para a Home
+        const response = await axios.post('http://localhost:5000/user', data); //solicitação POST (criar dados) para a URL do backend
+        setSucess('Usuário cadastrado com sucesso!');
+        setTimeout(() => {
+          setSucess('');
+        }, 3000);
+        setTimeout(() => navigation.navigate('SignIn'),2200); //retorna à tela de início após cadastro
       }
       catch (error) {
         //caso ocorra um erro na solicitação
         //mensagem de erro -> usuário já cadastrado
-        Alert.alert('Erro', 'Usuário já cadastrado');
-        console.log(error, 'Usuário já cadastrado');
+        // Alert.alert('Erro', 'Usuário já cadastrado');
+        // console.log(error, 'Usuário já cadastrado');
+        console.log(data);
+        setError(error.response.data.message);
+        setTimeout(() => {
+          setError('');
+        }, 3000);
       }
     }
   }
@@ -66,15 +80,17 @@ export default function SignUp(){
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -50}
         style={styles.cadastro_container} >
         <StatusBar/>
+        <ErrorComponent message={error} />
+        <SucessComponent message={sucess}/>
         <View style={styles.logo_container}>
           <Image style={styles.logo} source={require('../../../assets/android-chrome-192x192.png')}/>
         </View>
         <View style={styles.form_container}>
           <View style={styles.header_container}>
             <View style={styles.return_button_container}>
-              <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+              <Pressable onPress={() => navigation.navigate('SignIn')}>
                 <Ionicons name="arrow-back-outline" size={24}/>
-              </TouchableOpacity>
+              </Pressable>
             </View>
             <View style={styles.slogan_container}>
               <Text style={styles.app_name}>SmartGarden</Text>
@@ -82,14 +98,13 @@ export default function SignUp(){
             </View>
           </View>
           <View style={styles.input_container}>
-            {/* Inputs */}
             <Input label="Nome" placeHolder="Digite seu nome" value={name} onChangeText={text=>setName(text)}/>
             <Input label="E-mail" placeHolder="Digite um email" value={email} onChangeText={text=>setEmail(text)}/>
             <Input label="Senha" placeHolder="Digite uma senha" value={password} onChangeText={text=>setPassword(text)} isPassword={true}/>
             <Input label="Confirme sua senha" placeHolder="Confirme sua senha" value={confirmPassword} onChangeText={text=>setconfirmPassword(text)} isPassword={true}/>
           </View>
           <View style={styles.button_container}>
-            <Button title="Cadastrar" onPress={()=>handleSubmit()}/>
+            <Button title="Cadastrar" onPress={()=> handleSubmit()}/>
           </View>
         </View>
       </KeyboardAvoidingView>
