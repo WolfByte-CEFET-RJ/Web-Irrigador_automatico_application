@@ -5,6 +5,6 @@ const auth = require('../middleware/auth');
 router
   
 
-      .get('/identifier/:id?',auth, identifierController.getIdentifiers)
+      .get('/identifier/:id?', identifierController.getIdentifiers)
 
 module.exports = router;
