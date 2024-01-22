@@ -21,7 +21,11 @@ module.exports = {
 
         return garden;
     },
+    async getUserGardens (userId) {
+        const garden = await knex('garden').where({ userId });
 
+        return garden;
+    },
     async createGarden(name, description, identifier, userId) {
         const configId = 1;
         await gardenSchema.validate({name, description, identifier, userId, configId})
@@ -72,6 +76,7 @@ module.exports = {
         const {userId} = await this.getOneGarden(id);
         
         if (myId != userId){throw new Error("Você só pode deletar sua própria horta")}
+        const identifier = await knex('identifier').where({ gardenId: id }).update({gardenId: null});
         const garden = await knex('garden').where({ id }).del();
         if (!garden){throw new Error('Esta horta não existe')}
 
