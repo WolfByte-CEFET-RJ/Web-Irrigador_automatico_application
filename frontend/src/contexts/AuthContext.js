@@ -4,6 +4,7 @@ const Context = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
+  const [gardenData, setGardenData] = useState(null);
 
   const signIn = (newToken) => {
     setToken(newToken);
@@ -13,11 +14,12 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
   };
 
-
-  console.log('AAAA' + token)
+  const setGarden = (data) => {
+    setGardenData(data);
+  };
 
   return (
-    <Context.Provider value={{ token, signIn, signOut }}>
+    <Context.Provider value={{ token, signIn, signOut, gardenData, setGarden }}>
       {children}
     </Context.Provider>
   )

@@ -16,7 +16,6 @@ const LogIn = () => {
   const navigation = useNavigation();
   const [error, setError] = useState('');
   const { signIn } = useAuth();
-  // console.log(signed);
 
 
   const handleSubmit = async () => {
@@ -38,7 +37,6 @@ const LogIn = () => {
       try {
         //* Envia os dados a API e caso esteja cadastrado irá ser redirecionado a tela de Home
         const response = await axios.post('http://localhost:5000/login', data);
-        console.log(response);
         const token = response.data.token;
         signIn(token);
         navigation.navigate("Home")
@@ -51,10 +49,6 @@ const LogIn = () => {
         setTimeout(() => {
           setError('');
         }, 3000);
-        // if (error.response) {
-        //   console.error('Dados do erro:', error.response.data.message);
-        //   console.error('Status do erro:', error.response.status);
-        // }
       }
     }
   }

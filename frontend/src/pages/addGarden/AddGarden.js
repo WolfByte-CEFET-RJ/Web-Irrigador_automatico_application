@@ -25,6 +25,7 @@ const AddGarden = () => {
   const [userId, setUserId] = useState('');
   const [configId, setConfigId] = useState('');
   const [error, setError] = useState('');
+  const { setGarden } = useAuth();
   // const { token } = useAuth();
 
   // console.log(token)
@@ -46,7 +47,8 @@ const AddGarden = () => {
     } else {
         try {
           const response = await api.post('/garden', data)
-          console.log(response);
+          setGarden(response.data)
+          console.log(response.data);
           navigation.navigate('Home'); 
         } catch (error) {
           setError(error.response.data.msg)

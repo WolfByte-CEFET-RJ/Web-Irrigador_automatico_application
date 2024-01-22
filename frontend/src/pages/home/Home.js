@@ -8,20 +8,24 @@ import BottomBar from '../../components/bottomBar/BottomBar'
 import DeleteGardenModal from "../../components/deleteModal/DeleteGardenModal";
 import { StatusBar } from 'expo-status-bar';
 import EditModal from "../../components/editModal/EditModal";
+import { useAuth } from '../../contexts/AuthContext';
+import { createAxiosInstance } from "../../services/api";
 
 // !ATENÇÃO: Para fazer as hortas rodarem você tem que digitar "json-server --watch hortas.json --port 3001" na pasta data
 const API_URL = 'http://localhost:3001';
 
 export default function Home(){
-  
+  const api = createAxiosInstance();
   const navigation = useNavigation();
   const [hortas, setHortas] = useState([]);
   const [buscarHorta, setBurcarHorta] = useState('');
-
+  const { gardenData } = useAuth();
+  
   useEffect(() => {
     async function fetchHortas() {
       try {
-        const response = await axios.get(`${API_URL}/hortas`);
+        const response = await api.get(`/garden/${gardenData.identifier}`);
+        console.log(gardenData)
         setHortas(response.data);
       } catch (error) {
         console.error("Erro ao buscar hortas:", error);
@@ -79,9 +83,9 @@ export default function Home(){
       </View>
       <Text style={styles.minhasHortas}>Minhas hortas</Text>
       <View style={styles.hortas_container}>
-      {filtrarHortas().map((horta) => (
+      {filtrarHortas().map((gardenData) => (
           <Pressable 
-            key={horta.id} 
+            key={gardenData.identifier} 
             style={styles.horta}
             onPress={() => navigation.navigate('ViewGarden', { horta })}
           >
