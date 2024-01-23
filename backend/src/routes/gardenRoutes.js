@@ -6,6 +6,8 @@ const auth = require('../middleware/auth')
 router
       .get('/garden/:id?',auth, GardenController.getGardens)
 
+      .get('/myGardens',auth, GardenController.getUserGardens)
+
       .post('/garden',auth, GardenController.createGarden)
 
       .patch('/garden/:id',auth, GardenController.updateGarden)

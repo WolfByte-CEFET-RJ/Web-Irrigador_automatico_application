@@ -5,7 +5,6 @@ module.exports = {
 
     async getGardens(req, res) {
         const { id } = req.params;
-
         try {
             if (!id) {
                 const gardens = await gardenService.getAllGardens();
@@ -14,6 +13,17 @@ module.exports = {
 
             const garden = await gardenService.getOneGarden(id);
             return res.status(200).json(garden);
+
+        } catch (error) {
+            return res.status(400).json({ message: error.message });
+        }
+    },
+    async getUserGardens(req, res) {
+        const userId = req.user_id;
+        try {
+
+            const gardens = await gardenService.getUserGardens(userId);
+            return res.status(200).json(gardens);
 
         } catch (error) {
             return res.status(400).json({ message: error.message });
