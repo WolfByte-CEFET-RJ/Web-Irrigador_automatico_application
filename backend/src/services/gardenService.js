@@ -6,7 +6,7 @@ const gardenSchema = yup.object().shape({
     description: yup.string(),
     identifier: yup.string().required().min(10, 'O identificar deve ter pelo menos 10 caracteres.').matches(/^[0-9]+$/, 'O identificador deve conter apenas números.'), 
     userId: yup.number().integer().positive().required(),
-    configId: yup.number().integer().positive().required(),
+    irrigationId: yup.number().integer().positive().required(),
   });
 
 
@@ -21,10 +21,14 @@ module.exports = {
 
         return garden;
     },
+    async getUserGardens (userId) {
+        const garden = await knex('garden').where({ userId });
 
+        return garden;
+    },
     async createGarden(name, description, identifier, userId) {
-        const configId = 1;
-        await gardenSchema.validate({name, description, identifier, userId, configId})
+        const irrigationId = 1;
+        await gardenSchema.validate({name, description, identifier, userId, irrigationId})
 
         const identifierExists = await knex('identifier').select("id", "gardenId").where({ value: identifier }).first();
 
@@ -37,7 +41,7 @@ module.exports = {
             description,
             identifier,
             userId,
-            configId
+            irrigationId
         });
 
         const garden = await knex('garden').select("id").where({ identifier: identifier }).first();
@@ -72,6 +76,7 @@ module.exports = {
         const {userId} = await this.getOneGarden(id);
         
         if (myId != userId){throw new Error("Você só pode deletar sua própria horta")}
+        const identifier = await knex('identifier').where({ gardenId: id }).update({gardenId: null});
         const garden = await knex('garden').where({ id }).del();
         if (!garden){throw new Error('Esta horta não existe')}
 
