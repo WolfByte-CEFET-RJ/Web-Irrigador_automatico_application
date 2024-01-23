@@ -23,7 +23,7 @@ const DeleteGardenModal = ({ visible, onClose, onDelete, hortaToDelete }) => {
             />
             <Text style={styles.message}>Deseja mesmo excluir esta horta?</Text>
             <View style={styles.buttonContainer}>
-              <ButtonOrange title="Excluir" onPress={() => onDelete(hortaToDelete.id)} />
+              <ButtonOrange title="Excluir" onPress={() => onDelete(hortaToDelete)} />
             </View>
           </View>
         </View>

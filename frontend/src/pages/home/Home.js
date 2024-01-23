@@ -17,27 +17,26 @@ const API_URL = 'http://localhost:3001';
 export default function Home(){
   const api = createAxiosInstance();
   const navigation = useNavigation();
-  const [hortas, setHortas] = useState([]);
-  const [buscarHorta, setBurcarHorta] = useState('');
-  const { gardenData } = useAuth();
-  
+  const [buscarHorta, setBuscarHorta] = useState('');
+  const { setGarden, gardenData } = useAuth();
+
   useEffect(() => {
     async function fetchHortas() {
       try {
-        const response = await api.get(`/garden/${gardenData.identifier}`);
-        console.log(gardenData)
-        setHortas(response.data);
+        const response = await api.get(`/garden`);
+        // console.log(JSON.stringify(response.data))
+        setGarden(response.data);
+        // console.log(gardenData);
       } catch (error) {
         console.error("Erro ao buscar hortas:", error);
       }
     }
-
     fetchHortas();
-  }, []);
+  }, [gardenData]);
 
   const filtrarHortas = () => {
-    return hortas.filter((horta) =>
-      horta.nome.toLowerCase().includes(buscarHorta.toLowerCase())
+    return gardenData.filter((garden) =>
+      garden.name.toLowerCase().includes(buscarHorta.toLowerCase())
     );
   };
 
@@ -49,8 +48,9 @@ export default function Home(){
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/hortas/${id}`);
-      setHortas((prevHortas) => prevHortas.filter((horta) => horta.id !== id));
+      const responseDelete = await api.delete(`/garden/${id}`);
+      console.log(JSON.stringify(responseDelete.data))
+      setGarden(responseDelete.data);
       setModalVisible(false);
     } catch (error) {
       console.error('Erro ao excluir horta:', error);
@@ -70,7 +70,7 @@ export default function Home(){
       <View style={styles.search_container}>
         <TextInput
           style={styles.searcher}
-          onChangeText={(text) => setBurcarHorta(text)}
+          onChangeText={(text) => setBuscarHorta(text)}
           placeholder={"Buscar por nome da horta"}
           placeholderTextColor={"rgba(64,81,59,0.6)"} 
         />
@@ -83,18 +83,18 @@ export default function Home(){
       </View>
       <Text style={styles.minhasHortas}>Minhas hortas</Text>
       <View style={styles.hortas_container}>
-      {filtrarHortas().map((gardenData) => (
+      {filtrarHortas().map((garden) => (
           <Pressable 
-            key={gardenData.identifier} 
+            key={garden.id} 
             style={styles.horta}
-            onPress={() => navigation.navigate('ViewGarden', { horta })}
+            onPress={() => navigation.navigate('ViewGarden')}
           >
             <View>
-              <Text style={styles.textoSuperior}>{horta.nome}</Text>
+              <Text style={styles.textoSuperior}>{garden.name}</Text>
             </View>
             <View style={styles.textoInferiorContainer}>
-              <Text style={styles.textoInferior}>Umidade: {horta.umidade}</Text>
-              <Text style={styles.textoInferior}>Água: {horta.agua}</Text>
+              <Text style={styles.textoInferior}>Umidade: {}</Text>
+              <Text style={styles.textoInferior}>Água: {}</Text>
             </View>
             <Ionicons
               style={styles.iconHorta}
@@ -106,8 +106,8 @@ export default function Home(){
             <DeleteGardenModal
               visible={isModalVisible}
               onClose={() => setModalVisible(false)}
-              onDelete={(horta) => handleDelete(horta)}
-              hortaToDelete={horta}
+              onDelete={() => handleDelete(garden.id)}
+              hortaToDelete={garden.id}
             />
           </Pressable>
         ))}

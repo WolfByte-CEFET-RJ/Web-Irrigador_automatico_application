@@ -4,6 +4,7 @@ export const styles = StyleSheet.create({
     home_container: {
         backgroundColor: '#EDF1D6',
         height: '100%',
+        // alignItems: 'center',
         },
     home_title_container: {
         width: '100%',

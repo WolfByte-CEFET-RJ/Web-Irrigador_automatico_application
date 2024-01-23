@@ -7,7 +7,6 @@ import Button from "../../components/button/Button";
 import InputDark from '../../components/inputDark/InputDark';
 import { Platform } from 'react-native';
 import ErrorComponent from '../../components/Error/ErrorComponent';
-import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import { createAxiosInstance }  from '../../services/api';
 
@@ -37,7 +36,8 @@ const AddGarden = () => {
       description,
       identifier, 
       configId: 1,
-    };//* Ver depois configId
+      // userId: 3,
+    };
 
 
     if (name === '' || description === '' || identifier === '') {
@@ -47,11 +47,11 @@ const AddGarden = () => {
     } else {
         try {
           const response = await api.post('/garden', data)
-          setGarden(response.data)
+          // setGarden(response.data)
           console.log(response.data);
-          navigation.navigate('Home'); 
+          // navigation.navigate('Home'); 
         } catch (error) {
-          setError(error.response.data.msg)
+          setError(error.response.data.message)
           console.log(error)
         }
       }
@@ -100,7 +100,7 @@ const AddGarden = () => {
         <View style={styles.bottomBar_container}>
             <BottomBar/>
         </View>
-        {error && <ErrorComponent message={error} />}
+        <ErrorComponent message={error} />
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
