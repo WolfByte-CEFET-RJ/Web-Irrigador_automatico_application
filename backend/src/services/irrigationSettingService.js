@@ -132,11 +132,11 @@ module.exports = {
         if(setting.id === 1){throw new Error('Você não pode apagar uma configuração padrão')}
         if (setting.userId != userId){throw new Error('Esta config não pertence a você!')}
 
-        const inUseSettings = await knex('garden').select('id').where({ configId: settingId })
+        const inUseSettings = await knex('garden').select('id').where({ irrigationId: settingId })
         if (inUseSettings.length > 0){
                 inUseSettings.forEach(async item => {
                      gardenId = item.id;
-                    gardenData = {configId: 1}
+                    gardenData = {irrigationId: 1}
                     
                     await knex('garden').where({ id:gardenId }).update(gardenData);        
             });
