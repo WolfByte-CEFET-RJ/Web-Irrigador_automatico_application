@@ -87,13 +87,7 @@ module.exports = {
                         console.error(error);
                     }
                 });
-            } else {
-                // Avisar ao front-end que precisa encher o reservatório de água
-                console.log('Nível de água no reservatório está baixo. Avisar ao front-end para encher o reservatório.');
             }
-        } else if (parseFloat(valorAgua) < parseFloat(configSensorAgua.value)) {
-            // Avisar ao front-end que precisa encher o reservatório de água
-            console.log('Nível de água no reservatório está baixo. Avisar ao front-end para encher o reservatório.');
         }
     },
 
