@@ -4,17 +4,18 @@ const { connectOptions } = require('../use_mqtts.js');
 
 function createMqttClient() {
     const clientId = 'teste_nodejs_' + Math.random().toString(16).substring(2, 8);
+    const { protocol, host, port, username, password } = connectOptions;
+    
     const options = {
         clientId,
         clean: true,
         connectTimeout: 4000,
-        username: 'backend',
-        password: 'backend123',
+        username: username,
+        password: password,
         reconnectPeriod: 1000,
         rejectUnauthorized: true,
     };
 
-    const { protocol, host, port } = connectOptions;
     const connectUrl = `${protocol}://${host}:${port}`;
 
     return mqtt.connect(connectUrl, options);
