@@ -59,8 +59,8 @@ module.exports = {
         if (myId != userId){throw new Error("Você só pode atualizar sua própria horta")}
         if(gardenData.userId){throw new Error('Você não pode alterar o userId')}
 
-        if(gardenData.configId){
-                const userSetting = await knex('irrigationSetting').select("*") .where({ id: gardenData.configId }).first();
+        if(gardenData.irrigationId){
+                const userSetting = await knex('irrigationSetting').select("*") .where({ id: gardenData.irrigationId }).first();
                 if (!userSetting) {throw new Error('Essa configuração não existe!')}
                 if (userSetting.userId != myId){throw new Error('Essa configuração não pertence à você!')}
         }
