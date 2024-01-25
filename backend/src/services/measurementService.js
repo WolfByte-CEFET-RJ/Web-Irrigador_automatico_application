@@ -22,7 +22,7 @@ module.exports = {
         for(i=0; i<gardens.length; i++) {
             for(j=0; j<sensors.length; j++) {
                 const meausures = await knex('measurement').select('*').where({gardenId: gardens[i].id, sensorId: sensors[j].id}).orderBy('date','desc').first();
-                lastMeasures.push(meausures)
+                if (meausures){lastMeasures.push(meausures)}
             }
             lastMeasuresGardens[i].lastMeasures = []
         }

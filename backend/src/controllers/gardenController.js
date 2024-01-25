@@ -92,9 +92,10 @@ module.exports = {
     }, 
 
     async getMeasuresAllGardens(req, res) {
+        const userId = req.user_id;
         
         try {
-            let gardens = await gardenService.getAllGardens();
+            let gardens = await gardenService.getUserGardens(userId);
             const measurements = await measurementService.lastMeasuresAllGardens(gardens);
 
             return res.status(200).json(measurements);
