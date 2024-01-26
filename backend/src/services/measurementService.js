@@ -1,5 +1,42 @@
 const knex = require('../database');
 
+
+async function returnConfigValues (irrigationId){
+        const configSensorUmidade = await knex('configSensor')
+            .select('value')
+            .where({
+                sensorId: knex('sensor').select('id').where({ name: 'Umidade' }),
+                irrigationId: irrigationId
+            }).first();
+
+        const configSensorAgua = await knex('configSensor')
+            .select('value')
+            .where({
+                sensorId: knex('sensor').select('id').where({ name: 'Temperatura' }),
+                irrigationId: irrigationId
+            }).first();
+
+        if (!configSensorUmidade || !configSensorAgua) {
+            throw new Error('A configuração do sensor não foi encontrada!');
+        }
+
+        return { configHumidityValue: configSensorUmidade.value, configWaterValue: configSensorAgua.value}
+}
+
+async function verifyMeasurements(humidityValue, waterValue, configHumidityValue, configWaterValue){
+    console.log(configHumidityValue, configWaterValue);
+    if (parseFloat(humidityValue) < parseFloat(configHumidityValue)){
+        if (parseFloat(waterValue) < parseFloat(configWaterValue)){
+            return "Sua planta precisa ser irrigada, mas o reservatório está com pouca água!";
+        }
+    } else if (parseFloat(waterValue) < parseFloat(configWaterValue)){
+        return "O reservatório está baixo! Isso impedirá a sua planta de ser irrigada caso precise.";
+    }
+
+    return "Tudo certo!";
+    
+}
+
 module.exports = {
     async lastMeasures (gardenId) {
         let lastMeasures = [];
@@ -9,7 +46,6 @@ module.exports = {
             const lastMeasure = await knex('measurement').select('*').where({gardenId, sensorId: sensors[i].id}).orderBy('date','desc').first();
             lastMeasures.push(lastMeasure);
         }
-
 
         return lastMeasures;
     },
@@ -32,6 +68,14 @@ module.exports = {
                 if (lastMeasuresGardens[i].id == lastMeasures[j].gardenId){
                     lastMeasuresGardens[i].lastMeasures.push(lastMeasures[j]);
                 }
+            }
+        }
+
+        for (const obj of lastMeasuresGardens) {
+            if (obj.lastMeasures.length) {
+                let { configHumidityValue, configWaterValue } = await returnConfigValues(obj.irrigationId);
+                let message = await verifyMeasurements(obj.lastMeasures[0].measurement, obj.lastMeasures[1].measurement, configHumidityValue, configWaterValue);
+                obj.message = message;
             }
         }
 
