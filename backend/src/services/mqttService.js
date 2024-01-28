@@ -47,7 +47,7 @@ module.exports = {
         const {identificador, valorUmidade, valorAgua} = extractValuesFromString(data);
         
         const garden = await knex('garden')
-            .select('id', 'configId')
+            .select('id', 'irrigationId')
             .where({identifier: identificador})
             .first();
 
@@ -59,7 +59,7 @@ module.exports = {
             .select('value')
             .where({
                 sensorId: knex('sensor').select('id').where({ name: 'Umidade' }),
-                irrigationId: garden.configId
+                irrigationId: garden.irrigationId
             })
             .first();
 
@@ -67,7 +67,7 @@ module.exports = {
             .select('value')
             .where({
                 sensorId: knex('sensor').select('id').where({ name: 'NivelAgua' }),
-                irrigationId: garden.configId
+                irrigationId: garden.irrigationId
             })
             .first();
 

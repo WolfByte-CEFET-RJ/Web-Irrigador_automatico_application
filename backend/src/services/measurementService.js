@@ -12,7 +12,7 @@ async function returnConfigValues (irrigationId){
         const configSensorAgua = await knex('configSensor')
             .select('value')
             .where({
-                sensorId: knex('sensor').select('id').where({ name: 'Temperatura' }),
+                sensorId: knex('sensor').select('id').where({ name: 'NivelAgua' }),
                 irrigationId: irrigationId
             }).first();
 
@@ -24,7 +24,6 @@ async function returnConfigValues (irrigationId){
 }
 
 async function verifyMeasurements(humidityValue, waterValue, configHumidityValue, configWaterValue){
-    console.log(configHumidityValue, configWaterValue);
     if (parseFloat(humidityValue) < parseFloat(configHumidityValue)){
         if (parseFloat(waterValue) < parseFloat(configWaterValue)){
             return "Sua planta precisa ser irrigada, mas o reservatório está com pouca água!";
@@ -38,7 +37,11 @@ async function verifyMeasurements(humidityValue, waterValue, configHumidityValue
 }
 
 module.exports = {
-    async lastMeasures (gardenId) {
+    async lastMeasures (userId, gardenUserId, gardenIrrigationId, gardenId) {
+        if (userId !== gardenUserId){
+            throw new Error("Esta horta não pertence a você!");
+        }
+
         let lastMeasures = [];
         const sensors = await knex('sensor').select('id');
         
@@ -46,6 +49,10 @@ module.exports = {
             const lastMeasure = await knex('measurement').select('*').where({gardenId, sensorId: sensors[i].id}).orderBy('date','desc').first();
             lastMeasures.push(lastMeasure);
         }
+
+        let { configHumidityValue, configWaterValue } = await returnConfigValues(gardenIrrigationId);
+        let message = await verifyMeasurements(lastMeasures[0].measurement, lastMeasures[1].measurement, configHumidityValue, configWaterValue);
+        lastMeasures.push({message: message});
 
         return lastMeasures;
     },

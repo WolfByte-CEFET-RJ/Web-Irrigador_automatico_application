@@ -76,11 +76,12 @@ module.exports = {
 
     async getMeasuresGarden(req, res) {
         const { id } = req.params;
+        const userId = req.user_id;
 
         try {
 
             let garden = await gardenService.getOneGarden(id);
-            const measurements = await measurementService.lastMeasures(id);
+            const measurements = await measurementService.lastMeasures(userId, garden.userId, garden.irrigationId, id);
             
             garden['lastMeasures'] = measurements;
 
