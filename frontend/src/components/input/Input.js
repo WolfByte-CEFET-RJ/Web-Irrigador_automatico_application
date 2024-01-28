@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, TextInput, Text} from 'react-native';
 import { styles } from './styles'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 const Input = ({ label, isPassword, value, onChangeText, isLogin, isEmail, placeHolder }) => {
-  // const [inputText, setInputText] = useState('');
-
-  // const handleInputChange = (text) => {
-  //   setInputText(text);
-  // };
-
+  
   const [showPassword, setShowPassword] = useState(false);
 
   return (
