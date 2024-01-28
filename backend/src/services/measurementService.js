@@ -1,4 +1,5 @@
 const knex = require('../database');
+const irrigationSettingServicce = require("../services/irrigationSettingService");
 
 
 async function returnConfigValues (irrigationId){
@@ -83,6 +84,8 @@ module.exports = {
                 let { configHumidityValue, configWaterValue } = await returnConfigValues(obj.irrigationId);
                 let message = await verifyMeasurements(obj.lastMeasures[0].measurement, obj.lastMeasures[1].measurement, configHumidityValue, configWaterValue);
                 obj.message = message;
+                let irrigationSetting = await irrigationSettingServicce.getOneSetting(obj.irrigationId);
+                obj.settingName = irrigationSetting.name;
             }
         }
 
