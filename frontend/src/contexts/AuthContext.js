@@ -14,14 +14,9 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
   };
 
-  const setGarden = (data) => {
-    setGardenData(data);
-  };
-  // console.log(gardenData)
-
 
   return (
-    <Context.Provider value={{ token, signIn, signOut, gardenData, setGarden }}>
+    <Context.Provider value={{ token, signIn, signOut }}>
       {children}
     </Context.Provider>
   )

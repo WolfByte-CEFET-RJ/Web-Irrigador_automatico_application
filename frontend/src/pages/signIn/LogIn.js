@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { styles } from './styles';
-import React, { useState, useContext } from 'react';
-import { View, Text, Image, Pressable, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity} from 'react-native';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import ErrorComponent from '../../components/Error/ErrorComponent';

@@ -10,6 +10,7 @@ import { StatusBar } from 'expo-status-bar';
 import EditModal from "../../components/editModal/EditModal";
 import { useAuth } from '../../contexts/AuthContext';
 import { createAxiosInstance } from "../../services/api";
+import { useGarden } from "../../contexts/GardenContext";
 
 // !ATENÇÃO: Para fazer as hortas rodarem você tem que digitar "json-server --watch hortas.json --port 3001" na pasta data
 const API_URL = 'http://localhost:3001';
@@ -18,15 +19,13 @@ export default function Home(){
   const api = createAxiosInstance();
   const navigation = useNavigation();
   const [buscarHorta, setBuscarHorta] = useState('');
-  const { setGarden, gardenData } = useAuth();
+  const { setGarden, gardenData, setSelectedGarden } = useGarden();
 
   useEffect(() => {
     async function fetchHortas() {
       try {
-        const response = await api.get(`/garden`);
-        // console.log(JSON.stringify(response.data))
+        const response = await api.get(`/myGardens`);
         setGarden(response.data);
-        // console.log(gardenData);
       } catch (error) {
         console.error("Erro ao buscar hortas:", error);
       }
@@ -49,17 +48,14 @@ export default function Home(){
   const handleDelete = async (id) => {
     try {
       const responseDelete = await api.delete(`/garden/${id}`);
-      console.log(JSON.stringify(responseDelete.data))
-      setGarden(responseDelete.data);
+      const updatedGardenData = gardenData.filter(garden => garden.id !== id);
+      setGarden(updatedGardenData);
       setModalVisible(false);
     } catch (error) {
       console.error('Erro ao excluir horta:', error);
     }
   };
 
-  // TODO: renderizar o nome do usuário
-  // TODO: filtrar por nome (Feito ~terencio)
-  
   return(
     <View style={styles.home_container}>
       <StatusBar style="dark-content"/>
@@ -87,7 +83,10 @@ export default function Home(){
           <Pressable 
             key={garden.id} 
             style={styles.horta}
-            onPress={() => navigation.navigate('ViewGarden')}
+            onPress={() => {
+              setSelectedGarden(garden)
+              navigation.navigate('ViewGarden')}
+            }
           >
             <View>
               <Text style={styles.textoSuperior}>{garden.name}</Text>

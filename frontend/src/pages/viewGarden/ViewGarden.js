@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
+import { View, Text, Pressable, SafeAreaView, ScrollView, TouchableOpacity, Image} from 'react-native';
 import { styles } from './styles';
 import Svg, { Rect, Circle } from 'react-native-svg';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -7,14 +7,14 @@ import { useNavigation } from '@react-navigation/native';
 import BottomBar from '../../components/bottomBar/BottomBar';
 import { StatusBar } from 'expo-status-bar';
 import Button from "../../components/button/Button";
-import { Platform } from 'react-native';
 import EditModal from '../../components/editModal/EditModal';
+import { useGarden } from '../../contexts/GardenContext';
 
 const ViewGarden = () => {
-    const { horta } = route.params || {};
+    const { selectedGarden } = useGarden();
 
-    const porcentagemUmidade = (horta && horta.umidade) || 0;
-    const porcentagemAgua = (horta && horta.agua) || 0;
+    const porcentagemUmidade = 50;
+    const porcentagemAgua = 50;
 
     const navigation = useNavigation();   
 
@@ -40,22 +40,25 @@ const ViewGarden = () => {
                     onPress={() => navigation.navigate('Home')}
                 />
             </Pressable>
-            <Text style={styles.view_title}>{horta.nome}</Text>
+            <Text style={styles.view_title}>{selectedGarden.name}</Text>
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
             <SafeAreaView style={styles.view_description}>
-                <Text style={styles.descriptionText}>{horta.descricao}</Text>
+                <Text style={styles.descriptionText}>{selectedGarden.description}</Text>
             </SafeAreaView>
-            <Text style={styles.config_Text}>Configuração: <b>{horta.config}</b></Text>
+            <Text style={styles.config_Text}>Configuração: <b>{selectedGarden.irrigationId}</b></Text>
             
+                    
+
             <SafeAreaView style={styles.view_bars}>
                 {/* Barra de Umidade */}
                 <View style={styles.view_bars_status}>
-                    <Svg height="200" width="40" >
+                    <Image source={require('../../../assets/ion_water.png')} style={styles.bar_icon}/>
+                    <Svg height="200" width="50" style={styles.svg}>
                         <Rect
                             x="0"
                             y={200 - (porcentagemUmidade * 2)}
-                            width="40"
+                            width="50"
                             height={porcentagemUmidade * 2}
                             fill="#609966"
                         />
@@ -64,11 +67,12 @@ const ViewGarden = () => {
                 </View>
                 {/* Barra de Água */}
                 <View style={styles.view_bars_status}>
-                    <Svg height="200" width="40">
+                    <Image source={require('../../../assets/mdi_cup-water.png')} style={styles.bar_icon}/>
+                    <Svg height="200" width="50" style={styles.svg}>
                         <Rect
                             x="0"
                             y={200 - (porcentagemAgua * 2)}
-                            width="40"
+                            width="50"
                             height={porcentagemAgua * 2}
                             fill="#609966"
                         />

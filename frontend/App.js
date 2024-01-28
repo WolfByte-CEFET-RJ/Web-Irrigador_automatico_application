@@ -4,6 +4,7 @@ import { View, Image, ActivityIndicator, StyleSheet, Animated, Text} from 'react
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from './src/routes/routes';
 import { AuthProvider } from './src/contexts/AuthContext';
+import { GardenProvider } from './src/contexts/GardenContext';
 
 const LoadingScreen = () => {
   const [fadeAnim] = useState(new Animated.Value(0));
@@ -46,7 +47,7 @@ export default function App() {
 
     fetchData();
   }, []);
-  return (isLoading ? <LoadingScreen /> : <AuthProvider><Routes /></AuthProvider>);
+  return (isLoading ? <LoadingScreen /> : <AuthProvider><GardenProvider><Routes /></GardenProvider></AuthProvider>);
 }
 
 const styles = StyleSheet.create({

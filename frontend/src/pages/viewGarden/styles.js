@@ -85,6 +85,18 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  svg: {
+    borderRadius: 40, // Defina o borderRadius desejado
+    backgroundColor: '#D8E4C2',
+  },
+
+  bar_icon: {
+    position: 'absolute',
+    marginTop: '10%',
+    width: 30,
+    height: 30,
+  },
+
   btndiv: {
     alignItems: 'center',
     display: 'flex',

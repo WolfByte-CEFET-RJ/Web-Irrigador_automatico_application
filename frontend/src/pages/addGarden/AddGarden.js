@@ -7,8 +7,8 @@ import Button from "../../components/button/Button";
 import InputDark from '../../components/inputDark/InputDark';
 import { Platform } from 'react-native';
 import ErrorComponent from '../../components/Error/ErrorComponent';
-import { useAuth } from '../../contexts/AuthContext';
 import { createAxiosInstance }  from '../../services/api';
+import SucessComponent from '../../components/sucess/SucessComponent';
 
 const AddGarden = () => {
 
@@ -21,13 +21,9 @@ const AddGarden = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [identifier, setIdentifier] = useState('');
-  const [userId, setUserId] = useState('');
-  const [configId, setConfigId] = useState('');
+  const [irrigationId, setIrrigationId] = useState('');
   const [error, setError] = useState('');
-  const { setGarden } = useAuth();
-  // const { token } = useAuth();
-
-  // console.log(token)
+  const [sucess, setSucess] = useState('');
 
   const handleSubmit = async () => {
 
@@ -35,23 +31,34 @@ const AddGarden = () => {
       name,
       description,
       identifier, 
-      configId: 1,
+      irrigationId: 1,
       // userId: 3,
     };
 
 
     if (name === '' || description === '' || identifier === '') {
       setError('Preencha todos os campos')
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     } else if (isNaN(identifier)) {
       setError('O ID deve ser um número inteiro');
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     } else {
         try {
           const response = await api.post('/garden', data)
-          // setGarden(response.data)
           console.log(response.data);
-          // navigation.navigate('Home'); 
+          setSucess('Horta cadastrada com sucesso!');
+          setTimeout(() => {
+            setSucess('');
+          }, 3000);
         } catch (error) {
           setError(error.response.data.message)
+          setTimeout(() => {
+            setError('');
+          }, 3000);
           console.log(error)
         }
       }
@@ -101,6 +108,7 @@ const AddGarden = () => {
             <BottomBar/>
         </View>
         <ErrorComponent message={error} />
+        <SucessComponent message={sucess}/>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );

@@ -4,7 +4,7 @@ const yup = require('yup');
 const gardenSchema = yup.object().shape({
     name: yup.string().min(3, 'O nome deve ter pelo menos 3 caracteres').required(),
     description: yup.string(),
-    identifier: yup.string().required().min(11, 'O identificar deve ter 11 caracteres.').matches(/^[0-9]+$/, 'O identificador deve conter apenas números.'), 
+    identifier: yup.string().required().min(10, 'O identificar deve ter 11 caracteres.').matches(/^[0-9]+$/, 'O identificador deve conter apenas números.'), 
     userId: yup.number().integer().positive().required(),
     irrigationId: yup.number().integer().positive().required(),
   });
