@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Text, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, SafeAreaView, View, Pressable} from 'react-native';
 import { styles } from './styles';
 import BottomBar from '../../components/bottomBar/BottomBar';
 import { Platform } from 'react-native';
 import Button from '../../components/button/Button';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import DeleteModal from '../../components/deleteModal/DeleteModal';
 
 
 const ViewConfig = () => {
+
+  const fakeConfig = [
+    {
+      "nomeConfiguracao": "Configuração 1",
+      "porcentagemUmidade": 50,
+      "porcentagemAgua": 30
+    },
+    {
+      "nomeConfiguracao": "Configuração 2",
+      "porcentagemUmidade": 60,
+      "porcentagemAgua": 40
+    },
+    {
+      "nomeConfiguracao": "Configuração 3",
+      "porcentagemUmidade": 70,
+      "porcentagemAgua": 50
+    }
+  ]
+
   const dismissKeyboard = () => {
     Keyboard.dismiss();
+  };
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const handleDeleteIconPress = () => {
+    setModalVisible(true);
   };
 
   return (
@@ -28,25 +55,36 @@ const ViewConfig = () => {
         </Pressable>
         <View style={styles.container_text}>
           <Text style={styles.home_subtitle}> Personalizadas </Text>
-          <Pressable>
-            
-          </Pressable>
+          <Ionicons
+              style={styles.iconConfig}
+              name={'add-circle'}
+              size={30}
+              color={'#40513B'}
+            />
         </View>
+        {fakeConfig.map((config) => (
         <Pressable style={styles.container_personalizada}>
-          <Text style={styles.name}>Configuração 1</Text>
-          <Text style={styles.config}>Umidade:  <Text style={styles.bold}>35%</Text>   Água:  <Text style={styles.bold}>24%</Text></Text>
+          <Text style={styles.name}>{config.nomeConfiguracao}</Text>
+          <Text style={styles.config}>Umidade: <Text style={styles.bold}>{config.porcentagemUmidade}</Text>   Água:  <Text style={styles.bold}>{config.porcentagemAgua}</Text></Text>
+          <Ionicons
+            style={styles.iconConfig}
+            name={'close-circle'}
+            size={30}
+            color={'#9DC08B'}
+            onPress={handleDeleteIconPress}
+          />
+          <DeleteModal
+            visible={isModalVisible}
+            onClose={() => setModalVisible(false)}
+            // onDelete={() => handleDelete(garden.id)}
+            // hortaToDelete={garden.id}
+            texto={"Deseja mesmo excluir esta configuração?"}
+          />        
         </Pressable>
-        <Pressable style={styles.container_personalizada}>
-          <Text style={styles.name}>Configuração 2</Text>
-          <Text style={styles.config}>Umidade:  <Text style={styles.bold}>35%</Text>   Água:  <Text style={styles.bold}>24%</Text></Text>
-        </Pressable>
-        <Pressable style={styles.container_personalizada}>
-          <Text style={styles.name}>Configuração 3</Text>
-          <Text style={styles.config}>Umidade:  <Text style={styles.bold}>35%</Text>   Água:  <Text style={styles.bold}>24%</Text></Text>
-        </Pressable>
+        ))}
         </ScrollView>
         <View style={styles.bottomBar_container}>
-            <BottomBar/>
+          <BottomBar/>
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

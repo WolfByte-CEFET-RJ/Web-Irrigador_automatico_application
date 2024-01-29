@@ -87,4 +87,9 @@ export const styles = StyleSheet.create({
         height: 95,
         bottom: 0,
     },
+      iconConfig:{
+        position: 'absolute',
+        right: '5%',
+        bottom: '22%',
+      },
 });

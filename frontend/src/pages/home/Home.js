@@ -5,7 +5,7 @@ import { styles } from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from "axios";
 import BottomBar from '../../components/bottomBar/BottomBar'
-import DeleteGardenModal from "../../components/deleteModal/DeleteGardenModal";
+import DeleteModal from "../../components/deleteModal/DeleteModal";
 import { StatusBar } from 'expo-status-bar';
 import EditModal from "../../components/editModal/EditModal";
 import { useAuth } from '../../contexts/AuthContext';
@@ -102,11 +102,12 @@ export default function Home(){
               color={'#9DC08B'}
               onPress={handleDeleteIconPress}
             />
-            <DeleteGardenModal
+            <DeleteModal
               visible={isModalVisible}
               onClose={() => setModalVisible(false)}
               onDelete={() => handleDelete(garden.id)}
               hortaToDelete={garden.id}
+              texto={"Deseja mesmo excluir esta horta?"}
             />
           </Pressable>
         ))}
