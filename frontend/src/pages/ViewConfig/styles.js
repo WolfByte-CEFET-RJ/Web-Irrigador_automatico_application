@@ -1,0 +1,90 @@
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+    home_container: {
+        backgroundColor: '#EDF1D6',
+        height: '100%',
+        // alignItems: 'center',
+        },
+    home_title_container: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        marginTop: '20%',
+        marginBottom: '10%',
+    },
+    home_title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#40513B',
+    },
+    home_subtitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#40513B',
+    },
+    name: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: '#FFFFFF',
+        paddingLeft: 10,
+    },
+    config:{
+        color: '#FFFFFF',
+        fontSize: 14,
+        fontStyle: 'normal',
+        paddingLeft: 10,
+    },
+    bold:{
+        fontWeight:'bold',
+    },
+    container_default:{
+        width: '80%',
+        height:'6.5%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        marginTop: '5%',
+        marginBottom: '3%',
+        marginLeft: '10%',
+        backgroundColor: '#D26E28',
+        borderRadius: 8,
+    },
+    container_personalizada:{
+        width: '80%',
+        height:'6.5%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        marginTop: '5%',
+        marginBottom: '1%',
+        marginLeft: '10%',
+        backgroundColor: '#40513B',
+        borderRadius: 8,
+    },
+    container_text:{
+        width: '80%',
+        height:'3%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: '5%',
+        marginBottom: '3%',
+        marginLeft: '10%',
+        marginRight:'10%',
+        borderBottomColor: 'black',
+        borderBottomWidth: 1,
+    },
+    contentContainer:{
+        flexGrow: 1, // isso que faz o scrollview funcionar 
+    },
+    bottomBar_container:{
+        backgroundColor: '#EDF1D6',
+        position: 'absolute',
+        width: '100%',
+        height: 95,
+        bottom: 0,
+    },
+});
