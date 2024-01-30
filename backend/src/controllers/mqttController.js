@@ -49,6 +49,8 @@ client.on('message', async (topic, message, packet) => {
         } catch (error) {
             console.error('Erro ao registrar o histórico de irrigação: ', error);
         }
+    } else {
+        console.error('Formato de mensagem inválido!');
     }
   }
 });
