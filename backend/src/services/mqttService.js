@@ -107,5 +107,16 @@ module.exports = {
         console.log('Histórico de irrigação registrado com sucesso!');
     },
 
+    async deleteOldIrrigationHistory() {
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    
+        await knex('irrigationHistory')
+            .where('date', '<', sevenDaysAgo)
+            .del();
+    
+        console.log('Old irrigation history records deleted.');
+    },
+
     createMqttClient, extractValuesFromString,
 };
