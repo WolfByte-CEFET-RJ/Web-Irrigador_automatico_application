@@ -10,7 +10,6 @@ export default function BottomBar() {
 
   const isAddGardenScreen = route.name === "AddGarden";
   const isHomeScreen = route.name === "Home";
-  const isViewConfig = route.name === "ViewConfig";
 
   return (
     <View style={styles.bottomBar_container}>
@@ -22,7 +21,7 @@ export default function BottomBar() {
           color={isAddGardenScreen ? "#40513B" : "#609966"}
         />
       </Pressable>
-      <Pressable onPress={() => navigation.navigate("ViewConfig")}>
+      <Pressable>
         <Ionicons
          style={styles.iconCadastro}
          name={"cog"}
