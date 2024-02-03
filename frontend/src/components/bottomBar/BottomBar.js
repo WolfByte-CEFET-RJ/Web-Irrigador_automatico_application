@@ -3,6 +3,7 @@ import { View, Pressable } from "react-native";
 import { styles } from "./styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
+const isViewConfig = route.name === "ViewConfig";
 
 export default function BottomBar() {
   const navigation = useNavigation();
@@ -21,7 +22,7 @@ export default function BottomBar() {
           color={isAddGardenScreen ? "#40513B" : "#609966"}
         />
       </Pressable>
-      <Pressable>
+      <Pressable onPress={() => navigation.navigate("ViewConfig")}>
         <Ionicons
          style={styles.iconCadastro}
          name={"cog"}
