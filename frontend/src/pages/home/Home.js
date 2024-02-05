@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from "axios";
-import BottomBar from '../../components/bottomBar/BottomBar'
+import BottomBar from "../../components/bottomBar/BottomBar";
 import DeleteModal from "../../components/deleteModal/DeleteModal";
 import { StatusBar } from 'expo-status-bar';
 import EditModal from "../../components/editModal/EditModal";

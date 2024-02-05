@@ -3,12 +3,12 @@ import { View, Pressable } from "react-native";
 import { styles } from "./styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-const isViewConfig = route.name === "ViewConfig";
 
 export default function BottomBar() {
   const navigation = useNavigation();
   const route = useRoute();
-
+  
+  const isViewConfig = route.name === "ViewConfig";
   const isAddGardenScreen = route.name === "AddGarden";
   const isHomeScreen = route.name === "Home";
 

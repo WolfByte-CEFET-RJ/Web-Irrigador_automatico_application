@@ -6,6 +6,7 @@ import { Platform } from 'react-native';
 import Button from '../../components/button/Button';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import DeleteModal from '../../components/deleteModal/DeleteModal';
+import NewConfigModal from '../../components/newConfigModal/newConfigModal';
 
 
 const ViewConfig = () => {
@@ -32,62 +33,76 @@ const ViewConfig = () => {
     Keyboard.dismiss();
   };
 
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [isModalConfigVisible, setModalConfigVisible] = useState(false);
+
 
   const handleDeleteIconPress = () => {
-    setModalVisible(true);
+    setModalDeleteVisible(true);
   };
 
+  const handleCreateConfig = () => {
+    setModalConfigVisible(true);
+  }
+
   return (
-    <TouchableWithoutFeedback onPress={dismissKeyboard}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -50}
-        style={styles.home_container}
-      >
-        <ScrollView contentContainerStyle={styles.contentContainer}>
-          <SafeAreaView style={styles.home_title_container}>
-            <Text style={styles.home_title}>Configuração de irrigação</Text>
-          </SafeAreaView>
-        <Pressable style={styles.container_default}>
-          <Text style={styles.name}>Default</Text>
-          <Text style={styles.config}>Umidade:  <Text style={styles.bold}>25%</Text>   Água:  <Text style={styles.bold}>14%</Text></Text>
-        </Pressable>
-        <View style={styles.container_text}>
-          <Text style={styles.home_subtitle}> Personalizadas </Text>
+    <View style={styles.config_container}>
+      <View style={styles.config_title_container}>
+        <Text style={styles.config_title}> Configuração de </Text>
+        <Text style={styles.config_title}> irrigação </Text>
+      </View>
+      <View style={styles.config_default_container}>
+        <View style={styles.config_default}>
+          <Text style={styles.config_name}> Default </Text>
+          <View style={styles.config_stats_container}>
+            <Text style={styles.config_stats}> Umidade: <Text style={styles.config_number}> 25% </Text> </Text>
+            <Text style={styles.config_stats}> Água: <Text style={styles.config_number}> 14% </Text> </Text> 
+          </View>
+        </View>
+      </View>
+      <View style={styles.config_create_conteiner}>
+        <View style={styles.config_create}>
+          <Text style={styles.config_create_title}> Personalizadas </Text>
           <Ionicons
               style={styles.iconConfig}
               name={'add-circle'}
               size={30}
               color={'#40513B'}
+              onPress={handleCreateConfig}
             />
+            <NewConfigModal
+              visible={isModalConfigVisible}
+              onClose={() => setModalConfigVisible(false)}
+              texto={""}
+              />
         </View>
+      </View>
+      <View style={styles.config_all_container}>
         {fakeConfig.map((config) => (
-        <Pressable style={styles.container_personalizada}>
-          <Text style={styles.name}>{config.nomeConfiguracao}</Text>
-          <Text style={styles.config}>Umidade: <Text style={styles.bold}>{config.porcentagemUmidade}</Text>   Água:  <Text style={styles.bold}>{config.porcentagemAgua}</Text></Text>
-          <Ionicons
-            style={styles.iconConfig}
-            name={'close-circle'}
-            size={30}
-            color={'#9DC08B'}
-            onPress={handleDeleteIconPress}
-          />
-          <DeleteModal
-            visible={isModalVisible}
-            onClose={() => setModalVisible(false)}
-            // onDelete={() => handleDelete(garden.id)}
-            // hortaToDelete={garden.id}
-            texto={"Deseja mesmo excluir esta configuração?"}
-          />        
-        </Pressable>
+          <Pressable style={styles.configuracao}>
+            <Text style={styles.config_name}> {config.nomeConfiguracao} </Text>
+            <View style={styles.config_stats_container}>
+              <Text style={styles.config_stats}> Umidade: <Text style={styles.config_number}> {config.porcentagemUmidade} </Text> </Text>
+              <Text style={styles.config_stats}> Água: <Text style={styles.config_number}> {config.porcentagemAgua} </Text> </Text> 
+            </View>
+            <Ionicons
+              style={styles.iconConfig}
+              name={'close-circle'}
+              size={30}
+              color={'#9DC08B'}
+              onPress={handleDeleteIconPress}
+              />
+            <DeleteModal
+              visible={isModalDeleteVisible}
+              onClose={() => setModalDeleteVisible(false)}
+              // onDelete={() => handleDelete(garden.id)}
+              // hortaToDelete={garden.id}
+              texto={"Deseja mesmo excluir esta configuração?"}
+              />        
+          </Pressable>
         ))}
-        </ScrollView>
-        <View style={styles.bottomBar_container}>
-          <BottomBar/>
-        </View>
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+      </View>
+    </View>
   );
 };
 
