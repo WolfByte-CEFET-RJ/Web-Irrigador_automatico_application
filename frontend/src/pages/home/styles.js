@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#40513B',
+    fontFamily: 'Montserrat-Bold'
   },
   logo: {
     width: 50,
@@ -42,6 +43,7 @@ export const styles = StyleSheet.create({
     height: 45,
     color: 'rgba(64, 81, 59, 0.6)',
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold', 
   },
   iconHome: {
     position: 'absolute',
@@ -53,6 +55,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#40513B',
     marginTop: 32,
+    fontFamily: 'Montserrat-Bold'
   },
   hortas_container: {
     display: 'flex',
@@ -76,6 +79,7 @@ export const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 17,
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold'
   },
   textoInferiorContainer:{
     display: 'flex',
@@ -83,8 +87,8 @@ export const styles = StyleSheet.create({
     gap: 10,
   },
   textoInferior:{
-    color: '#ffffff'
-
+    color: '#ffffff',
+    fontFamily: 'Montserrat-Bold'
   },
   iconHorta:{
     position: 'absolute',

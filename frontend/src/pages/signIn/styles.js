@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight:  'bold',
     color: '#40513B',
+    fontFamily: 'Montserrat-Bold',
   },
   app_slogan:{
     fontSize: 12,
@@ -56,11 +57,13 @@ export const styles = StyleSheet.create({
     fontSize: 10,
     color: '#40513B',
     marginLeft: '5%',
+    fontFamily: 'Montserrat-Bold'
   },
   forgot_text:{
     fontWeight:'bold',
     fontSize: 10,
     color: '#40513B',
+    fontFamily: 'Montserrat-Bold'
   },
   cadastrar_container:{
     display: 'flex',
@@ -74,15 +77,18 @@ export const styles = StyleSheet.create({
     fontWeight:'bold',
     fontSize: 12,
     color: '#609966',
+    fontFamily: 'Montserrat-Bold'
   },
   cadastrar_navegacao:{
     fontWeight:'bold',
     fontSize: 12,
     color: '#40513B',
+    fontFamily: 'Montserrat-Bold'
   },
 
   errorText: {
     color: 'red',
     marginTop: 10,
+    fontFamily: 'Montserrat-Bold'
   },
 });

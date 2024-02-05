@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
       fontStyle: 'normal',
       fontWeight: '700',
       lineHeight: 'normal',
+      fontFamily: 'Montserrat-Bold'
     },
     buttonContainer: {
       flexDirection: 'row',

@@ -4,7 +4,6 @@ export const styles = StyleSheet.create({
     home_container: {
         backgroundColor: '#EDF1D6',
         height: '100%',
-        // alignItems: 'center',
         },
     home_title_container: {
         width: '100%',
@@ -19,12 +18,14 @@ export const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: '#40513B',
+        fontFamily: 'Montserrat-Bold'
     },
     subtitle:{
         color: '#40513B',
         fontSize: 17,
         fontStyle: 'normal',
         fontWeight: '700',
+        fontFamily: 'Montserrat-Bold'
     },
     input_container:{
         display: 'flex',
@@ -40,7 +41,7 @@ export const styles = StyleSheet.create({
         marginBottom: '3%',
     },
     contentContainer:{
-        flexGrow: 1, // isso que faz o scrollview funcionar 
+        flexGrow: 1, 
     },
     bottomBar_container:{
         backgroundColor: '#EDF1D6',

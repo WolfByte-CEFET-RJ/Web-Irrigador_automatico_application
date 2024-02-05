@@ -48,12 +48,13 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight:  'bold',
     color: '#40513B',
-    //fontFamily: 'Montserrat-Regular',  
+    fontFamily: 'Montserrat-Bold', 
   },
   app_slogan:{
     fontSize: 12,
     fontWeight: 'bold',
     color: '#609966',
+    fontFamily: 'Montserrat-Bold', 
   },
   input_container:{
     display: 'flex',

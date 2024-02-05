@@ -12,5 +12,6 @@ export const styles = StyleSheet.create({
       },
       sucessText: {
         color: 'white',
+        fontFamily: 'Montserrat-Bold'
       },
 })

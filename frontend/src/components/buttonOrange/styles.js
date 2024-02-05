@@ -13,5 +13,6 @@ export const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 17,
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold'
   },
 });

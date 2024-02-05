@@ -12,7 +12,7 @@ const InputDark = ({ label, isPassword, value, onChangeText, isLogin, isEmail, p
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.label, isFocused || value ? styles.labelFocused : null]}>{label}</Text>
+      <Text style={[styles.label, isFocused || value ? styles.labelFocused : null]}>{label}</Text> {/* aqui eh o label */}
       <TextInput
         multiline={isDescricaoInput && editable}
         style={[

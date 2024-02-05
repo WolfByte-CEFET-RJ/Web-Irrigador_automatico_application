@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, SafeAreaView, ScrollView, TouchableOpacity, Image} from 'react-native';
 import { styles } from './styles';
-import Svg, { Rect, Circle } from 'react-native-svg';
+import Svg, { Rect } from 'react-native-svg';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import BottomBar from '../../components/bottomBar/BottomBar';
@@ -14,7 +14,7 @@ const ViewGarden = () => {
     const { selectedGarden } = useGarden();
 
     const porcentagemUmidade = 50;
-    const porcentagemAgua = 50;
+    const porcentagemAgua = 20;
 
     const navigation = useNavigation();   
 
@@ -23,9 +23,6 @@ const ViewGarden = () => {
     const handleDeleteIconPress = () => {
         setModalVisible(true);
     };
-
-  // TODO: consertar as barras que mostram os níveis de umidade e de água
-  // TODO: adicionar mensagem que mostra o estado da horta (tudo certo, nível de água/umidade baixo/alto)
 
     return (
     
@@ -53,31 +50,46 @@ const ViewGarden = () => {
             <SafeAreaView style={styles.view_bars}>
                 {/* Barra de Umidade */}
                 <View style={styles.view_bars_status}>
-                    <Image source={require('../../../assets/ion_water.png')} style={styles.bar_icon}/>
-                    <Svg height="200" width="50" style={styles.svg}>
-                        <Rect
-                            x="0"
-                            y={200 - (porcentagemUmidade * 2)}
-                            width="50"
-                            height={porcentagemUmidade * 2}
-                            fill="#609966"
-                        />
-                    </Svg>
-                    <Text>Umidade: {porcentagemUmidade}%</Text>
+                <View style={styles.info_container}>
+                        <Text style={[styles.view_horta_text, { marginTop: 233.93 - (porcentagemUmidade * 2.33) - 20 }]}>
+                            {porcentagemUmidade}%
+                        </Text>
+                        <View style={styles.info_graph}>
+
+                            <Image source={require('../../../assets/ion_water.png')} style={styles.bar_icon}/>
+                            <Svg height="233.93" width="65.15" style={styles.svg}>
+                                <Rect
+                                    x="0"
+                                    y={233.93 - (porcentagemUmidade * 2.33)}
+                                    width="65.15"
+                                    height={porcentagemUmidade * 2.33}
+                                    fill="#609966"
+                                />
+                            </Svg>
+                            <Text style={styles.view_horta_text}>Umidade</Text>
+                        </View>
+                    </View>
                 </View>
                 {/* Barra de Água */}
                 <View style={styles.view_bars_status}>
-                    <Image source={require('../../../assets/mdi_cup-water.png')} style={styles.bar_icon}/>
-                    <Svg height="200" width="50" style={styles.svg}>
-                        <Rect
-                            x="0"
-                            y={200 - (porcentagemAgua * 2)}
-                            width="50"
-                            height={porcentagemAgua * 2}
-                            fill="#609966"
-                        />
-                    </Svg>
-                    <Text>Água: {porcentagemAgua}%</Text> 
+                    <View style={styles.info_container}>
+                        <View style={styles.info_graph}>
+                            <Image source={require('../../../assets/mdi_cup-water.png')} style={styles.bar_icon}/>
+                            <Svg height="233.93" width="65.15" style={styles.svg}>
+                                <Rect
+                                    x="0"
+                                    y={233.93 - (porcentagemAgua * 2.33)}
+                                    width="65.15"
+                                    height={porcentagemAgua * 2.33}
+                                    fill="#609966"
+                                />
+                            </Svg>
+                            <Text style={styles.view_horta_text}>Água</Text>
+                        </View>
+                        <Text style={[styles.view_horta_text, { marginTop: 233.93 - (porcentagemAgua * 2.33) - 20 }]}>
+                            {porcentagemAgua}%
+                        </Text>
+                    </View>
                 </View>
             </SafeAreaView> 
 

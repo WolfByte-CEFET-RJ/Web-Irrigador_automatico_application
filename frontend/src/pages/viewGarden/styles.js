@@ -31,6 +31,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#40513B',
+    fontFamily: 'Montserrat-Bold', 
   },
 
   bottomBar_container: {
@@ -62,7 +63,8 @@ export const styles = StyleSheet.create({
   descriptionText: {
     color: '#40513B',
     fontWeight: 'bold',
-    padding: 14
+    padding: 14,
+    fontFamily: 'Montserrat-Bold', 
   },
 
   config_Text: {
@@ -70,6 +72,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     alignSelf: 'center',
     marginBottom: '10%',
+    fontFamily: 'Montserrat-Bold',  
   },
 
   view_bars: {
@@ -78,11 +81,17 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     width: '100%',
+    marginTop: 10,
   },
 
   view_bars_status: {
     flexDirection: 'column',
     alignItems: 'center',
+  },
+
+  view_horta_text: {
+    fontFamily: 'Montserrat-Bold',
+    marginTop: 10,
   },
 
   svg: {
@@ -92,15 +101,20 @@ export const styles = StyleSheet.create({
 
   bar_icon: {
     position: 'absolute',
-    marginTop: '10%',
     width: 30,
     height: 30,
+    top: '5%',
+  },
+
+  info_graph: {
+    display: 'flex',
+    alignItems: 'center',
   },
 
   btndiv: {
     alignItems: 'center',
     display: 'flex',
-    marginTop: '40%',
+    marginTop: '30%',
   },
   editButton: {
     display: 'flex',
@@ -115,5 +129,11 @@ export const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold', 
   },
+  info_container: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
+  }
 });

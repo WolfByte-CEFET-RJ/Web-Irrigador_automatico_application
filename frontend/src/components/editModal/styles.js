@@ -36,6 +36,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
     marginLeft: 10,
+    fontFamily: 'Montserrat-Bold'
   },
   inputNome: {
     backgroundColor: '#D8E4C2',
@@ -46,7 +47,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     borderRadius: 8,
     paddingLeft: 12, 
-
+    fontFamily: 'Montserrat-Bold'
   },
   inputDescricao: {
     backgroundColor: '#D8E4C2',
@@ -57,7 +58,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     borderRadius: 8,
     paddingLeft: 12, 
-
+    fontFamily: 'Montserrat-Bold'
   },
   informationConfiguration:{
     display: 'flex',
@@ -68,6 +69,7 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     marginBottom: 15,
+    fontFamily: 'Montserrat-Bold'
   },
   inputConfiguracao: {
     backgroundColor: '#D8E4C2',
@@ -77,6 +79,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
     borderRadius: 8,
+    fontFamily: 'Montserrat-Bold'
   },
   buttonContainer: {
     display: 'flex',

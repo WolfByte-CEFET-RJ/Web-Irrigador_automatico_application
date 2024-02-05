@@ -20,6 +20,7 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
     color: '#609966',
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold', 
   },
   writeTaskWrapper:{
     
@@ -37,6 +38,7 @@ export const styles = StyleSheet.create({
     borderColor: "#609966",
     borderWidth: 2,
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold'
   },
   inputCadastro: {
     height: 40,
@@ -49,6 +51,7 @@ export const styles = StyleSheet.create({
     color: 'rgba(64,81,59,0.6)',
     fontWeight: 'bold',
     alignItems: 'center',
+    fontFamily: 'Montserrat-Bold'
   },
   iconCadastro:{
     position: 'absolute',

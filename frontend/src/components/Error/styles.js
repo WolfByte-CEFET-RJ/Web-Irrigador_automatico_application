@@ -12,5 +12,6 @@ export const styles = StyleSheet.create({
       },
       errorText: {
         color: 'white',
+        fontFamily: 'Montserrat-Bold'
       },
 })
