@@ -26,7 +26,7 @@ export default function BottomBar() {
          style={styles.iconCadastro}
          name={"cog"}
          size={24}
-         color={isViewConfig ? "#40513B" : "#609966"}
+        //  color={isViewConfig ? "#40513B" : "#609966"}
         />
       </Pressable>
       <Pressable onPress={() => navigation.navigate("Home")}>
