@@ -5,12 +5,12 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10,
-        backgroundColor: '#D26E28',
+        backgroundColor: '#609966',
         borderRadius: 8,
         position: 'absolute',
         bottom: '5%',
       },
-      errorText: {
+      sucessText: {
         color: 'white',
         fontFamily: 'Montserrat-Bold'
       },

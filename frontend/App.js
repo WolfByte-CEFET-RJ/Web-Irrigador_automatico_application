@@ -1,6 +1,11 @@
-import Navigation from './src/routes/routes';
 import React, { useState, useEffect } from 'react';
-import { View, Image, ActivityIndicator, StyleSheet, Animated, Text} from 'react-native';
+import { View, Image, StyleSheet, Animated, Text} from 'react-native';
+import Routes from './src/routes/routes';
+import { AuthProvider } from './src/contexts/AuthContext';
+import { GardenProvider } from './src/contexts/GardenContext';
+import { useFonts } from 'expo-font';
+import globalStyles from './src/style/globalStyles';
+
 const LoadingScreen = () => {
   const [fadeAnim] = useState(new Animated.Value(0));
 
@@ -32,9 +37,14 @@ const LoadingScreen = () => {
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [fontsLoaded] = useFonts({
+    'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
+  });
 
+    console.log(fontsLoaded);
   useEffect(() => {
     const fetchData = async () => {
+
       // Aguarda 3 s
       await new Promise(resolve => setTimeout(resolve, 3000));
       setIsLoading(false);
@@ -42,7 +52,7 @@ export default function App() {
 
     fetchData();
   }, []);
-  return (isLoading ? <LoadingScreen /> : <Navigation/>);
+  return (isLoading && fontsLoaded ? <LoadingScreen /> : <AuthProvider><GardenProvider><Routes /></GardenProvider></AuthProvider>);
 }
 
 const styles = StyleSheet.create({
@@ -50,7 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0'
+    backgroundColor: '#f0f0f0',
   },
   image: {
     width: 100,

@@ -15,19 +15,21 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '77%',
   },  
+
   label: {
     fontSize: 12,
     marginBottom: 8,
-    color: '#609966',
+    color: '#40513B',
     fontWeight: 'bold',
     fontFamily: 'Montserrat-Bold', 
   },
-  writeTaskWrapper:{
-    
+
+  labelFocused: {
+    color: '#609966', // Cor quando o input está focado ou tem valor
   },
   inputLogin: {
     height: 40,
-    backgroundColor: '#EDF1D6',
+    backgroundColor: '#D8E4C2',
     borderRadius: 8,
     paddingHorizontal: 8,
     paddingLeft: 60,
@@ -42,7 +44,7 @@ export const styles = StyleSheet.create({
   },
   inputCadastro: {
     height: 40,
-    backgroundColor: '#EDF1D6',
+    backgroundColor: '#D8E4C2',
     borderRadius: 8,
     paddingHorizontal: 8,
     width: '77%',
@@ -56,7 +58,6 @@ export const styles = StyleSheet.create({
   iconCadastro:{
     position: 'absolute',
     right: '15%',
-    //top: '50%',
     bottom: '22%',
   },
   iconLogin:{

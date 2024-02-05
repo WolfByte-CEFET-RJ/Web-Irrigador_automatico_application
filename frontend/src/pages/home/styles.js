@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#EDF1D6',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    height: '100vh',
   },
 
   home_title_container: {
@@ -20,14 +21,13 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#40513B',
+    fontFamily: 'Montserrat-Bold'
   },
   logo: {
     width: 50,
     height: 50,
   },
   search_container: {
-    // borderColor: 'red',
-    // borderWidth: 1,
     width: '77%',
     height: 45,
     marginTop: 40,
@@ -43,6 +43,7 @@ export const styles = StyleSheet.create({
     height: 45,
     color: 'rgba(64, 81, 59, 0.6)',
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold', 
   },
   iconHome: {
     position: 'absolute',
@@ -54,10 +55,11 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#40513B',
     marginTop: 32,
+    fontFamily: 'Montserrat-Bold'
   },
   hortas_container: {
     display: 'flex',
-    justifyContent:  'center',
+    overflow: 'scroll',    
     alignItems:  'center',
     width: '100%',
     marginTop: 32,
@@ -77,6 +79,7 @@ export const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 17,
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold'
   },
   textoInferiorContainer:{
     display: 'flex',
@@ -84,8 +87,8 @@ export const styles = StyleSheet.create({
     gap: 10,
   },
   textoInferior:{
-    color: '#ffffff'
-
+    color: '#ffffff',
+    fontFamily: 'Montserrat-Bold'
   },
   iconHorta:{
     position: 'absolute',
@@ -93,6 +96,7 @@ export const styles = StyleSheet.create({
     bottom: '22%',
   },
   bottomBar_container:{
+    backgroundColor: '#EDF1D6',
     position: 'absolute',
     width: '100%',
     height: 95,
