@@ -21,17 +21,30 @@ export default function Home(){
   const [buscarHorta, setBuscarHorta] = useState('');
   const { setGarden, gardenData, setSelectedGarden } = useGarden();
 
+
   useEffect(() => {
     async function fetchHortas() {
       try {
         const response = await api.get(`/myGardens`);
         setGarden(response.data);
+
+        gardenData.forEach(async (garden) => {
+          try {
+              // Obtém as últimas medidas para a horta atual
+              const measures = await api.get(`/measures/garden`);
+              console.log(measures.data); // Aqui você pode manipular os dados das últimas medidas
+          } catch (error) {
+              console.error(`Erro ao buscar medidas para a horta ${garden.id}:`, error);
+          }
+      });
+
       } catch (error) {
         console.error("Erro ao buscar hortas:", error);
       }
     }
     fetchHortas();
   }, [gardenData]);
+
 
   const filtrarHortas = () => {
     return gardenData.filter((garden) =>
