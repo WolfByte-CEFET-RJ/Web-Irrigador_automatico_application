@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const routes = require('./routes');
+const scheduleTasks =  require('./utils/scheduleTasks');
 const app = express();
 
 app.use(cors());

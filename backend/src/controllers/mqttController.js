@@ -40,7 +40,7 @@ client.on('message', async (topic, message, packet) => {
     const motorStatus = message.toString();
     const parts = motorStatus.split(',').map(part => part.replace(/["']/g, ''));
 
-    if (parts.length === 2 && parts[1] === '1') {
+    if (parts.length === 1) {
         try {
             const identificador = parts[0];
 
