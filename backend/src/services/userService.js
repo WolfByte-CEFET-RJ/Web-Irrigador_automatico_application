@@ -2,14 +2,6 @@ const knex = require('../database');
 const bcrypt = require('bcryptjs');
 const yup = require('yup');
 
-userSchema = yup.object({
-    name: yup.string().min(3,'O nome precisa ter pelo menos 3 caracteres'),
-    email: yup.string().email('O email precisa ser válido'),
-    password: yup.string().min(8, 'A senha precisa ter pelo menos 8 caracteres'),
-    humidityNotification: yup.boolean(),
-    waterNotification: yup.boolean()
-})
-
 
 module.exports = {
     async getAllUsers() {
@@ -26,7 +18,15 @@ module.exports = {
     },
 
     async createUser(name, email, password, humidityNotification, waterNotification) {
-        await userSchema.validate({name, email, password, humidityNotification, waterNotification})
+        const userCreateSchema = yup.object({
+            name: yup.string().min(3,'O nome precisa ter pelo menos 3 caracteres').required('O campo nome é obrigatório.'),
+            email: yup.string().email('O email precisa ser válido').required('O campo email é obrigatório.'),
+            password: yup.string().min(8, 'A senha precisa ter pelo menos 8 caracteres').required('O campo password é obrigatório.'),
+            humidityNotification: yup.boolean(),
+            waterNotification: yup.boolean()
+        })
+        await userCreateSchema.validate({name, email, password, humidityNotification, waterNotification})
+
         const user = await knex('user').select('email').where({email}).first();
         if (user) {
           throw new Error('Usuário já existe!');
@@ -45,27 +45,43 @@ module.exports = {
 
         return "Usuário cadastrado!"
     },
+
     async updateUser(userId, userData) {
-        await userSchema.validate(userData, {abortEarly: false});
+        const userUpdateSchema = yup.object({
+            name: yup.string().min(3,'O nome precisa ter pelo menos 3 caracteres'),
+            password: yup.string().min(8, 'A senha precisa ter pelo menos 8 caracteres'),
+            humidityNotification: yup.boolean(),
+            waterNotification: yup.boolean()
+        })
+
+        if (userData.email){
+            throw new Error('Não é permitido alterar o email');
+        }
+
+        await userUpdateSchema.validate(userData);
+
         const user = await this.getOneUser(userId); 
         if (!user){
             throw new Error('Este usuário não existe!')
         }
 
-        const salt = await bcrypt.genSalt();
-        const hash = await bcrypt.hash(userData.password, salt);
+        if (userData.password){
+            const salt = await bcrypt.genSalt();
+            const hash = await bcrypt.hash(userData.password, salt);
+            userData.password = hash;
+        }
 
-        return await knex('user').where({ id: userId }).update({name: userData.name, email: userData.email, password: hash, humidityNotification: userData.humidityNotification, waterNotification: userData.waterNotification} );
-        
-       
+        return await knex('user').where({ id: userId }).update({name: userData.name, password: userData.password, humidityNotification: userData.humidityNotification, 
+        waterNotification: userData.waterNotification});
       },
+
       async deleteUser(userId) {
-        
         const user = await this.getOneUser(userId); 
+
         if (!user){
             throw new Error('Este usuário não existe!')
         }
+
         return knex('user').where({ id: userId }).del();
-      
       }
 };
