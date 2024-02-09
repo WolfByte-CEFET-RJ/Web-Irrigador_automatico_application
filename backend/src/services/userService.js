@@ -9,7 +9,7 @@ module.exports = {
         return users;
     },
 
-    async getOneUser(id) {
+    async getUser(id) {
         const user = await knex('user').select('id', 'name', 'email', 'humidityNotification', 'waterNotification').where({id}).first();
         if (!user) {
             throw new Error('Usuário não existe!');
@@ -60,7 +60,7 @@ module.exports = {
 
         await userUpdateSchema.validate(userData);
 
-        const user = await this.getOneUser(userId); 
+        const user = await this.getUser(userId); 
         if (!user){
             throw new Error('Este usuário não existe!')
         }
@@ -76,7 +76,7 @@ module.exports = {
       },
 
       async deleteUser(userId) {
-        const user = await this.getOneUser(userId); 
+        const user = await this.getUser(userId); 
 
         if (!user){
             throw new Error('Este usuário não existe!')
