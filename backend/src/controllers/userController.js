@@ -1,18 +1,22 @@
 const userService = require('../services/userService');
 
 module.exports = {
-    async getUsers(req, res) {
-        const { id } = req.params;
+    async getAllUsers(req, res) {
         try {
-            if (!id) {
-                const users = await userService.getAllUsers();
-                return res.status(200).json(users);
-            }
-
-            const user = await userService.getOneUser(id);
-            return res.status(200).json(user);
-
+            const users = await userService.getAllUsers();
+            return res.status(200).json(users);
         } catch (error) {
+            return res.status(400).json({message: error.message});
+        }
+    },
+
+    async getUser(req, res){
+        const userId = req.user_id;
+
+        try{
+            const user = await userService.getUser(userId);
+            return res.status(200).json(user);
+        } catch(error){
             return res.status(400).json({message: error.message});
         }
     },
