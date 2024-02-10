@@ -5,13 +5,15 @@ module.exports = {
 
     async getGardens(req, res) {
         const { id } = req.params;
+        const userId = req.user_id;
+
         try {
             if (!id) {
                 const gardens = await gardenService.getAllGardens();
                 return res.status(200).json(gardens);
             }
 
-            const garden = await gardenService.getOneGarden(id);
+            const garden = await gardenService.getOneGarden(id, userId);
             return res.status(200).json(garden);
 
         } catch (error) {
