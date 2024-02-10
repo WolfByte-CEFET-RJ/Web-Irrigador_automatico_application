@@ -67,6 +67,8 @@ module.exports = {
         .groupBy('irrigationSetting.id')
         .orderBy('irrigationSetting.id', 'asc');
 
+        const defaultConfig = await this.getOneSetting(1);
+
         const finalSetting = settings.map(setting => ({
             id: setting.id,
             name: setting.name,
@@ -74,6 +76,8 @@ module.exports = {
             humidityValue: JSON.parse(setting.sensors)[0].value,
             waterValue: JSON.parse(setting.sensors)[1].value
         }))
+
+        finalSetting.unshift(defaultConfig);
 
         return finalSetting;
        
@@ -102,9 +106,9 @@ module.exports = {
         await updateSettingSchema.validate(settingData, {abortEarly: false})
         const settingInfo = await this.getOneSetting(id);
 
-        if (myId != settingInfo.userId){throw new Error("Você só pode atualizar sua própria config")}
-        if(settingInfo.id === 1){throw new Error('Você não pode alterar uma configuração padrão')}
-        if(settingData.userId){throw new Error('Você não pode alterar o userId')}
+        if(settingInfo.id === 1){throw new Error('Você não pode alterar uma configuração padrão.')}
+        if (myId != settingInfo.userId){throw new Error("Você só pode atualizar sua própria config.")}
+        if(settingData.userId){throw new Error('Você não pode alterar o userId.')}
 
         if (settingData.name){
             const settingInfo = await knex('irrigationSetting').select("id").where({ name: settingData.name, userId: myId }).first();
