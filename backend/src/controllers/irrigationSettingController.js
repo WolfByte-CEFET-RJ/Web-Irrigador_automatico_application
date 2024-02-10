@@ -18,10 +18,10 @@ module.exports = {
         }   
     },
     async getUserSettings(req, res) {
-        const { id } = req.params;
+        const userId = req.user_id;
     
         try {
-            const setting = await irrigationSettingService.getUserSettings(id);
+            const setting = await irrigationSettingService.getUserSettings(userId);
             return res.status(200).json(setting);
     
             } catch (error) {
