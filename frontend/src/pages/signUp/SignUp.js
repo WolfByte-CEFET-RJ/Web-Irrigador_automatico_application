@@ -78,7 +78,8 @@ export default function SignUp(){
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -50}
-        style={styles.cadastro_container} >
+        style={styles.cadastro_container} 
+      >
         <StatusBar/>
         <ErrorComponent message={error} />
         <SucessComponent message={sucess}/>

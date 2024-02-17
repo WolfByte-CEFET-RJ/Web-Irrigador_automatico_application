@@ -1,8 +1,8 @@
 import React from 'react';
-import { styles } from './styles'
+import { styles } from './styles';
 import { Text, Pressable } from 'react-native';
 
-const Button = ({ onPress, title, buttonHeight, fontSize }) => {
+const ButtonLight = ({ onPress, title, buttonHeight, fontSize }) => {
   const dynamicStyles = {
     button: {
       ...styles.button,
@@ -21,4 +21,4 @@ const Button = ({ onPress, title, buttonHeight, fontSize }) => {
   );
 };
 
-export default Button;
+export default ButtonLight;
