@@ -112,16 +112,18 @@ export const styles = StyleSheet.create({
   },
 
   btndiv: {
+    width: '100%',
+    position: 'absolute',
     alignItems: 'center',
+    justifyContent: 'center',
     display: 'flex',
-    marginTop: '30%',
+    marginTop: 600,
   },
   editButton: {
-    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#40513B',
-    width: '77%',
+    width: '80%',
     borderRadius: 8,
     height: 36,
   },
