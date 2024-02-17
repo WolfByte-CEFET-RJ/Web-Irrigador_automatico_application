@@ -13,8 +13,17 @@ import { useGarden } from '../../contexts/GardenContext';
 const ViewGarden = () => {
     const { selectedGarden } = useGarden();
 
-    const porcentagemUmidade = 50;
-    const porcentagemAgua = 20;
+    let porcentagemUmidade;
+    let porcentagemAgua;
+    for (const measure of selectedGarden.lastMeasures) {
+        if (measure.sensorId === 1) {
+            porcentagemUmidade = measure.measurement;
+        } else if (measure.sensorId === 2) {
+            porcentagemAgua = measure.measurement;
+        }
+    }
+    console.log(porcentagemAgua);
+    console.log(porcentagemUmidade);
 
     const navigation = useNavigation();   
 

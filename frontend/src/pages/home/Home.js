@@ -3,12 +3,10 @@ import { View, Text, Image, Pressable,TextInput} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import axios from "axios";
 import BottomBar from '../../components/bottomBar/BottomBar'
 import DeleteModal from "../../components/deleteModal/DeleteModal";
 import { StatusBar } from 'expo-status-bar';
 import EditModal from "../../components/editModal/EditModal";
-import { useAuth } from '../../contexts/AuthContext';
 import { createAxiosInstance } from "../../services/api";
 import { useGarden } from "../../contexts/GardenContext";
 
@@ -21,30 +19,42 @@ export default function Home(){
   const [buscarHorta, setBuscarHorta] = useState('');
   const { setGarden, gardenData, setSelectedGarden } = useGarden();
 
-
   useEffect(() => {
     async function fetchHortas() {
-      try {
-        const response = await api.get(`/myGardens`);
-        setGarden(response.data);
-
-        gardenData.forEach(async (garden) => {
           try {
               // Obtém as últimas medidas para a horta atual
-              const measures = await api.get(`/measures/garden`);
-              console.log(measures.data); // Aqui você pode manipular os dados das últimas medidas
+              const response = await api.get(`/measures/garden`);
+              setGarden(response.data)
+              // console.log(response.data);
           } catch (error) {
-              console.error(`Erro ao buscar medidas para a horta ${garden.id}:`, error);
+              console.error(`Erro ao buscar hortas:`, error);
           }
-      });
-
-      } catch (error) {
-        console.error("Erro ao buscar hortas:", error);
-      }
     }
     fetchHortas();
   }, [gardenData]);
 
+  const userInfo = async () => {
+    try {
+      const userResponse = await api.get(`/user`);
+      console.log(userResponse);
+    }
+    catch (error) {
+      console.error('Erro ao encontrar usuario:', error);
+    }
+  }
+
+  const measures = (garden) => {
+    let porcentagemAgua = 0;
+    let porcentagemUmidade = 0;
+    for (const measure of garden.lastMeasures) {
+      if (measure.sensorId === 1) {
+          porcentagemUmidade = measure.measurement;
+      } else if (measure.sensorId === 2) {
+          porcentagemAgua = measure.measurement;
+      }
+    }
+    return {porcentagemUmidade, porcentagemAgua}
+  }
 
   const filtrarHortas = () => {
     return gardenData.filter((garden) =>
@@ -105,8 +115,8 @@ export default function Home(){
               <Text style={styles.textoSuperior}>{garden.name}</Text>
             </View>
             <View style={styles.textoInferiorContainer}>
-              <Text style={styles.textoInferior}>Umidade: {}</Text>
-              <Text style={styles.textoInferior}>Água: {}</Text>
+              <Text style={styles.textoInferior}>Umidade: {measures(garden).porcentagemUmidade}%</Text>
+              <Text style={styles.textoInferior}>Água: {measures(garden).porcentagemAgua}%</Text>
             </View>
             <Ionicons
               style={styles.iconHorta}
