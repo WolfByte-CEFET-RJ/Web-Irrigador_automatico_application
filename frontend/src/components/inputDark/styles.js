@@ -7,10 +7,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-    // borderColor: 'red',
-    // borderWidth: 2,
   },
-  label_container:{
+
+  labelContainer:{
     display: 'flex',
     alignItems: 'flex-start',
     width: '77%',
