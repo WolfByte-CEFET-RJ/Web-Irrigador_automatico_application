@@ -3,8 +3,6 @@ import { View, TextInput, Text } from 'react-native';
 import { styles } from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-// todo: consertar a estilização do label porque tá torto
-
 const InputDark = ({ label, isPassword, value, onChangeText, isLogin, isEmail, placeHolder, editable = true }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -12,7 +10,9 @@ const InputDark = ({ label, isPassword, value, onChangeText, isLogin, isEmail, p
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.label, isFocused || value ? styles.labelFocused : null]}>{label}</Text>
+      <View style={styles.labelContainer}>
+        <Text style={[styles.label, isFocused || value ? styles.labelFocused : null]}>{label}</Text>
+      </View>
       <TextInput
         multiline={isDescricaoInput && editable}
         style={[

@@ -6,43 +6,41 @@ export const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'rgba(0, 0, 0, 0.3)',
-      borderColor: 'red',
-      borderWidth: 1,
     },
     modalContent: {
       backgroundColor: '#EDF1D6',
-      padding: 40,
       borderRadius: 10,
       alignItems: 'center',
-      width: "88%",
+      width: "90%",
     },
-    message: {
-      marginTop: 20,
-      marginBottom: 40,
-      color: '#40513B',
-      textAlign: 'center',
-      fontSize: 17,
-      fontStyle: 'normal',
-      fontWeight: '700',
-      lineHeight: 'normal',
+    input_container:{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 50,
+      width: '100%'
     },
+
     buttonContainer: {
       flexDirection: 'row',
       justifyContent: 'center',
       width: '100%',
     },
-    iconHorta:{
-        position: 'absolute',
-        right: '5%',
-        top: "5%",
-      },
-    alertText:{
-      //width: "100%",
+    
+    // iconHorta:{
+    //     position: 'absolute',
+    //     right: '5%',
+    //     top: "5%",
+    //   },
+    
+    alert_container:{
       display: "flex",
       flexDirection: "row",
       justifyContent:  "space-between",
-      borderColor: 'red',
-      borderWidth: 1,
+    },
+    alert_text:{
+      fontSize: 10,
     },
 
 });

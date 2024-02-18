@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import {Text, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, SafeAreaView, View, Pressable} from 'react-native';
 import { styles } from './styles';
 import BottomBar from '../../components/bottomBar/BottomBar';
-import { Platform } from 'react-native';
-import Button from '../../components/button/Button';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import DeleteModal from '../../components/deleteModal/DeleteModal';
 import NewConfigModal from '../../components/newConfigModal/newConfigModal';
-
+import { createAxiosInstance } from "../../services/api";
+import { useConfig } from '../../contexts/ConfigContext';
 
 const ViewConfig = () => {
 
@@ -29,9 +28,24 @@ const ViewConfig = () => {
     }
   ]
 
+  const api = createAxiosInstance();
+  const { configData, setConfigData } = useConfig();
+
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
+
+  const fetchConfig = async () => {
+    try {
+      const response = await api.get('/setting/')
+      setConfigData(response.data)
+      console.log(response.data)
+    } catch (error) {
+      console.error("Erro ao buscar configuração", error)
+    }
+  }
+
+  fetchConfig()
 
   const [isModalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [isModalConfigVisible, setModalConfigVisible] = useState(false);
@@ -101,6 +115,9 @@ const ViewConfig = () => {
               />        
           </Pressable>
         ))}
+      </View>
+      <View style={styles.bottomBar_container}>
+        <BottomBar/>
       </View>
     </View>
   );

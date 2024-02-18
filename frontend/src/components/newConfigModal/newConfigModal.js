@@ -1,9 +1,9 @@
 import React from 'react';
 import { styles } from './styles';
 import { Modal, View, Text} from 'react-native';
-import ButtonOrange from '../buttonOrange/ButtonOrange';
+import Button from '../button/Button';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { TextInput } from 'react-native-gesture-handler';
+import InputDark from '../inputDark/InputDark';
 
 const newConfigModal = ({visible, onClose, texto}) => {
   return (
@@ -22,19 +22,31 @@ const newConfigModal = ({visible, onClose, texto}) => {
             color={'#40513B'}
             onPress={onClose}
           />
-          <Text style={styles.message}>{texto}</Text>
-          <TextInput/>
-          <View style={styles.buttonContainer}>
-            <ButtonOrange title="Excluir" onPress={() => onDelete(hortaToDelete)} />
+          <View style={styles.input_container}>
+            <InputDark
+              label="Nome" 
+              placeHolder="Ex: Configuração #001" 
+            />
+            <InputDark
+              label="Nível de Umidade" 
+              placeHolder="Ex: 45" 
+            />
+            <InputDark
+              label="Nível de Água" 
+              placeHolder="Ex: 50" 
+            />
           </View>
-          <View style={styles.alertText}>
+          <View style={styles.buttonContainer}>
+            <Button title="Adicionar configuração" buttonHeight={36.6} fontSize={17}/>
+          </View>
+          <View style={styles.alert_container}>
             <Ionicons
               // style={styles.iconHorta}
               name={'warning'}
               size={30}
               color={'#D26E28'}
             />
-            <Text>A irrigação será acionada automaticamente se a umidade estiver menor do que a estabelecida e se o nível de água do reservatório estiver maior do que o estabelecido</Text>
+            <Text style={styles.alert_text}>A irrigação será acionada automaticamente se a umidade estiver menor do que a estabelecida e se o nível de água do reservatório estiver maior do que o estabelecido</Text>
           </View>
         </View>
       </View>

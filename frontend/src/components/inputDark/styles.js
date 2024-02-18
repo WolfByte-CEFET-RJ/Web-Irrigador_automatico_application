@@ -8,20 +8,17 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  label_container:{
-    display: 'flex',
+  labelContainer:{
+    display: 'flex', 
     alignItems: 'flex-start',
     width: '77%',
   },  
-
   label: {
     fontSize: 12,
     marginBottom: 8,
     color: '#40513B',
     fontWeight: 'bold',
-    marginRight: 240,
   },
-
   labelFocused: {
     color: '#609966', // Cor quando o input está focado ou tem valor
   },

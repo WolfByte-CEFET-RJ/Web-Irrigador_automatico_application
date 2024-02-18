@@ -1,12 +1,23 @@
 import React from 'react';
 import { styles } from './styles'
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, Pressable } from 'react-native';
 
-const Button = ({ onPress, title }) => {
+const Button = ({ onPress, title, buttonHeight, fontSize }) => {
+  const dynamicStyles = {
+    button: {
+      ...styles.button,
+      height: buttonHeight || styles.button.height,
+    },
+    buttonText: {
+      ...styles.buttonText,
+      fontSize: fontSize || styles.buttonText.fontSize,
+    },
+  };
+
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.buttonText}>{title}</Text>
-    </TouchableOpacity>
+    <Pressable style={dynamicStyles.button} onPress={onPress}>
+      <Text style={dynamicStyles.buttonText}>{title}</Text>
+    </Pressable>
   );
 };
 

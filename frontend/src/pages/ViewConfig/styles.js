@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     config_title_container:{
       width: '100%',
       display: 'flex',
-      flexDirection: 'collumn',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       marginTop: '20%',
