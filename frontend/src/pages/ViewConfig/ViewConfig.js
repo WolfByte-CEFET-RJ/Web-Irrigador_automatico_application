@@ -29,7 +29,7 @@ const ViewConfig = () => {
   ]
 
   const api = createAxiosInstance();
-  const { configData, setConfigData } = useConfig();
+  const { configData, setConfig } = useConfig();
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -38,7 +38,7 @@ const ViewConfig = () => {
   const fetchConfig = async () => {
     try {
       const response = await api.get('/setting/')
-      setConfigData(response.data)
+      setConfig(response.data)
       console.log(response.data)
     } catch (error) {
       console.error("Erro ao buscar configuração", error)
