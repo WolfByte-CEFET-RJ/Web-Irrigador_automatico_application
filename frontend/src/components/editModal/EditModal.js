@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import ButtonOrange from '../buttonOrange/ButtonOrange';
 import { useGarden } from '../../contexts/GardenContext';
 import { createAxiosInstance } from '../../services/api';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const EditModal = ({visible, onClose}) => {
   const { selectedGarden, setSelectedGarden } = useGarden();
@@ -12,6 +13,7 @@ const EditModal = ({visible, onClose}) => {
   const [ newDescription, setNewDescription ] = useState('');
   const [ newIrrigationId, setNewIrrigationId ] = useState('');
   const api = createAxiosInstance();
+  const [isFocus, setIsFocus] = useState(false);
 
   const handleSaveChanges = async (id) => {
     try {
@@ -55,9 +57,18 @@ const EditModal = ({visible, onClose}) => {
             </View>
             <View style={styles.informationConfiguration}>
               <Text style={styles.labelConfiguracao}>Configuração de irrigação</Text>
-              <TextInput style={styles.inputConfiguracao} value={newIrrigationId} onChangeText={text=>setNewIrrigationId(text)} placeholder={selectedGarden.irrigationId}></TextInput>
+              {/* <TextInput style={styles.inputConfiguracao} value={newIrrigationId} onChangeText={text=>setNewIrrigationId(text)} placeholder={selectedGarden.irrigationId}></TextInput> */}
+              <Dropdown style={[styles.dropdown, isFocus ? styles.focusDropdown : null]}
+              onChange={item => {
+                setIsFocus(false)
+              }}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              placeholder='default'
+              placeholderStyle={styles.placeholderStyle}
+              />
             </View>
-            <View style={styles.buttonContainer}>
+            <View style={styles.saveButtonContainer}>
               <ButtonOrange title="Salvar alterações" onPress={() => handleSaveChanges(selectedGarden.id)}/>
             </View>
           </View>

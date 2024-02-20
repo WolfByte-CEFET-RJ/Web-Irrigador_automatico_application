@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, SafeAreaView, View} from 'react-native';
-import { useState } from "react";
+import { useState } from 'react';
 import { styles } from './styles';
 import BottomBar from '../../components/bottomBar/BottomBar';
 import Button from "../../components/button/Button";
@@ -9,6 +9,7 @@ import { Platform } from 'react-native';
 import ErrorComponent from '../../components/Error/ErrorComponent';
 import { createAxiosInstance }  from '../../services/api';
 import SucessComponent from '../../components/sucess/SucessComponent';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const AddGarden = () => {
 
