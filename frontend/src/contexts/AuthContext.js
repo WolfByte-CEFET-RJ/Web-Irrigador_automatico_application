@@ -4,7 +4,6 @@ const Context = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
-  const [gardenData, setGardenData] = useState([]);
 
   const signIn = (newToken) => {
     setToken(newToken);

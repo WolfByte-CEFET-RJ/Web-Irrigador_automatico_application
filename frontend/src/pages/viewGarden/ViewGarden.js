@@ -6,18 +6,26 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import BottomBar from '../../components/bottomBar/BottomBar';
 import { StatusBar } from 'expo-status-bar';
-import Button from "../../components/button/Button";
 import EditModal from '../../components/editModal/EditModal';
 import { useGarden } from '../../contexts/GardenContext';
+import MeasureMessage from '../../components/measureMessage/MeasureMessage';
 
 const ViewGarden = () => {
     const { selectedGarden } = useGarden();
+    const navigation = useNavigation();  
 
-    const porcentagemUmidade = 50;
-    const porcentagemAgua = 20;
+    let porcentagemUmidade;
+    let porcentagemAgua;
+    for (const measure of selectedGarden.lastMeasures) {
+        if (measure.sensorId === 1) {
+            porcentagemUmidade = measure.measurement;
+        } else if (measure.sensorId === 2) {
+            porcentagemAgua = measure.measurement;
+        }
+    }
 
-    const navigation = useNavigation();   
-
+    console.log(selectedGarden.message);
+    
     const [isModalVisible, setModalVisible] = useState(false);
 
     const handleDeleteIconPress = () => {
@@ -92,6 +100,8 @@ const ViewGarden = () => {
                     </View>
                 </View>
             </SafeAreaView> 
+
+            <MeasureMessage message={selectedGarden.message}/>
 
             <SafeAreaView style={styles.btndiv}>
                 <TouchableOpacity style={styles.editButton} onPress={() => setModalVisible(true)}>

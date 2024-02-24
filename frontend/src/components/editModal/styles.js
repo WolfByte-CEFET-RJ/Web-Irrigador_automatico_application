@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   },
   modalContent: {
     width: '90%',
-    height: 393,
+    height: 400,
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#EDF1D6',
@@ -81,10 +81,25 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     fontFamily: 'Montserrat-Bold'
   },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems:  'center',
+  saveButtonContainer: {
+    position: 'absolute',
     width: '100%',
+    marginTop: 300,
   },
+  dropdown: {
+    backgroundColor: '#D8E4C2',
+    width: '100%',
+    borderRadius: 8,
+    justifyContent: 'center',
+  },
+  placeholderStyle: {
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'center',
+    fontSize: 12,
+    color: '#40513B',
+  },
+  focusDropdown: {
+    borderWidth: 2, 
+    borderColor: '#D26E28'
+  }
 });
