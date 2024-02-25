@@ -14,7 +14,7 @@ userSchema = yup.object({
 
 module.exports = {
     async getAllUsers() {
-        const users = await knex('user').select('id', 'name', 'email','code', 'humidityNotification', 'waterNotification', 'password');
+        const users = await knex('user').select('id', 'name', 'email','code', 'humidityNotification', 'waterNotification');
         return users;
     },
 
@@ -88,8 +88,7 @@ module.exports = {
       },
       async verifyCode(email, code) {
         const user = await knex('user').select('*').where({email}).first();
-        console.log(email, code);
-        console.log(typeof code);
+        
         if (!user) {
             throw new Error('Este usuário não existe!')
         }
