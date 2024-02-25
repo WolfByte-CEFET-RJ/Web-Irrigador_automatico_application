@@ -107,6 +107,11 @@ export const styles = StyleSheet.create({
       right: '5%',
       bottom: '20%',
     },
+    updateConfig:{
+      position: 'absolute',
+      right: '15%',
+      bottom: '20%',
+    },
     container_text:{
         width: '100%',
         height:'3%',

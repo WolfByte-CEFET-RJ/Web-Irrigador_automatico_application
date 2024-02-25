@@ -5,8 +5,10 @@ import BottomBar from '../../components/bottomBar/BottomBar';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import DeleteModal from '../../components/deleteModal/DeleteModal';
 import NewConfigModal from '../../components/newConfigModal/newConfigModal';
+import UpdateConfigModal from '../../components/updateConfig/updateConfig';
 import { createAxiosInstance } from "../../services/api";
 import { useConfig } from '../../contexts/ConfigContext';
+import Button from '../../components/button/Button';
 
 const ViewConfig = () => {
 
@@ -49,7 +51,7 @@ const ViewConfig = () => {
 
   const [isModalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [isModalConfigVisible, setModalConfigVisible] = useState(false);
-
+  const [isModalUpdateVisible, setModalUpdateVisible] = useState(false);
 
   const handleDeleteIconPress = () => {
     setModalDeleteVisible(true);
@@ -57,6 +59,10 @@ const ViewConfig = () => {
 
   const handleCreateConfig = () => {
     setModalConfigVisible(true);
+  };
+
+  const handleUpdateConfigPress = () => {
+    setModalUpdateVisible(true);
   }
 
   return (
@@ -99,6 +105,17 @@ const ViewConfig = () => {
               <Text style={styles.config_stats}> Umidade: <Text style={styles.config_number}> {config.porcentagemUmidade} </Text> </Text>
               <Text style={styles.config_stats}> Água: <Text style={styles.config_number}> {config.porcentagemAgua} </Text> </Text> 
             </View>
+            <Ionicons
+              style={styles.updateConfig}
+              name={'pencil'}
+              size={30}
+              color={'#9DC08B'}
+              onPress={handleUpdateConfigPress}
+              />
+            <UpdateConfigModal
+              visible={isModalUpdateVisible}
+              onClose={() => setModalUpdateVisible(false)}
+            />
             <Ionicons
               style={styles.iconConfig}
               name={'close-circle'}
