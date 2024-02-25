@@ -1,6 +1,7 @@
 const knex = require('../database');
 const bcrypt = require('bcryptjs');
 const yup = require('yup');
+const sendEmail = require('../utils/sendEmail');
 
 userSchema = yup.object({
     name: yup.string().min(3,'O nome precisa ter pelo menos 3 caracteres'),
@@ -80,6 +81,8 @@ module.exports = {
         await knex('user').where({email}).update({code});
     
         // chamar a função que enviará o código para o email
+        await sendEmail(email, code);
+
         return 'Código enviado para o seu email!'
 
       },

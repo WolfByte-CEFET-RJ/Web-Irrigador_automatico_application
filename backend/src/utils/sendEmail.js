@@ -2,19 +2,22 @@ const sgMail = require('@sendgrid/mail')
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-const msg = {
-  to: 'teste@gmail.com',
-  from: 'wolfbytegames@gmail.com', 
-  subject: 'Sending with SendGrid is Fun',
-  text: 'and easy to do anywhere, even with Node.js',
-  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+
+async function sendEmail(email, code) {
+  const msg = {
+    to: email,
+    from: 'wolfbytegames@gmail.com', 
+    subject: 'Código de recuperação de senha',
+    text: `Seu código de recuperação de senha é: ${code}`,
+  };
+
+  try {
+    await sgMail.send(msg);
+    console.log('Email enviado com sucesso!');
+  } catch (error) {
+    console.error('Erro ao enviar e-mail', error);
+    throw new Error('Erro ao enviar e-mail');
+  }
 }
 
-sgMail
-  .send(msg)
-  .then(() => {
-    console.log('Email sent')
-  })
-  .catch((error) => {
-    console.error(error)
-  })
+module.exports = sendEmail;
