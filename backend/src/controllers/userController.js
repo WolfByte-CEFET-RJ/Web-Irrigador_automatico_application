@@ -57,5 +57,38 @@ module.exports = {
         } catch (error) {
             return res.status(400).json({message: error.message});
         }
+    },
+    async forgotPassword(req, res) {
+        const { email } = req.body;
+
+        try {
+            const response = await userService.fogotPassword(email);
+            return res.status(200).json({message: response});
+            
+        } catch (error) {
+            return res.status(400).json({message: error.message});
+        }
+    },
+    async verifyCode(req, res) {
+        const { email } = req.params;
+        const { code } = req.body;
+
+        try {
+            const response = await userService.verifyCode(email, code);
+            return res.status(200).json({message: response});
+        } catch (error) {
+            return res.status(400).json({message: error.message});
+        }
+    },
+    async resetPassword(req, res) {
+        const { email } = req.params;
+        const { password, confirmPassword } = req.body;
+
+        try {
+            const response = await userService.resetPassword(email, password, confirmPassword);
+            return res.status(200).json({message: response});
+        } catch (error) {
+            return res.status(400).json({message: error.message});
+        }
     }
 };

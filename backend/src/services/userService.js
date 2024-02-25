@@ -13,7 +13,7 @@ userSchema = yup.object({
 
 module.exports = {
     async getAllUsers() {
-        const users = await knex('user').select('id', 'name', 'email', 'humidityNotification', 'waterNotification');
+        const users = await knex('user').select('id', 'name', 'email','code', 'humidityNotification', 'waterNotification', 'password');
         return users;
     },
 
@@ -40,7 +40,8 @@ module.exports = {
           email,
           password: hash,
           humidityNotification,
-          waterNotification
+          waterNotification,
+          code: null
         })
 
         return "Usuário cadastrado!"
@@ -67,5 +68,57 @@ module.exports = {
         }
         return knex('user').where({ id: userId }).del();
       
+      },
+      async fogotPassword(email) {
+        const user = await knex('user').select('*').where({email}).first();
+        if (!user){
+            throw new Error('Este usuário não existe!')
+        }
+
+        const code = Math.round(Math.random() * 9999);
+       
+        await knex('user').where({email}).update({code});
+    
+        // chamar a função que enviará o código para o email
+        return 'Código enviado para o seu email!'
+
+      },
+      async verifyCode(email, code) {
+        const user = await knex('user').select('*').where({email}).first();
+        console.log(email, code);
+        console.log(typeof code);
+        if (!user) {
+            throw new Error('Este usuário não existe!')
+        }
+        if (typeof code != 'number' || user.code != code){
+            throw new Error('Código inválido');
+        }
+
+        if (user.code == code) {
+            // ver lógica, se vai ser usado token ou se vai ser feito e outra forma
+            return 'Código válido! Você já pode recuperar sua senha!';
+        }
+      },
+      async resetPassword(email, password, confirmPassword) {
+        const user = await knex('user').select('*').where({email}).first();
+        const passwordSchema = yup.string().min(8, 'A senha precisa ter pelo menos 8 caracteres');
+        if (!user) {
+            throw new Error('Este usuário não existe!')
+        }
+
+        if (password != confirmPassword) {
+            throw new Error('As senhas são diferentes!')
+        }
+
+        await passwordSchema.validate(password)
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash(password, salt);
+        
+        await knex('user').where({email}).update({
+            password: hash,
+            code: null
+        })
+
+        return 'Senha alterada com sucesso!';
       }
 };
