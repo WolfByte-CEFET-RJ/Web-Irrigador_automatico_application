@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/userController');
 const auth = require('../middleware/auth');
-const userController = require('../controllers/userController');
 
 router
       .get('/user/:id?',auth, UserController.getUsers)
@@ -11,9 +10,9 @@ router
 
       .post('/forgot_password', UserController.forgotPassword)
 
-      .post('/verify_code/:email', userController.verifyCode)
+      .post('/verify_code/:email', UserController.verifyCodeAndGenerateToken)
 
-      .post('/reset_password/:email', UserController.resetPassword)
+      .post('/reset_password/:email', auth, UserController.resetPassword)
 
       .patch('/user/',auth, UserController.updateUser)
 

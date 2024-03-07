@@ -2,6 +2,7 @@ const knex = require('../database');
 const bcrypt = require('bcryptjs');
 const yup = require('yup');
 const sendEmail = require('../utils/sendEmail');
+const moment = require('moment/moment');
 
 userSchema = yup.object({
     name: yup.string().min(3,'O nome precisa ter pelo menos 3 caracteres'),
@@ -77,8 +78,9 @@ module.exports = {
         }
 
         const code = Math.round(Math.random() * 9999);
+        const expirationDate = moment().add(1, 'hour').format('YYYY-MM-DD HH:mm:ss');
        
-        await knex('user').where({email}).update({code});
+        await knex('user').where({email}).update({code, expirationDate});
     
         // chamar a função que enviará o código para o email
         await sendEmail(email, code);
@@ -96,10 +98,13 @@ module.exports = {
             throw new Error('Código inválido');
         }
 
-        if (user.code == code) {
-            // ver lógica, se vai ser usado token ou se vai ser feito e outra forma
-            return 'Código válido! Você já pode recuperar sua senha!';
+        const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        if (moment(currentDateTime).isAfter(user.expirationDate)) {
+            throw new Error('Código expirado! Por favor, solicite um novo código!');
         }
+        
+        return true, 'Código válido! Você já pode recuperar sua senha!';
+        
       },
       async resetPassword(email, password, confirmPassword) {
         const user = await knex('user').select('*').where({email}).first();
@@ -122,5 +127,11 @@ module.exports = {
         })
 
         return 'Senha alterada com sucesso!';
+      },
+      
+      // usar cron jobs ou alçgo do tipo para rodar regularmente.
+      async cleanExpiredCodes() {
+        const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        await knex('user').where('expirationDate', '<', currentDateTime).update({code: null, expirationDate: null});
       }
 };

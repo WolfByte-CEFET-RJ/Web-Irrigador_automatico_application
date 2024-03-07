@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const userService = require('../services/userService');
 
 module.exports = {
@@ -69,15 +70,21 @@ module.exports = {
             return res.status(400).json({message: error.message});
         }
     },
-    async verifyCode(req, res) {
+    async verifyCodeAndGenerateToken(req, res) {
         const { email } = req.params;
         const { code } = req.body;
 
         try {
-            const response = await userService.verifyCode(email, code);
-            return res.status(200).json({message: response});
+            const isValidCode = await userService.verifyCode(email, code);
+            if (!isValidCode) {
+                return res.status(400).json({message: 'Código inválido!'});
+            }
+
+            const token = jwt.sign({ email }, process.env.TOKEN_KEY, { expiresIn: '1h' });
+            
+            return res.status(200).json({ token });
         } catch (error) {
-            return res.status(400).json({message: error.message});
+            return res.status(500).json({message: error.message});
         }
     },
     async resetPassword(req, res) {
