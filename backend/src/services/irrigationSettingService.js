@@ -38,10 +38,11 @@ module.exports = {
 
         return finalSetting;
     },
-    async getOneSetting(id) {
+    async getOneSetting(id, myId) {
         const setting = await knex('irrigationSetting').select('irrigationSetting.id', 'irrigationSetting.name', 'irrigationSetting.userId', 'configSensor.value')
         .join('configSensor', 'irrigationSetting.id', '=', 'configSensor.irrigationId').where({ id });
 
+        if (myId != setting[0].userId) {throw new Error('Essa config não pertence a você!')}
         if (!setting.length) {throw new Error('Esta config não existe!')}
 
         const finalSetting = {
