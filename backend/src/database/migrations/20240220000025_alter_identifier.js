@@ -7,7 +7,7 @@ exports.up = async function(knex) {
 
     // Adicionar as colunas com as propriedades desejadas
     await knex.schema.alterTable("identifier", async (table) => {
-        tabl.foreign("gardenId").references("id").inTable("garden").onDelete("SET NULL");
+        table.foreign("gardenId").references("id").inTable("garden").onDelete("SET NULL");
         
     });
 };
@@ -21,7 +21,7 @@ exports.down = async function(knex) {
 
     // Adicionar novamente as colunas removidas
     await knex.schema.alterTable("identifier", async (table) => {
-        tabl.foreign("gardenId").references("id").inTable("garden").onDelete("SET NULL");
+        table.foreign("gardenId").references("id").inTable("garden").onDelete("SET NULL");
         
     });
 };
