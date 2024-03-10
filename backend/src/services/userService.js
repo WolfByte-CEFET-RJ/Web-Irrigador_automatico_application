@@ -15,12 +15,12 @@ userSchema = yup.object({
 
 module.exports = {
     async getAllUsers() {
-        const users = await knex('user').select('id', 'name', 'email','code', 'humidityNotification', 'waterNotification');
+        const users = await knex('user').select('id', 'name', 'email','code', 'expirationDate', 'humidityNotification', 'waterNotification');
         return users;
     },
 
     async getOneUser(id) {
-        const user = await knex('user').select('id', 'name', 'email', 'humidityNotification', 'waterNotification').where({id}).first();
+        const user = await knex('user').select('id', 'name', 'email','code', 'expirationDate', 'humidityNotification', 'waterNotification').where({id}).first();
         if (!user) {
             throw new Error('Usuário não existe!');
         }
@@ -123,7 +123,8 @@ module.exports = {
         
         await knex('user').where({email}).update({
             password: hash,
-            code: null
+            code: null,
+            expirationDate: null
         })
 
         return 'Senha alterada com sucesso!';
