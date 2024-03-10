@@ -12,7 +12,7 @@ router
 
       .post('/verify_code/:email', UserController.verifyCodeAndGenerateToken)
 
-      .post('/reset_password/:email', auth, UserController.resetPassword)
+      .post('/reset_password', auth, UserController.resetPassword)
 
       .patch('/user/',auth, UserController.updateUser)
 

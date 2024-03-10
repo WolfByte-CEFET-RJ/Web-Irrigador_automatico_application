@@ -88,10 +88,10 @@ module.exports = {
         }
     },
     async resetPassword(req, res) {
-        const { email } = req.params;
+        const token = req.token;
         const { password, confirmPassword } = req.body;
-
         try {
+            const { email } = jwt.verify(token, process.env.TOKEN_KEY);
             const response = await userService.resetPassword(email, password, confirmPassword);
             return res.status(200).json({message: response});
         } catch (error) {
