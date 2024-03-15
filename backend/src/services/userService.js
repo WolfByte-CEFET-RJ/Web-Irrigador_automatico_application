@@ -100,6 +100,7 @@ module.exports = {
 
         const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
         if (moment(currentDateTime).isAfter(user.expirationDate)) {
+            await knex('user').where({email}).update({code: null, expirationDate: null});
             throw new Error('Código expirado! Por favor, solicite um novo código!');
         }
         
