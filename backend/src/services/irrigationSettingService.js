@@ -132,7 +132,7 @@ module.exports = {
         return "Configuração atualizada com sucesso!"
     },
     async deleteIrrigationSetting(settingId, userId) {
-        const setting = await this.getOneSetting(settingId); 
+        const setting = await this.getOneSetting(settingId, userId);
 
         if(setting.id === 1){throw new Error('Você não pode apagar uma configuração padrão')}
         if (setting.userId != userId){throw new Error('Esta config não pertence a você!')}
