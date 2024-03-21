@@ -6,7 +6,7 @@ exports.up = function(knex) {
         table.string("description");
         table.string("identifier").notNullable(); 
         table.integer("userId").unsigned().references("id").inTable("user").onDelete("CASCADE");
-        table.integer("configId").unsigned().references("id").inTable("irrigationSetting").onDelete("SET 1");
+        table.integer("configId").unsigned().references("id").inTable("irrigationSetting");
     })
 };
 
