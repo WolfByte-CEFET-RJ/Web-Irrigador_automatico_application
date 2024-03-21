@@ -11,6 +11,12 @@ router
 
       .post('/user', UserController.createUser)
 
+      .post('/forgot_password', UserController.forgotPassword)
+
+      .post('/verify_code/:email', UserController.verifyCodeAndGenerateToken)
+
+      .post('/reset_password', auth, UserController.resetPassword)
+
       .patch('/user/',auth, UserController.updateUser)
 
       .delete('/user/',auth, UserController.deleteUser)
