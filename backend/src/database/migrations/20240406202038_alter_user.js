@@ -1,7 +1,7 @@
 
 exports.up = function(knex) {
     return knex.schema.alterTable("user", async (table) => {
-        table.integer("code");
+        table.integer("code").defaultTo(null);
         table.timestamp("expirationDate").defaultTo(null);
     })
 };
