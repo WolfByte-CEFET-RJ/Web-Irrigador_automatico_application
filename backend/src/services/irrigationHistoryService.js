@@ -2,6 +2,7 @@ const knex = require("../database");
 const convertDate = require("../utils/convertDate")
 
 module.exports = {
+    // Retorna o histórico de irrigação de todas as hortas do usuário autenticado
     async getAllUserGardensHistory(userId){
         const userGardensHistory = await knex('user as u').select('g.name as gardenName', 'ih.date as date')
         .join('garden as g', 'g.userId', '=', 'u.id')
@@ -15,6 +16,7 @@ module.exports = {
         return finalUserGardensHistory;
     },
 
+    // Retorna o histórico de irrigação de uma horta do usuário autenticado
     async getOneGardenHistory(userId, gardenName){
         const userGardenHistory = await knex('user as u').select('g.name as gardenName', 'ih.date as date')
         .join('garden as g', 'g.userId', '=', 'u.id')
