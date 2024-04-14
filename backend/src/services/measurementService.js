@@ -2,6 +2,7 @@ const knex = require('../database');
 const irrigationSettingServicce = require("../services/irrigationSettingService");
 
 
+// Retorna os valores de uma configuração de irrigação de acordo com o id passado
 async function returnConfigValues (irrigationId){
         const configSensorUmidade = await knex('configSensor')
             .select('value')
@@ -24,6 +25,7 @@ async function returnConfigValues (irrigationId){
         return { configHumidityValue: configSensorUmidade.value, configWaterValue: configSensorAgua.value}
 }
 
+// Realiza a verificação do estado da horta
 async function verifyMeasurements(humidityValue, waterValue, configHumidityValue, configWaterValue){
     if (parseFloat(humidityValue) < parseFloat(configHumidityValue)){
         if (parseFloat(waterValue) < parseFloat(configWaterValue)){
@@ -46,12 +48,16 @@ module.exports = {
         let lastMeasures = [];
         const sensors = await knex('sensor').select('id');
         
+        // Para cada sensor, busca a última medida registrada na tabela measurement 
         for(i=0; i<sensors.length; i++) {
             const lastMeasure = await knex('measurement').select('*').where({gardenId, sensorId: sensors[i].id}).orderBy('date','desc').first();
             lastMeasures.push(lastMeasure);
         }
 
+        // Busca a configuração de irrigação ativa da horta em questão
         let { configHumidityValue, configWaterValue } = await returnConfigValues(gardenIrrigationId);
+
+        // Verifica o status/mensagem da horta de acordo com as últimas medidas
         let message = await verifyMeasurements(lastMeasures[0].measurement, lastMeasures[1].measurement, configHumidityValue, configWaterValue);
         lastMeasures.push({message: message});
 
@@ -63,6 +69,7 @@ module.exports = {
         let lastMeasuresGardens = gardens;
         const sensors = await knex('sensor').select('id');
 
+        // Busca as últimas medidas de todos os sensores de cada horta de um usuário
         for(i=0; i<gardens.length; i++) {
             for(j=0; j<sensors.length; j++) {
                 const meausures = await knex('measurement').select('*').where({gardenId: gardens[i].id, sensorId: sensors[j].id}).orderBy('date','desc').first();
