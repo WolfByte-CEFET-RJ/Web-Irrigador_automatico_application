@@ -2,6 +2,7 @@ const knex = require('../database');
 const mqtt = require('mqtt');
 const { connectOptions } = require('../use_mqtts.js');
 
+// Função para criar um cliente MQTT
 function createMqttClient() {
     const clientId = 'teste_nodejs_' + Math.random().toString(16).substring(2, 8);
     const { protocol, host, port, username, password } = connectOptions;
@@ -21,6 +22,7 @@ function createMqttClient() {
     return mqtt.connect(connectUrl, options);
 }
 
+// Função para extrair os valores de um string
 function extractValuesFromString(message) {
     const cleanedMessage = message.replace(/["\n\r\s]/g, '').trim();
     const [identificador, valorUmidade, valorAgua] = cleanedMessage.split(',');
@@ -29,6 +31,7 @@ function extractValuesFromString(message) {
 }
 
 module.exports = {
+    // Função para inserir dados no banco de dados
     async insertData(data){
         const {identificador, valorUmidade, valorAgua} = extractValuesFromString(data);
         
@@ -44,6 +47,7 @@ module.exports = {
         ]);
     },
 
+    // Função para verificar se a planta deve ser irrigada
     async checkAndSendIrrigationMessage(data, mqttClient){
         const {identificador, valorUmidade, valorAgua} = extractValuesFromString(data);
         
@@ -92,6 +96,7 @@ module.exports = {
         }
     },
 
+    // Função para registrar o histórico de irrigação
     async recordIrrigationHistory(identificador) {
         const garden = await knex('garden').select('id').where({ identifier: identificador }).first();
 
@@ -107,6 +112,7 @@ module.exports = {
         console.log('Histórico de irrigação registrado com sucesso!');
     },
 
+    // Função para deletar o histórico de irrigação antigo
     async deleteOldIrrigationHistory() {
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
