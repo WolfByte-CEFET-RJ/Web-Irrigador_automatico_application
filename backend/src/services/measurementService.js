@@ -77,7 +77,8 @@ module.exports = {
             }
             lastMeasuresGardens[i].lastMeasures = []
         }
-        
+
+        // Coloca todas as últimas medidas dos sensores em sua respectiva horta
         for(i=0; i<lastMeasuresGardens.length; i++){
             for(j=0; j<lastMeasures.length; j++){
                 if (lastMeasuresGardens[i].id == lastMeasures[j].gardenId){
