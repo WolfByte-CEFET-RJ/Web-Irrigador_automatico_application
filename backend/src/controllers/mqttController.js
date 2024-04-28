@@ -7,7 +7,7 @@ const topicMedida = 'Horta/Medida';
 const topicEstadoMotor = 'Outros/Estado_Motor';
 const qos = 0
 
-// connect to same client and subscribe to same topic name  
+// Conecta ao broker e se inscreve nos tópicos
 client.on('connect', () => { 
   console.log(`${client.options.protocol}: Connected`)
   client.subscribe(topicMedida, {qos}, (err, granted) => { 
@@ -24,7 +24,7 @@ client.on('connect', () => {
   })
 });
 
-// on receive message event
+// Recebe mensagens dos tópicos inscritos
 client.on('message', async (topic, message, packet) => { 
   console.log("Mensagem recebiba!")
   if(topic === topicMedida) { 

@@ -3,7 +3,6 @@ const cors = require('cors');
 const user = require('./userRoutes.js');
 const auth = require('./authRoutes.js');
 const garden = require('./gardenRoutes.js');
-const identifier = require('./identifierRoutes.js');
 const irrigationSetting = require('./irrigationSettingRoutes.js');
 const irrigationHistory = require('./irrigationHistoryRoutes.js');
 
@@ -14,7 +13,6 @@ module.exports = (app) => {
     .use(user)
     .use(auth)
     .use(garden)
-    .use(identifier)
     .use(irrigationSetting)
     .use(irrigationHistory);
 
