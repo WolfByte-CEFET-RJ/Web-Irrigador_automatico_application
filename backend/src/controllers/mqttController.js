@@ -26,11 +26,11 @@ client.on('connect', () => {
 
 // Recebe mensagens dos tópicos inscritos
 client.on('message', async (topic, message, packet) => { 
-  console.log("Mensagem recebiba!")
+  console.log("Mensagem recebida!")
   if(topic === topicMedida) { 
     try {
       const stringMessage = message.toString();
-      console.log('Conteudo:', stringMessage);
+      console.log('Conteúdo:', stringMessage);
       await mqttService.insertData(stringMessage);
       await mqttService.checkAndSendIrrigationMessage(stringMessage, client);
     } catch (error) {

@@ -25,15 +25,15 @@ function createMqttClient() {
 // Função para extrair os valores de um string
 function extractValuesFromString(message) {
     const cleanedMessage = message.replace(/["\n\r\s]/g, '').trim();
-    const [identificador, valorUmidade, valorAgua] = cleanedMessage.split(',');
+    const [identificador, valorUmidade] = cleanedMessage.split(',');
         
-    return { identificador, valorUmidade, valorAgua };
+    return { identificador, valorUmidade };
 }
 
 module.exports = {
     // Função para inserir dados no banco de dados
     async insertData(data){
-        const {identificador, valorUmidade, valorAgua} = extractValuesFromString(data);
+        const {identificador, valorUmidade} = extractValuesFromString(data);
         
         const garden = await knex('garden').select("id").where({identifier: identificador}).first();
 
@@ -43,13 +43,12 @@ module.exports = {
         
         await knex('measurement').insert([
             {measurement: valorUmidade, date, sensorId: 1, gardenId: garden.id},
-            {measurement: valorAgua, date, sensorId: 2, gardenId: garden.id}
         ]);
     },
 
     // Função para verificar se a planta deve ser irrigada
     async checkAndSendIrrigationMessage(data, mqttClient){
-        const {identificador, valorUmidade, valorAgua} = extractValuesFromString(data);
+        const {identificador, valorUmidade} = extractValuesFromString(data);
         
         const garden = await knex('garden')
             .select('id', 'irrigationId')
@@ -68,31 +67,22 @@ module.exports = {
             })
             .first();
 
-        const configSensorAgua = await knex('configSensor')
-            .select('value')
-            .where({
-                sensorId: knex('sensor').select('id').where({ name: 'NivelAgua' }),
-                irrigationId: garden.irrigationId
-            })
-            .first();
 
-        if (!configSensorUmidade || !configSensorAgua) {
+        if (!configSensorUmidade) {
             throw new Error('A configuração do sensor não foi encontrada!');
         }
 
         if (parseFloat(valorUmidade) < parseFloat(configSensorUmidade.value)) {
-            if (parseFloat(valorAgua) >= parseFloat(configSensorAgua.value)) {
                 // Enviar mensagem para o mesmo tópico indicando que a planta deve ser irrigada
-                const topicName = 'Outros/Estado_Motor';
-                const payload = `"${identificador}"`;
-                const qos = 0;
+            const topicName = 'Outros/Estado_Motor';
+            const payload = `"${identificador}"`;
+            const qos = 0;
 
-                mqttClient.publish(topicName, payload, { qos }, (error) => {
-                    if (error) {
-                        console.error(error);
-                    }
-                });
-            }
+            mqttClient.publish(topicName, payload, { qos }, (error) => {
+                if (error) {
+                    console.error(error);
+                }
+            });
         }
     },
 
