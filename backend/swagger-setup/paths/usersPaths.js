@@ -4,7 +4,7 @@ module.exports = {
         parameters: [],
         security: [
             {
-                BearerAuth: [],
+                Token_Autenticação: [],
             },
         ],
         tags: ["Usuário"],

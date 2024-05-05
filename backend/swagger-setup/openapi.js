@@ -1,7 +1,9 @@
 const SCHEMAS = require("./schemas/index.js");
 const SECURITY_SCHEMES = require("./schemas/securitySchemes.js");
+
 const USER_PATHS = require("./paths/userPaths.js");
-const USERS_PATHS = require("./paths/usersPaths.js");
+const USERS_PATH = require("./paths/usersPaths.js");
+const VERIFY_PATH = require("./paths/verifyPaths.js");
 
 /**
  * Lidando com o swagger document como um object para aplicar mais modularização
@@ -16,12 +18,12 @@ const openApiDocument = {
     ],
     info: {
       version: "1.0.0",
-      title: "Irrigador Automáticoooo - API",
+      title: "Irrigador Automático - API",
       summary:
-        "Documentação da aplicação de um Irrigador Automático. Tem como objetivo auxiliar no controle de informações e especificações de irrigação do usuário, possibilitando maior flexibilidade.\n\nDesenvolvido por: Ramo Estudantil IEEE - WolfByte(Web)",
+        "Documentação da aplicação de um Irrigador Automático. A API tem como objetivo auxiliar no controle de informações e especificações de irrigação do usuário, possibilitando maior flexibilidade. Desenvolvido por: Ramo Estudantil IEEE - WolfByte(Web) - Projeto Bower",
       contact: {
         name: "Projeto Bower - WolfByte",
-        email: "gustavoandrade0125@gmail.com",
+        email: "---",
       },
       termsOfService: "---",
       license: {
@@ -52,10 +54,14 @@ const openApiDocument = {
       },
     ],
     paths: {
-      "/users": USERS_PATHS,
-      "/user": USER_PATHS
+      "/users": USERS_PATH,
+      "/user": USER_PATHS,
+      "/verify_code/{email}": VERIFY_PATH
     },
-    components: SCHEMAS,
+    components: {
+      schemas: SCHEMAS,
+      securitySchemes: SECURITY_SCHEMES
+    }
   };
 
 module.exports = openApiDocument;

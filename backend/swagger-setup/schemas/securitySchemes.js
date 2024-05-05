@@ -1,7 +1,8 @@
 module.exports = {
-    BearerAuth: {
-      type: "http",
-        scheme: "bearer",
-        bearerFormat: "JWT",
-    }
+  Token_Autenticação: {
+    in: "header",
+    type: "http",
+    scheme: "bearer",
+    bearerFormat: "JWT",
+  }
 }
