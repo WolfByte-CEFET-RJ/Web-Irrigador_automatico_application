@@ -6,16 +6,14 @@ const gardenService = require('./gardenService');
 const settingSchema = yup.object().shape({
     name: yup.string().min(3, 'O nome deve ter pelo menos 3 caracteres').required(),
     userId: yup.number().integer().positive().required(),
-    humidityValue: yup.string().required(),
-    waterValue: yup.string().required()
+    humidityValue: yup.string().required()
 });
 
 // Define o esquema de validação para atualizar uma configuração de irrigação
 const updateSettingSchema = yup.object().shape({
     name: yup.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
     userId: yup.number().integer().positive(),
-    humidityValue: yup.string(),
-    waterValue: yup.string()
+    humidityValue: yup.string()
 });
 
 module.exports = {
@@ -37,8 +35,7 @@ module.exports = {
             id: setting.id,
             name: setting.name,
             userId: setting.userId,
-            humidityValue: JSON.parse(setting.sensors)[0].value,
-            waterValue: JSON.parse(setting.sensors)[1].value
+            humidityValue: JSON.parse(setting.sensors)[0].value
         }));
 
         return finalSetting;
@@ -65,8 +62,7 @@ module.exports = {
             id: setting[0].id,
             name: setting[0].name,
             userId: setting[0].userId,
-            humidityValue: setting[0].value,
-            waterValue: setting[1].value
+            humidityValue: setting[0].value
         };
 
         return finalSetting;
@@ -94,8 +90,7 @@ module.exports = {
             id: setting.id,
             name: setting.name,
             userId: setting.userId,
-            humidityValue: JSON.parse(setting.sensors)[0].value,
-            waterValue: JSON.parse(setting.sensors)[1].value
+            humidityValue: JSON.parse(setting.sensors)[0].value
         }));
 
         // Adiciona a configuração padrão no início do array
@@ -105,8 +100,8 @@ module.exports = {
     },
 
     // Método para criar uma nova configuração de irrigação
-    async createIrrigationSetting(name, userId, humidityValue, waterValue) {
-        await settingSchema.validate({ name, userId, humidityValue, waterValue });
+    async createIrrigationSetting(name, userId, humidityValue) {
+        await settingSchema.validate({ name, userId, humidityValue });
         
         // Verifica se já existe uma configuração com o mesmo nome para o mesmo usuário
         const settingInfo = await knex('irrigationSetting').select("id").where({ name, userId }).first();
@@ -124,10 +119,7 @@ module.exports = {
         const irrigationId = await knex('irrigationSetting').select("id").where({ name, userId }).first();
 
         // Insere os valores dos sensores para a nova configuração de irrigação
-        await knex('configSensor').insert([
-            { irrigationId: irrigationId.id, sensorId: 1, value: humidityValue },
-            { irrigationId: irrigationId.id, sensorId: 2, value: waterValue }
-        ]);
+        await knex('configSensor').insert({ irrigationId: irrigationId.id, sensorId: 1, value: humidityValue });
 
         return "Configuração cadastrada!";
     },
@@ -137,7 +129,7 @@ module.exports = {
         await updateSettingSchema.validate(settingData, { abortEarly: false });
         
         // Obtém a informação da configuração
-        const settingInfo = await this.getOneSetting(id);
+        const settingInfo = await this.getOneSetting(id, myId);
 
         // Verifica se a configuração é a padrão
         if (settingInfo.id === 1) {
@@ -147,6 +139,10 @@ module.exports = {
         // Verifica se o usuário é o proprietário da configuração
         if (myId != settingInfo.userId) {
             throw new Error("Você só pode atualizar sua própria config.");
+        }
+
+        if (Object.keys(settingData).length === 0){
+            throw new Error('Nenhum valor foi passado!');
         }
 
         // Verifica se o usuário está tentando alterar o userId (não permitido)
@@ -175,27 +171,20 @@ module.exports = {
             }
         }
 
-        // Verifica e atualiza o valor do nível da água, se fornecido
-        if (settingData.waterValue) {
-            const waterValue = await knex('configSensor').where({ irrigationId: settingInfo.id, sensorId: 2 }).update({ value: settingData.waterValue });
-            if (!waterValue) {
-                throw new Error('Erro ao alterar o valor do nível da água!');
-            }
-        }
-
         return "Configuração atualizada com sucesso!";
     },
 
     // Método para deletar uma configuração de irrigação
     async deleteIrrigationSetting(settingId, userId) {
-        // Obtém a configuração
-        const setting = await this.getOneSetting(settingId, userId);
 
         // Verifica se a configuração é a padrão (não pode ser apagada)
-        if (setting.id === 1) {
-            throw new Error('Você não pode apagar uma configuração padrão');
+        if (settingId == 1) {
+            throw new Error('Você não pode apagar uma configuração padrão!');
         }
 
+        // Obtém a configuração
+        const setting = await this.getOneSetting(settingId, userId);
+    
         // Verifica se a configuração pertence ao usuário
         if (setting.userId != userId) {
             throw new Error('Esta config não pertence a você!');

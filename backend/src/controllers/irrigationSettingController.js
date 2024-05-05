@@ -30,11 +30,11 @@ module.exports = {
             }   
         },
     async createIrrigationSetting(req, res) {
-        const { name, humidityValue, waterValue } = req.body;
+        const { name, humidityValue } = req.body;
         const userId = req.user_id;
 
         try {
-            const response = await irrigationSettingService.createIrrigationSetting(name, userId, humidityValue, waterValue);
+            const response = await irrigationSettingService.createIrrigationSetting(name, userId, humidityValue);
             return res.status(201).json({ message: response });
 
         } catch (error) {
