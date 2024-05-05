@@ -127,14 +127,14 @@ module.exports = {
     // Método para atualizar uma configuração de irrigação
     async updateIrrigationSetting(myId, id, settingData) {
         await updateSettingSchema.validate(settingData, { abortEarly: false });
+
+        // Verifica se a configuração é a padrão
+        if (id == 1) {
+            throw new Error('Você não pode alterar uma configuração padrão.');
+        }
         
         // Obtém a informação da configuração
         const settingInfo = await this.getOneSetting(id, myId);
-
-        // Verifica se a configuração é a padrão
-        if (settingInfo.id === 1) {
-            throw new Error('Você não pode alterar uma configuração padrão.');
-        }
 
         // Verifica se o usuário é o proprietário da configuração
         if (myId != settingInfo.userId) {
