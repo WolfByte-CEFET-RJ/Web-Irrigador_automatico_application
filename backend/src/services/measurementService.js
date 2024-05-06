@@ -11,28 +11,17 @@ async function returnConfigValues (irrigationId){
                 irrigationId: irrigationId
             }).first();
 
-        const configSensorAgua = await knex('configSensor')
-            .select('value')
-            .where({
-                sensorId: knex('sensor').select('id').where({ name: 'NivelAgua' }),
-                irrigationId: irrigationId
-            }).first();
-
-        if (!configSensorUmidade || !configSensorAgua) {
+        if (!configSensorUmidade) {
             throw new Error('A configuração do sensor não foi encontrada!');
         }
 
-        return { configHumidityValue: configSensorUmidade.value, configWaterValue: configSensorAgua.value}
+        return { configHumidityValue: configSensorUmidade.value }
 }
 
 // Realiza a verificação do estado da horta
-async function verifyMeasurements(humidityValue, waterValue, configHumidityValue, configWaterValue){
+async function verifyMeasurements(humidityValue, configHumidityValue){
     if (parseFloat(humidityValue) < parseFloat(configHumidityValue)){
-        if (parseFloat(waterValue) < parseFloat(configWaterValue)){
-            return "Sua planta precisa ser irrigada, mas o reservatório está com pouca água!";
-        }
-    } else if (parseFloat(waterValue) < parseFloat(configWaterValue)){
-        return "O reservatório está baixo! Isso impedirá a sua planta de ser irrigada caso precise.";
+        return "Nível de umidade baixo. Sua planta precisa ser irrigada!";
     }
 
     return "Tudo certo!";
@@ -55,10 +44,10 @@ module.exports = {
         }
 
         // Busca a configuração de irrigação ativa da horta em questão
-        let { configHumidityValue, configWaterValue } = await returnConfigValues(gardenIrrigationId);
+        let { configHumidityValue } = await returnConfigValues(gardenIrrigationId);
 
         // Verifica o status/mensagem da horta de acordo com as últimas medidas
-        let message = await verifyMeasurements(lastMeasures[0].measurement, lastMeasures[1].measurement, configHumidityValue, configWaterValue);
+        let message = await verifyMeasurements(lastMeasures[0].measurement, configHumidityValue);
         lastMeasures.push({message: message});
 
         return lastMeasures;
@@ -90,8 +79,8 @@ module.exports = {
         // Caso o usuáerio tenha hortas com medidas, insere o status da horta e o nome da configuração de irrigação usada por ela 
         for (const obj of lastMeasuresGardens) {
             if (obj.lastMeasures.length) {
-                let { configHumidityValue, configWaterValue } = await returnConfigValues(obj.irrigationId);
-                let message = await verifyMeasurements(obj.lastMeasures[0].measurement, obj.lastMeasures[1].measurement, configHumidityValue, configWaterValue);
+                let { configHumidityValue } = await returnConfigValues(obj.irrigationId);
+                let message = await verifyMeasurements(obj.lastMeasures[0].measurement, configHumidityValue);
                 obj.message = message;
                 let irrigationSetting = await irrigationSettingServicce.getOneSetting(obj.irrigationId);
                 obj.settingName = irrigationSetting.name;
