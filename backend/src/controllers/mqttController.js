@@ -45,7 +45,6 @@ client.on('message', async (topic, message, packet) => {
             const identificador = parts[0];
 
             await mqttService.recordIrrigationHistory(identificador);
-            console.log('Histórico de irrigação registrado com sucesso!');
         } catch (error) {
             console.error('Erro ao registrar o histórico de irrigação: ', error);
         }
