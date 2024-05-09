@@ -1,12 +1,12 @@
 module.exports = {
     post: {
-        summary: "Verificação do código de validação da senha",
-        tags: ["Usuário"],
+        summary: "Password validation code check",
+        tags: ["User"],
         parameters: [
             {
                 name:"email",
                 in: "path",
-                description: "Email do usuário",
+                description: "User's email",
                 required: true,
                 schema: {
                     type:"string",
@@ -17,14 +17,14 @@ module.exports = {
         ],
         responses: {
             "200":{
-                description: "Resultado esperado",
+                description: "Expected response",
                 content: {
                     "application/json": {
                         schema: {
                             type: "object",
                             properties: {
                                 token: {
-                                description: "Token para validação temporária",
+                                description: "Token for temporary validation",
                                 type: "string",
                                 example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c" 
                                 }
@@ -34,7 +34,7 @@ module.exports = {
                 }
             },
             "400": {
-                description: "Requisição Inválida",
+                description: "Bad request",
                 content: {
                     "application/json": {
                         schema: {
@@ -44,7 +44,7 @@ module.exports = {
                 }
             },
             "500":{
-                description: "Erro interno",
+                description: "Intern server error",
                 content: {
                     "application/json": {
                         schema: {

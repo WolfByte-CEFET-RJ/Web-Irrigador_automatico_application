@@ -1,29 +1,29 @@
 module.exports = {
     get: {
-        summary: "Visualização de todos os usuários do sistema",
+        summary: "View all registered users",
         parameters: [],
         security: [
             {
                 Token_Autenticação: [],
             },
         ],
-        tags: ["Usuário"],
+        tags: ["User"],
         responses: {
             "200": {
-                description: "Resultado esperado",
+                description: "Expected response",
                 content: {
                     "application/json": {
                         schema: {
                             type: "array",
                             items: {
-                                $ref: "#/components/schemas/ResponseUser",
+                                $ref: "#/components/schemas/ResponseGetUser",
                             }
                         }
                     }
                 }
             },
             "400": {
-                description: "Requisição Inválida",
+                description: "Bad request",
                 content: {
                     "application/json": {
                         schema: {
@@ -33,7 +33,7 @@ module.exports = {
                 }
             },
             "401": {
-                description: "Token inválido.",
+                description: "Invalid credential",
                     content: {
                     "application/json": {
                         schema: {

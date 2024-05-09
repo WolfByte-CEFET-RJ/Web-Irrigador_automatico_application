@@ -1,73 +1,73 @@
 
-const ResponseUser = {
+const getUser = {
     type: "object",
     properties: {
       id: {
         type: "integer",
-        description: "Código de Identificação do Usuário",
+        description: "User identification code",
         format: "int64",
       },
       name: {
         type: "string",
-        description: "Nome do usuário",
+        description: "User's name",
         example: "João Pedro",
       },
       email: {
         type: "string",
-        description: "E-mail do usuário",
+        description: "User's email",
         format: "email",
       },
       code: {
         type: "integer",
-        description: "Código de verificação da senha",
+        description: "Password verification code (null if not '/forgot_password') ",
         example: 12335,
       },
       expirationDate: {
         type: "string",
-        description: "Data de validade do código de verificação",
+        description: "Expiration date of the verification code (null if not '/forgot_password')",
         format: "date-time",
       },
       humidityNotification: {
         type: "int8",
-        description: "Permissão de notificação de humidade - Default: 1",
+        description: "Humidity notification permission - Default: 1",
         enum: [0, 1],
         example: 1,
       },
       waterNotification: {
         type: "int8",
-        description: "Permissão de notificação de humidade - Default: 1",
+        description: "Water notification permission - Default: 1",
         enum: [0, 1],
         example: 1,
       }
     }
 }
 
-const RequestUser = {
+const createUser = {
     type: "object",
     properties: {
         name: {
           type: "string",
-          description: "Nome do usuário",
+          description: "User's name",
           example: "João Pedro",
         },
         email: {
           type: "string",
-          description: "E-mail do usuário",
+          description: "User's e-mail",
           format: "email",
         },
         password: {
           type: "string",
-          description: "Senha do usuário",
+          description: "User's password",
           example: "HuP.45##",
         },
         humidityNotification: {
           type: "boolean",
-          description: "Permissão de notificação de humidade - Default: true",
+          description: "Humidity notification permission - Default: true",
           example: true,
         },
         waterNotification: {
           type: "boolean",
-          description: "Permissão de notificação de humidade - Default: true",
+          description: "Water notification permission - Default: true",
           example: false,
         }
     },
@@ -75,6 +75,6 @@ const RequestUser = {
 }   
 
 module.exports = {
-    RequestUser,
-    ResponseUser
+    createUser,
+    getUser
 }

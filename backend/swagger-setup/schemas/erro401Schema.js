@@ -3,7 +3,7 @@ module.exports = {
         properties: {
           err: {
               type: "string",
-              description: "Descrição do erro",
+              description: "Error message",
               example: "Token inválido",
           }
         }

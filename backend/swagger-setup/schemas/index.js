@@ -7,6 +7,6 @@ module.exports = {
     ResponseError400: erro400,
     ResponseError401: erro401,
     ResponseError500 : erro500,
-    RequestUser: user.RequestUser,
-    ResponseUser: user.ResponseUser
+    RequestCreateUser: user.createUser,
+    ResponseGetUser: user.getUser
 };

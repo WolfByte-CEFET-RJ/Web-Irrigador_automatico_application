@@ -1,21 +1,21 @@
 module.exports = {
     post: {
-        summary: "Cadastro de um usuário",
+        summary: "Registering a user",
         parameters: [],
-        tags: ["Usuário"],
+        tags: ["User"],
         requestBody: {
-            description: "Dados do usuário",
+            description: "User's data",
             content: {
                 "application/json": {
                     schema: {
-                        $ref: "#/components/schemas/RequestUser",
+                        $ref: "#/components/schemas/RequestCreateUser",
                     }
                 }
             }
         },
         responses: {
             "200": {
-                description: "Resultado esperado",
+                description: "Expected response",
                 content: {
                     "application/json": {
                         schema: {
@@ -31,7 +31,7 @@ module.exports = {
                 }
             },
             "400": {
-                description: "Requisição Inválida",
+                description: "Bad request",
                 content: {
                     "application/json": {
                         schema: {

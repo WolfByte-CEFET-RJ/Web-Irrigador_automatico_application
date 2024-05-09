@@ -20,7 +20,7 @@ const openApiDocument = {
       version: "1.0.0",
       title: "Automatic Irrigator - API",
       summary:
-        "The Automatic Irrigator API provides developers with endpoints to control user irrigation information and specifications. It enables greater flexibility in managing irrigation systems, allowing users to monitor their garden status and adjust irrigation setting remotely. Developded by: Ramo Estudantil IEEE - WolfByte(Web) - Bower Project",
+        "The Automatic Irrigator API provides endpoints to control user irrigation information and specifications. It enables greater flexibility in managing irrigation systems, allowing users to monitor their garden status and adjust irrigation setting remotely. Developded by: Ramo Estudantil IEEE - WolfByte(Web) - Bower Project",
       contact: {
         name: "Bower Project - WolfByte",
         email: "---",
