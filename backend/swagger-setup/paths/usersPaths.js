@@ -1,6 +1,6 @@
 module.exports = {
     get: {
-        summary: "View all registered users",
+        summary: "View data of all registered users",
         parameters: [],
         security: [
             {
@@ -16,7 +16,7 @@ module.exports = {
                         schema: {
                             type: "array",
                             items: {
-                                $ref: "#/components/schemas/ResponseGetUser",
+                                $ref: "#/components/schemas/ResponseGetUsers",
                             }
                         }
                     }

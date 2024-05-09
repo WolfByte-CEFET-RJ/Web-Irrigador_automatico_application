@@ -18,9 +18,9 @@ const openApiDocument = {
     ],
     info: {
       version: "1.0.0",
-      title: "Automatic Irrigator - API",
+      title: "Smart Garden",
       summary:
-        "The Automatic Irrigator API provides endpoints to control user irrigation information and specifications. It enables greater flexibility in managing irrigation systems, allowing users to monitor their garden status and adjust irrigation setting remotely. Developded by: Ramo Estudantil IEEE - WolfByte(Web) - Bower Project",
+        "Smart Garden is an intuitive and efficient API used for managing automatic irrigators. This application provides endpoints to control user irrigation details and specifications. It enables greater flexibility in managing automatic irrigation systems, allowing users to monitor their garden status and adjust irrigation settings remotely. Developed by: Ramo Estudantil IEEE - WolfByte(Web) - Bower Project",
       contact: {
         name: "Bower Project - WolfByte",
         email: "---",
