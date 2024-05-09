@@ -13,44 +13,44 @@ const openApiDocument = {
     servers: [
       {
         url: "http://localhost:5000",
-        description: "Servidor de desenvolvimento estritamente local",
+        description: "Development server (strictly local)",
       },
     ],
     info: {
       version: "1.0.0",
-      title: "Irrigador Automático - API",
+      title: "Automatic Irrigator - API",
       summary:
-        "Documentação da aplicação de um Irrigador Automático. A API tem como objetivo auxiliar no controle de informações e especificações de irrigação do usuário, possibilitando maior flexibilidade. Desenvolvido por: Ramo Estudantil IEEE - WolfByte(Web) - Projeto Bower",
+        "The Automatic Irrigator API provides developers with endpoints to control user irrigation information and specifications. It enables greater flexibility in managing irrigation systems, allowing users to monitor their garden status and adjust irrigation setting remotely. Developded by: Ramo Estudantil IEEE - WolfByte(Web) - Bower Project",
       contact: {
-        name: "Projeto Bower - WolfByte",
+        name: "Bower Project - WolfByte",
         email: "---",
       },
       termsOfService: "---",
       license: {
-        name: "Licença de Uso",
+        name: "License agreement",
         identifier: "---",
       },
     },
     externalDocs: {
-      description: "Documentos adicionais",
+      description: "Related documents",
       url: "---",
     },
     tags: [
       {
-        name: "Usuário",
-        description: "Serviços de gestão e identificação de usuários",
+        name: "User",
+        description: "User management and identification services",
       },
       {
-        name: "Jardim",
-        description: "Serviços de gestão dos jardins do usuário",
+        name: "Garden",
+        description: "User garden management services",
       },
       {
-        name: "Configuração de Irrigação",
-        description: "Serviços de gestão das configurações de irrigação",
+        name: "Irrigation Settings",
+        description: "Irrigation setting management services",
       },
       {
-        name: "Histórico de Irrigação",
-        description: "Serviços visualização de históricos de irrigação",
+        name: "Irrigation History",
+        description: "Irrigation history viewing services",
       },
     ],
     paths: {
