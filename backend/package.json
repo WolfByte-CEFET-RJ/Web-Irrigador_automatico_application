@@ -23,7 +23,6 @@
     "mqtt": "^5.2.0",
     "mysql2": "^3.6.2",
     "node-schedule": "^2.1.1",
-    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "yup": "^1.3.2"
   },
