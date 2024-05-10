@@ -4,7 +4,7 @@ module.exports = {
             message: {
                 type: "string",
                 description: "Error message",
-                example: "Fomato ou Requisição Inválida",
+                example: "Formato ou Requisição Inválida",
             }
         }
 }

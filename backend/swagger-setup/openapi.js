@@ -25,19 +25,17 @@ const openApiDocument = {
       summary:
         "Smart Garden is an intuitive and efficient API used for managing automatic irrigators. This application provides endpoints to control user irrigation details and specifications. It enables greater flexibility in managing automatic irrigation systems, allowing users to monitor their garden status and adjust irrigation settings remotely. Developed by: Ramo Estudantil IEEE - WolfByte(Web) - Bower Project",
       contact: {
-        name: "Bower Project - WolfByte",
-        email: "---",
-      },
-      termsOfService: "---",
-      license: {
-        name: "License agreement",
-        identifier: "---",
-      },
+        name: "WolfByte - Web",
+        email: "wolfbytegames@gmail.com",
+      }
     },
     externalDocs: {
-      description: "Related documents",
-      url: "---",
-    },
+        description: "Pesquisa e Prototipagem",
+        url: "https://docs.google.com/document/d/1ZOw6h07MdLoZnEbsfuC1LLb_xfXNLjHfuz_29Xtl8Fo/edit"
+        // MONTAR UM DRIVE COM OS DOCS, O ATRIBUTO SÓ RECEBE 1 LINK
+        // https://docs.google.com/document/d/14bgq_BmYfMkKwTuk0kb8C10kXW0ZQl6CEtnAxMSN7SA/edit
+        // https://drive.google.com/file/d/1GLH6PAzltESBoO5uRdQrc-eh_nThnK55/view
+      },
     tags: [
       {
         name: "User",
