@@ -1,7 +1,14 @@
+const { request } = require("express");
+
 module.exports = {
     post: {
-        summary: "Password validation code check",
+        summary: "Reset password validation code check",
         tags: ["User"],
+        security: [
+            {
+                Token_Autenticação: [],
+            }
+        ],
         parameters: [
             {
                 name:"email",
@@ -15,6 +22,24 @@ module.exports = {
                 }
             }
         ],
+        requestBody: {
+            description: "User's validation code",
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            code: {
+                                type: "integer",
+                                description: "User's validation code",
+                                example: 1234
+                            }
+                        }
+                    }
+                }
+            }
+        },
         responses: {
             "200":{
                 description: "Expected response",

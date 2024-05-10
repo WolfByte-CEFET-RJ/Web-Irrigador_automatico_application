@@ -4,6 +4,9 @@ const SECURITY_SCHEMES = require("./schemas/securitySchemes.js");
 const USER_PATHS = require("./paths/userPaths.js");
 const USERS_PATH = require("./paths/usersPaths.js");
 const VERIFY_PATH = require("./paths/verifyPaths.js");
+const FORGOT_PATH = require("./paths/forgotPaths.js");
+const RESET_PATH = require("./paths/resetPaths.js");
+const LOGIN_PATH = require("./paths/loginPaths.js");
 
 /**
  * Lidando com o swagger document como um object para aplicar mais modularização
@@ -56,7 +59,10 @@ const openApiDocument = {
     paths: {
       "/users": USERS_PATH,
       "/user": USER_PATHS,
-      "/verify_code/{email}": VERIFY_PATH
+      "/login": LOGIN_PATH,
+      "/forgot_password": FORGOT_PATH,
+      "/verify_code/{email}": VERIFY_PATH,
+      "/reset_password": RESET_PATH,
     },
     components: {
       schemas: SCHEMAS,
