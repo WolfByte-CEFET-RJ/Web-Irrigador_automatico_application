@@ -16,6 +16,11 @@ const updateSettingSchema = yup.object().shape({
     humidityValue: yup.string()
 });
 
+function validadeHumidityValue(humidityValue){
+    const regex = /^[0-9]+$/;
+    return regex.test(humidityValue);
+}
+
 module.exports = {
     // Método para obter todas as configurações de irrigação
     async getSettings() {
@@ -109,6 +114,10 @@ module.exports = {
             throw new Error('Você já criou uma configuração de irrigação com este nome!');
         }
 
+        const humidityIsValid = validadeHumidityValue(humidityValue);
+
+        if (!humidityIsValid) throw new Error('Valor de umidade inválido!');
+
         // Insere a nova configuração de irrigação
         await knex('irrigationSetting').insert({
             name,
@@ -165,6 +174,9 @@ module.exports = {
 
         // Verifica e atualiza o valor da umidade, se fornecido
         if (settingData.humidityValue) {
+            const humidityIsValid = validadeHumidityValue(settingData.humidityValue);
+            if (!humidityIsValid) throw new Error('Valor de umidade inválido!');
+
             const humidityValue = await knex('configSensor').where({ irrigationId: settingInfo.id, sensorId: 1 }).update({ value: settingData.humidityValue });
             if (!humidityValue) {
                 throw new Error('Erro ao alterar o valor da umidade!');
