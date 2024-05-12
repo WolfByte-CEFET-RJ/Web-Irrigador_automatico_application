@@ -1,6 +1,5 @@
 const knex = require('../database'); 
 const yup = require('yup'); 
-const gardenService = require('./gardenService'); 
 
 // Define o esquema de validação para criar uma configuração de irrigação
 const settingSchema = yup.object().shape({
@@ -15,6 +14,20 @@ const updateSettingSchema = yup.object().shape({
     userId: yup.number().integer().positive(),
     humidityValue: yup.string()
 });
+
+function verifyUpdateData(data){
+    const irrigationSettingModel = [
+        'name', 'humidityValue'
+    ]
+
+    for (const key in data){
+        if (irrigationSettingModel.indexOf(key) === -1){
+            return false;
+        }
+    }
+
+    return true;
+}
 
 function validadeHumidityValue(humidityValue){
     const regex = /^[0-9]+$/;
@@ -158,6 +171,8 @@ module.exports = {
         if (settingData.userId) {
             throw new Error('Você não pode alterar o userId.');
         }
+
+        if (!verifyUpdateData(settingData)) {throw new Error('Alguns campos inseridos não fazem parte da entrutura de uma configuração de irrigação!');}
 
         // Verifica e atualiza o nome da configuração, se fornecido
         if (settingData.name) {
