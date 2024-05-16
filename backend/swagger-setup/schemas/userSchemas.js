@@ -1,4 +1,5 @@
 
+//schema de retorno com múltiplos registros
 const getUsers = {
     type: "object",
     properties: {
@@ -32,16 +33,11 @@ const getUsers = {
         description: "Humidity notification permission - Default: 1",
         enum: [0, 1],
         example: 1,
-      },
-      waterNotification: {
-        type: "int8",
-        description: "Water notification permission - Default: 1",
-        enum: [0, 1],
-        example: 1,
       }
     }
 }
 
+//schema de retorno com múltiplos registros
 const getUser = {
   type: "object",
   properties: {
@@ -63,12 +59,6 @@ const getUser = {
     humidityNotification: {
       type: "int8",
       description: "Humidity notification permission - Default: 1",
-      enum: [0, 1],
-      example: 1,
-    },
-    waterNotification: {
-      type: "int8",
-      description: "Water notification permission - Default: 1",
       enum: [0, 1],
       example: 1,
     }
@@ -97,11 +87,6 @@ const createUser = {
           type: "boolean",
           description: "Humidity notification permission - Default: true",
           example: true,
-        },
-        waterNotification: {
-          type: "boolean",
-          description: "Water notification permission - Default: true",
-          example: false,
         }
     },
     required: ["name", "email", "password"],
@@ -124,11 +109,6 @@ const updateUser = {
         type: "boolean",
         description: "Humidity notification permission - Default: true",
         example: true,
-      },
-      waterNotification: {
-        type: "boolean",
-        description: "Water notification permission - Default: true",
-        example: false,
       }
   }
 }
