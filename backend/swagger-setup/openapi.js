@@ -4,6 +4,9 @@ const SECURITY_SCHEMES = require("./schemas/securitySchemes.js");
 const USER_PATHS = require("./paths/userPaths.js");
 const USERS_PATH = require("./paths/usersPaths.js");
 const VERIFY_PATH = require("./paths/verifyPaths.js");
+const FORGOT_PATH = require("./paths/forgotPaths.js");
+const RESET_PATH = require("./paths/resetPaths.js");
+const LOGIN_PATH = require("./paths/loginPaths.js");
 
 /**
  * Lidando com o swagger document como um object para aplicar mais modularização
@@ -18,23 +21,21 @@ const openApiDocument = {
     ],
     info: {
       version: "1.0.0",
-      title: "Automatic Irrigator - API",
+      title: "Smart Garden",
       summary:
-        "The Automatic Irrigator API provides endpoints to control user irrigation information and specifications. It enables greater flexibility in managing irrigation systems, allowing users to monitor their garden status and adjust irrigation setting remotely. Developded by: Ramo Estudantil IEEE - WolfByte(Web) - Bower Project",
+        "Smart Garden is an intuitive and efficient API used for managing automatic irrigators. This application provides endpoints to control user irrigation details and specifications. It enables greater flexibility in managing automatic irrigation systems, allowing users to monitor their garden status and adjust irrigation settings remotely. Developed by: Ramo Estudantil IEEE - WolfByte(Web) - Bower Project",
       contact: {
-        name: "Bower Project - WolfByte",
-        email: "---",
-      },
-      termsOfService: "---",
-      license: {
-        name: "License agreement",
-        identifier: "---",
-      },
+        name: "WolfByte - Web",
+        email: "wolfbytegames@gmail.com",
+      }
     },
     externalDocs: {
-      description: "Related documents",
-      url: "---",
-    },
+        description: "Pesquisa e Prototipagem",
+        url: "https://docs.google.com/document/d/1ZOw6h07MdLoZnEbsfuC1LLb_xfXNLjHfuz_29Xtl8Fo/edit"
+        // MONTAR UM DRIVE COM OS DOCS, O ATRIBUTO SÓ RECEBE 1 LINK
+        // https://docs.google.com/document/d/14bgq_BmYfMkKwTuk0kb8C10kXW0ZQl6CEtnAxMSN7SA/edit
+        // https://drive.google.com/file/d/1GLH6PAzltESBoO5uRdQrc-eh_nThnK55/view
+      },
     tags: [
       {
         name: "User",
@@ -56,7 +57,10 @@ const openApiDocument = {
     paths: {
       "/users": USERS_PATH,
       "/user": USER_PATHS,
-      "/verify_code/{email}": VERIFY_PATH
+      "/login": LOGIN_PATH,
+      "/forgot_password": FORGOT_PATH,
+      "/verify_code/{email}": VERIFY_PATH,
+      "/reset_password": RESET_PATH,
     },
     components: {
       schemas: SCHEMAS,

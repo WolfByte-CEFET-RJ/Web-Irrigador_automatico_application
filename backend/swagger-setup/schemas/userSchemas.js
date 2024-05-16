@@ -1,5 +1,6 @@
 
-const getUser = {
+//schema de retorno com múltiplos registros
+const getUsers = {
     type: "object",
     properties: {
       id: {
@@ -32,14 +33,36 @@ const getUser = {
         description: "Humidity notification permission - Default: 1",
         enum: [0, 1],
         example: 1,
-      },
-      waterNotification: {
-        type: "int8",
-        description: "Water notification permission - Default: 1",
-        enum: [0, 1],
-        example: 1,
       }
     }
+}
+
+//schema de retorno com múltiplos registros
+const getUser = {
+  type: "object",
+  properties: {
+    id: {
+      type: "integer",
+      description: "User identification code",
+      format: "int64",
+    },
+    name: {
+      type: "string",
+      description: "User's name",
+      example: "João Pedro",
+    },
+    email: {
+      type: "string",
+      description: "User's email",
+      format: "email",
+    },
+    humidityNotification: {
+      type: "int8",
+      description: "Humidity notification permission - Default: 1",
+      enum: [0, 1],
+      example: 1,
+    }
+  }
 }
 
 const createUser = {
@@ -64,17 +87,35 @@ const createUser = {
           type: "boolean",
           description: "Humidity notification permission - Default: true",
           example: true,
-        },
-        waterNotification: {
-          type: "boolean",
-          description: "Water notification permission - Default: true",
-          example: false,
         }
     },
     required: ["name", "email", "password"],
 }   
 
+const updateUser = {
+  type: "object",
+  properties: {
+      name: {
+        type: "string",
+        description: "User's name",
+        example: "João Pedro",
+      },
+      password: {
+        type: "string",
+        description: "User's password",
+        example: "HuP.45##",
+      },
+      humidityNotification: {
+        type: "boolean",
+        description: "Humidity notification permission - Default: true",
+        example: true,
+      }
+  }
+}
+
 module.exports = {
-    createUser,
-    getUser
+  getUsers,
+  getUser,
+  createUser,
+  updateUser
 }
