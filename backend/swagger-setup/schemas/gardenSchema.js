@@ -9,7 +9,7 @@ const createGarden = {
         description: {
           type: "string",
           description: "Garden's description",
-          example: "Horta com arroz de todos os tipos que produzo(incluindo arroz branco, arroz basmati, arroz jasmin, etc)."
+          example: "Horta com arroz de todos os tipos que produzo (incluindo arroz branco, arroz basmati, arroz jasmin, etc)."
         },
         identifier: {
           type: "string",
@@ -62,22 +62,22 @@ const updateGarden = {
         name: {
           type: "string",
           description: "Garden's name",
-          example: "Horta de Arroz",
+          example: "Horta de Feijão",
         },
         description: {
           type: "string",
           description: "Garden's description",
-          example: "Horta com arroz de todos os tipos que produzo (incluindo arroz branco, arroz basmati, arroz jasmin, etc)."
+          example: "Horta com feijões brancos"
         },
         identifier: {
           type: "string",
           description: "Garden's numeric identifier",
-          example: "8954123647",
+          example: "7458961247",
         },
         irrigationId: {
           type: "string",
           description: "Garden ID irrigation settings",
-          example: "1",
+          example: "3",
         },  
     },
 }

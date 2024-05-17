@@ -5,7 +5,7 @@ module.exports = {
             {
                 name:"id",
                 in: "path",
-                description: "Graden's ID (if not informed, route should behaves like /myGradens)",
+                description: "Garden's ID (if not informed, route should behaves like /myGardens)",
                 required: false,
                 schema: {
                     type:"string",
@@ -59,7 +59,7 @@ module.exports = {
             {
                 name:"id",
                 in: "path",
-                description: "Graden's ID",
+                description: "Garden's ID",
                 required: false,
                 schema: {
                     type:"string",
@@ -74,7 +74,7 @@ module.exports = {
         ],
         tags: ["Garden"],
         requestBody: {
-            description: "Graden's new data",
+            description: "Garden's new data",
             content: {
                 "application/json": {
                     schema: {
@@ -129,7 +129,7 @@ module.exports = {
             {
                 name:"id",
                 in: "path",
-                description: "Graden's ID",
+                description: "Garden's ID",
                 required: false,
                 schema: {
                     type:"string",

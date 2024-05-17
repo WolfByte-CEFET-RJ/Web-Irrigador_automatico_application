@@ -9,7 +9,7 @@ module.exports = {
         ],
         tags: ["Garden"],
         requestBody: {
-            description: "Graden's data",
+            description: "Garden's data",
             content: {
                 "application/json": {
                     schema: {
