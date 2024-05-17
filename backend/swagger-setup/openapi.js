@@ -9,7 +9,9 @@ const RESET_PATH = require("./paths/resetPaths.js");
 const LOGIN_PATH = require("./paths/loginPaths.js");
 const CREATE_GARDEN_PATH = require("./paths/createGardenPath"); 
 const MY_GARDENS_PATH = require("./paths/myGardenPath");
-const GARDEN_PATH = require("./paths/gardenPaths")
+const GARDEN_PATH = require("./paths/gardenPaths");
+const MEASURES_GARDENS_PATH = require("./paths/measuresGardensPath.js");
+const MEASURES_GARDEN_PATH = require("./paths/measuresGardenPath.js");
 
 /**
  * Lidando com o swagger document como um object para aplicar mais modularização
@@ -69,8 +71,8 @@ const openApiDocument = {
       "/garden": CREATE_GARDEN_PATH, //post only
       "/garden/{id}": GARDEN_PATH ,  //get, delete, and patch
       "/myGardens": MY_GARDENS_PATH,
-      //"measueres/garden/{id}": ,
-      //"/mesaures/garden": 
+      "/measures/garden/{id}": MEASURES_GARDEN_PATH,
+      "/measures/garden": MEASURES_GARDENS_PATH
     },
     components: {
       schemas: SCHEMAS,
