@@ -106,7 +106,7 @@ module.exports = {
     },
 
     async deleteGarden(myId, id) {
-        const {userId} = await this.getOneGarden(id, myId);
+        const {userId} = await this.getOneGarden(id);
         
         if (myId != userId){throw new Error("Você só pode deletar sua própria horta")}
         await knex('identifier').where({ gardenId: id }).update({gardenId: null});
