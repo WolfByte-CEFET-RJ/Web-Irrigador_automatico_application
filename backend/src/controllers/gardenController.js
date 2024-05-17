@@ -82,7 +82,7 @@ module.exports = {
 
         try {
 
-            let garden = await gardenService.getOneGarden(id);
+            let garden = await gardenService.getOneGarden(id, userId);
             const measurements = await measurementService.lastMeasures(userId, garden.userId, garden.irrigationId, id);
             
             garden['lastMeasures'] = measurements;

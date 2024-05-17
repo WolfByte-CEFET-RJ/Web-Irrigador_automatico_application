@@ -76,7 +76,7 @@ module.exports = {
 
         await gardenUpdateSchema.validate(gardenData); // Valida os dados atualizados da horta
         
-        const {userId} = await this.getOneGarden(gardenId); // Obtém o ID do usuário dono da horta
+        const {userId} = await this.getOneGarden(gardenId, myId); // Obtém o ID do usuário dono da horta
         
 
         if (myId != userId){throw new Error("Você só pode atualizar sua própria horta")} // Se o usuário não é o dono da horta, lança um erro
@@ -106,7 +106,7 @@ module.exports = {
     },
 
     async deleteGarden(myId, id) {
-        const {userId} = await this.getOneGarden(id);
+        const {userId} = await this.getOneGarden(id, myId);
         
         if (myId != userId){throw new Error("Você só pode deletar sua própria horta")}
         await knex('identifier').where({ gardenId: id }).update({gardenId: null});
