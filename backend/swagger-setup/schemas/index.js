@@ -21,5 +21,8 @@ module.exports = {
     ResponseGetGarden: garden.getGarden,
     
     RequestCreateGarden: garden.createGarden,
-    RequestUpdateGarden: garden.updateGarden
+    RequestUpdateGarden: garden.updateGarden,
+
+    ResponseGetMeasuresGardens: garden.measuresGardens,
+    ResponseGetMeasuresGarden: garden.measuresGarden
 };
