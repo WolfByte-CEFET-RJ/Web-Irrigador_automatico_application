@@ -100,16 +100,31 @@ module.exports = {
             .groupBy('irrigationSetting.id')
             .orderBy('irrigationSetting.id', 'asc');
 
+        const allSensors = [];
+        
+        // Cria um objeto com o nome dos sensores de uma configuração e seu valor 
+        for (const setting of settings) {
+            const sensors = {};
+            for (const sensor of JSON.parse(setting.sensors)) {
+                const sensorName = await knex('sensor').select('name').where({ id: sensor.sensorId }).first();
+    
+                sensors[sensorName.name] = sensor.value;
+            }
+            allSensors.push(sensors);
+        }
+
         // Obtém a configuração padrão
         const defaultConfig = await this.getOneSetting(1);
 
         // Formata as configurações finais para retorno
-        const finalSetting = settings.map(setting => ({
-            id: setting.id,
-            name: setting.name,
-            userId: setting.userId,
-            humidityValue: JSON.parse(setting.sensors)[0].value
-        }));
+        const finalSetting = settings.map((setting, index) => {
+            return {
+                id: setting.id,
+                name: setting.name,
+                userId: setting.userId,
+                ...allSensors[index]
+            };
+        });
 
         // Adiciona a configuração padrão no início do array
         finalSetting.unshift(defaultConfig);
