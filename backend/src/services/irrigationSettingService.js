@@ -34,6 +34,23 @@ function validadeHumidityValue(humidityValue){
     return regex.test(humidityValue);
 }
 
+// Cria um objeto com o nome dos sensores, junto com seu valor, de cada configuração passada no array 
+async function returnConfigSensors(settingsArray){
+    const allSensors = [];
+
+    for (const setting of settingsArray) {
+        const sensors = {};
+        for (const sensor of JSON.parse(setting.sensors)) {
+            const sensorName = await knex('sensor').select('name').where({ id: sensor.sensorId }).first();
+
+            sensors[sensorName.name] = sensor.value;
+        }
+        allSensors.push(sensors);
+    }
+
+    return allSensors;
+}
+
 module.exports = {
     // Método para obter todas as configurações de irrigação
     async getSettings() {
@@ -48,12 +65,14 @@ module.exports = {
             .groupBy('irrigationSetting.id')
             .orderBy('irrigationSetting.id', 'asc');
 
+        const allSensors = await returnConfigSensors(settings);
+
         // Formata as configurações finais para retorno
-        const finalSetting = settings.map(setting => ({
+        const finalSetting = settings.map((setting, index) => ({
             id: setting.id,
             name: setting.name,
             userId: setting.userId,
-            humidityValue: JSON.parse(setting.sensors)[0].value
+            ...allSensors[index]
         }));
 
         return finalSetting;
@@ -62,7 +81,7 @@ module.exports = {
     // Método para obter uma configuração de irrigação específica por ID
     async getOneSetting(id, myId) {
         const setting = await knex('irrigationSetting')
-            .select('irrigationSetting.id', 'irrigationSetting.name', 'irrigationSetting.userId', 'configSensor.value')
+            .select('irrigationSetting.id', 'irrigationSetting.name', 'irrigationSetting.userId', 'configSensor.value', 'configSensor.sensorId')
             .join('configSensor', 'irrigationSetting.id', '=', 'configSensor.irrigationId')
             .where({ id });
 
@@ -75,12 +94,21 @@ module.exports = {
             throw new Error('Esta config não existe!');
         }
 
+        const sensors = {};
+
+        // Pega o nome e o valor dos sensores da config
+        for (const config of setting) {
+            const sensorName = await knex('sensor').select('name').where({ id: config.sensorId }).first();
+
+            sensors[sensorName.name] = config.value;
+        }
+
         // Formata a configuração final para retorno
         const finalSetting = {
             id: setting[0].id,
             name: setting[0].name,
             userId: setting[0].userId,
-            humidityValue: setting[0].value
+            ...sensors
         };
 
         return finalSetting;
@@ -100,18 +128,7 @@ module.exports = {
             .groupBy('irrigationSetting.id')
             .orderBy('irrigationSetting.id', 'asc');
 
-        const allSensors = [];
-        
-        // Cria um objeto com o nome dos sensores de uma configuração e seu valor 
-        for (const setting of settings) {
-            const sensors = {};
-            for (const sensor of JSON.parse(setting.sensors)) {
-                const sensorName = await knex('sensor').select('name').where({ id: sensor.sensorId }).first();
-    
-                sensors[sensorName.name] = sensor.value;
-            }
-            allSensors.push(sensors);
-        }
+        const allSensors = await returnConfigSensors(settings);
 
         // Obtém a configuração padrão
         const defaultConfig = await this.getOneSetting(1);
