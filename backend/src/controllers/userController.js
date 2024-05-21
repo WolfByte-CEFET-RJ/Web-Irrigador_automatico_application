@@ -23,10 +23,10 @@ module.exports = {
     },
 
     async createUser(req, res) {
-        const { name, email, password, humidityNotification, waterNotification } = req.body;
+        const { name, email, password, humidityNotification } = req.body;
         
         try {
-            const response = await userService.createUser(name, email, password, humidityNotification, waterNotification);
+            const response = await userService.createUser(name, email, password, humidityNotification);
             return res.status(201).json({message: response});
 
         } catch (error) {

@@ -8,13 +8,13 @@ const moment = require('moment/moment');
 module.exports = {
     // Método para obter todos os usuários
     async getAllUsers() {
-        const users = await knex('user').select('id', 'name', 'email', 'code', 'expirationDate', 'humidityNotification', 'waterNotification');
+        const users = await knex('user').select('id', 'name', 'email', 'code', 'expirationDate', 'humidityNotification');
         return users;
     },
 
     // Método para obter um usuário específico por ID
     async getUser(id) {
-        const user = await knex('user').select('id', 'name', 'email', 'humidityNotification', 'waterNotification').where({ id }).first();
+        const user = await knex('user').select('id', 'name', 'email', 'humidityNotification').where({ id }).first();
         if (!user) {
             throw new Error('Usuário não existe!');
         }
@@ -22,15 +22,14 @@ module.exports = {
     },
 
     // Método para criar um novo usuário
-    async createUser(name, email, password, humidityNotification, waterNotification) {
+    async createUser(name, email, password, humidityNotification) {
         const userCreateSchema = yup.object({ // Define o esquema de validação para criar um usuário
             name: yup.string().min(3, 'O nome precisa ter pelo menos 3 caracteres').required('O campo nome é obrigatório.'),
             email: yup.string().email('O email precisa ser válido').required('O campo email é obrigatório.'),
             password: yup.string().min(8, 'A senha precisa ter pelo menos 8 caracteres').required('O campo password é obrigatório.'),
-            humidityNotification: yup.boolean(),
-            waterNotification: yup.boolean()
+            humidityNotification: yup.boolean()
         });
-        await userCreateSchema.validate({ name, email, password, humidityNotification, waterNotification });
+        await userCreateSchema.validate({ name, email, password, humidityNotification});
 
         const user = await knex('user').select('email').where({ email }).first();
         if (user) {
@@ -45,7 +44,6 @@ module.exports = {
             email,
             password: hash,
             humidityNotification,
-            waterNotification,
             code: null // Define o código como nulo inicialmente
         });
 
@@ -57,8 +55,7 @@ module.exports = {
         const userUpdateSchema = yup.object({ // Define o esquema de validação para atualizar um usuário
             name: yup.string().min(3, 'O nome precisa ter pelo menos 3 caracteres'),
             password: yup.string().min(8, 'A senha precisa ter pelo menos 8 caracteres'),
-            humidityNotification: yup.boolean(),
-            waterNotification: yup.boolean()
+            humidityNotification: yup.boolean()
         });
 
         if (userData.email) {
@@ -81,8 +78,7 @@ module.exports = {
         return await knex('user').where({ id: userId }).update({
             name: userData.name,
             password: userData.password,
-            humidityNotification: userData.humidityNotification,
-            waterNotification: userData.waterNotification
+            humidityNotification: userData.humidityNotification
         });
     },
 
@@ -157,7 +153,7 @@ module.exports = {
         return 'Senha alterada com sucesso!';
       },
       
-      // usar cron jobs ou alçgo do tipo para rodar regularmente.
+      // usar cron jobs ou algo do tipo para rodar regularmente.
       async cleanExpiredCodes() {
         const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
         await knex('user').where('expirationDate', '<', currentDateTime).update({code: null, expirationDate: null});
