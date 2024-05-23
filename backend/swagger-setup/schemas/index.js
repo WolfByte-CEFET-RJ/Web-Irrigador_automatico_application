@@ -3,6 +3,7 @@ const erro401 = require("./erro401Schema");
 const erro500 = require("./erro500Schema")
 const user = require("./userSchemas");
 const garden = require("./gardenSchema")
+const setting = require("./settingsSchemas")
 
 module.exports = {
     //Schemas relacionados a Erros
@@ -10,7 +11,7 @@ module.exports = {
     ResponseError401: erro401,
     ResponseError500 : erro500,
 
-    //Schemas relacionados a  Usuário
+    //Schemas relacionados ao Usuário
     ResponseGetUsers: user.getUsers,
     ResponseGetUser: user.getUser,
     
@@ -24,5 +25,10 @@ module.exports = {
     RequestUpdateGarden: garden.updateGarden,
 
     ResponseGetMeasuresGardens: garden.measuresGardens,
-    ResponseGetMeasuresGarden: garden.measuresGarden
+    ResponseGetMeasuresGarden: garden.measuresGarden,
+
+    //Schemas relacionados a Configurações de Irrigação
+    ResponseGetSetting: setting.getSetting,
+    
+    RequestCreateSetting: setting.createSetting,
 };
