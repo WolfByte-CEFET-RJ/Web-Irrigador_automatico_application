@@ -4,11 +4,11 @@ module.exports = {
     post: {
         summary: "Reset password validation code check",
         tags: ["User"],
-        security: [
+        /*security: [
             {
                 Token_Autenticação: [],
             }
-        ],
+        ],*/
         parameters: [
             {
                 name:"email",

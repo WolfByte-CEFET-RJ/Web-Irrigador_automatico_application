@@ -3,8 +3,8 @@ module.exports = {
         properties: {
             message: {
                 type: "string",
-                description: "Error message",
-                example: "Formato ou Requisição Inválida",
+                description: "Detailed Error message",
+                example: "Formato de requisição inválido",
             }
         }
 }

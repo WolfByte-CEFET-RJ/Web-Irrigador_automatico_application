@@ -1,5 +1,5 @@
 
-//schema de retorno com múltiplos registros
+//schema de retorno com múltiplos registros (usado em /users)
 const getUsers = {
     type: "object",
     properties: {
@@ -37,7 +37,7 @@ const getUsers = {
     }
 }
 
-//schema de retorno com múltiplos registros
+//schema de retorno de um único registro (usado em /user)
 const getUser = {
   type: "object",
   properties: {
