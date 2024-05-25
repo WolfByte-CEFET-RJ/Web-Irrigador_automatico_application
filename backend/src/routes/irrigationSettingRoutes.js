@@ -12,6 +12,6 @@ router
 
       .patch('/setting/:id',auth, IrrigationSettingController.updateIrrigationSetting)
 
-      .delete('/setting/:settingId',auth, IrrigationSettingController.deleteIrrigationSetting)
+      .delete('/setting/:id',auth, IrrigationSettingController.deleteIrrigationSetting)
 
 module.exports = router;
