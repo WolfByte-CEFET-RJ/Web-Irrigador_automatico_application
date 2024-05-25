@@ -78,8 +78,8 @@ const openApiDocument = {
       "/measures/garden": MEASURES_GARDENS_PATH,
 
       "/setting": CREATE_SETTING_PATH,         //post only
-      "/userSettings": GET_USERS_SETTING_PATH, //get, delete and patch
-      "/setting/{id}": SETTING_PATH
+      "/userSettings": GET_USERS_SETTING_PATH, 
+      "/setting/{id}": SETTING_PATH            //get, delete and patch
     },
     components: {
       schemas: SCHEMAS,
