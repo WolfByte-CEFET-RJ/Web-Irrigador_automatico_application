@@ -49,8 +49,25 @@ const getSetting = {
     required: true
 }
 
+const updateSetting = {
+    type: "object",
+    properties: {
+      name: {
+        type: "string",
+        description: "Irrigations name",
+        example: "Configuração de Arroz",
+      },
+      humidityValue: {
+        type: "int8",
+        description: "Humidity value to be consider",
+        example: 40,
+      }
+    }
+
+}
 
 module.exports = {
     createSetting,
-    getSetting
+    getSetting,
+    updateSetting
 }

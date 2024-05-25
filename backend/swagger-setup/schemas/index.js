@@ -31,4 +31,6 @@ module.exports = {
     ResponseGetSetting: setting.getSetting,
     
     RequestCreateSetting: setting.createSetting,
+
+    RequestUpdateSetting: setting.updateSetting
 };

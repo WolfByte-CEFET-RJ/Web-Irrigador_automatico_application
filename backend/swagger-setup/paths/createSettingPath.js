@@ -1,6 +1,6 @@
 module.exports = {
     post: {
-        summary: "Create a garden for user to manage",
+        summary: "Create a irrigation setting",
         parameters: [],
         security: [
             {
