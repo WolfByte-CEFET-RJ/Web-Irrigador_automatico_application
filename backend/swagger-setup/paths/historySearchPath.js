@@ -38,7 +38,7 @@ module.exports = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError400",
+                            $ref: "#/components/schemas/ResponseError400History",
                         }
                     }
                 }
