@@ -82,7 +82,7 @@ module.exports = {
                 let { configHumidityValue } = await returnConfigValues(obj.irrigationId);
                 let message = await verifyMeasurements(obj.lastMeasures[0].measurement, configHumidityValue);
                 obj.message = message;
-                let irrigationSetting = await irrigationSettingServicce.getOneSetting(obj.irrigationId);
+                let irrigationSetting = await irrigationSettingServicce.getOneSetting(obj.irrigationId, obj.userId);
                 obj.settingName = irrigationSetting.name;
             }
         }

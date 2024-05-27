@@ -86,7 +86,7 @@ module.exports = {
             .where({ id });
 
         // Verifica se o usuário é o proprietário da configuração
-        if (myId != setting[0].userId) {
+        if (myId != setting[0].userId && setting[0].id != 1) {
             throw new Error('Essa config não pertence a você!');
         }
         // Verifica se a configuração existe
