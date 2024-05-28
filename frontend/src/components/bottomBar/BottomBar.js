@@ -10,6 +10,8 @@ export default function BottomBar() {
 
   const isAddGardenScreen = route.name === "AddGarden";
   const isHomeScreen = route.name === "Home";
+  const isViewConfig = route.name === "config";
+  const isProfile = route.name === "Profile";
 
   return (
     <View style={styles.bottomBar_container}>
@@ -21,12 +23,12 @@ export default function BottomBar() {
           color={isAddGardenScreen ? "#40513B" : "#609966"}
         />
       </Pressable>
-      <Pressable>
+      <Pressable onPress={() => navigation.navigate("ViewConfig")}>
         <Ionicons
          style={styles.iconCadastro}
          name={"cog"}
          size={24}
-        //  color={isViewConfig ? "#40513B" : "#609966"}
+         color={isViewConfig ? "#40513B" : "#609966"}
         />
       </Pressable>
       <Pressable onPress={() => navigation.navigate("Home")}>
@@ -43,12 +45,14 @@ export default function BottomBar() {
         size={24}
         color={"#609966"}
       />
+      <Pressable onPress={() => navigation.navigate("Profile")}>
       <Ionicons
         style={styles.iconCadastro}
         name={"person"}
         size={24}
-        color={"#609966"}
+        color={isProfile ? "#40513B" : "#609966"}
       />
+      </Pressable>
     </View>
   );
 }

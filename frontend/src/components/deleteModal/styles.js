@@ -11,6 +11,8 @@ export const styles = StyleSheet.create({
       backgroundColor: '#EDF1D6',
       padding: 40,
       borderRadius: 10,
+      marginRight:20,
+      marginLeft:20,
       alignItems: 'center',
     },
     message: {

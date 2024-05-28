@@ -2,9 +2,10 @@ import React from 'react';
 import { styles } from './styles';
 import { Modal, View, Text} from 'react-native';
 import ButtonOrange from '../buttonOrange/ButtonOrange';
+import Button from "../../components/button/Button";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const DeleteModal = ({ visible, onClose, onDelete, hortaToDelete, texto }) => {
+const DeleteModal = ({ visible, onClose, onClick, texto }) => {
     return (
       <Modal
         visible={visible}
@@ -23,7 +24,12 @@ const DeleteModal = ({ visible, onClose, onDelete, hortaToDelete, texto }) => {
             />
             <Text style={styles.message}>{texto}</Text>
             <View style={styles.buttonContainer}>
-              <ButtonOrange title="Excluir" onPress={() => onDelete(hortaToDelete)} />
+            <ButtonOrange
+              title="Excluir"
+              buttonHeight={35}
+              fontSize={15}
+              onPress={onClick}
+            />
             </View>
           </View>
         </View>

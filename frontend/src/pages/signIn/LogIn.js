@@ -16,7 +16,7 @@ const LogIn = () => {
   const navigation = useNavigation();
   const [error, setError] = useState('');
   const { signIn } = useAuth();
-
+  const {token} = useAuth();
 
   const handleSubmit = async () => {
 

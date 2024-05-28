@@ -70,7 +70,8 @@ const ViewGarden = () => {
                         </View>
                     </View>
                 </View>
-                {/* Barra de Água */}
+                    {/* Barra de Água */}
+                {/*
                 <View style={styles.view_bars_status}>
                     <View style={styles.info_container}>
                         <View style={styles.info_graph}>
@@ -90,7 +91,7 @@ const ViewGarden = () => {
                             {porcentagemAgua}%
                         </Text>
                     </View>
-                </View>
+                </View>*/}
             </SafeAreaView> 
 
             <SafeAreaView style={styles.btndiv}>

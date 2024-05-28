@@ -65,7 +65,7 @@ const AddGarden = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={dismissKeyboard}>
+    <TouchableWithoutFeedback onClick={dismissKeyboard}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -50}
@@ -84,7 +84,7 @@ const AddGarden = () => {
               />
             <InputDark
               label="Descrição" 
-              placeHolder="solo fértil, fileiras organizadas, irrigação suave, luz solar adequada, colheita contínua, frescor e nutrientes."
+              placeHolder="solo fértil, fileiras organizadas, irrigação suave, luz solar adequada..."
               onChangeText={text=>setDescription(text)}
             />
             <InputDark 

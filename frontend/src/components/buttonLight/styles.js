@@ -4,8 +4,7 @@ export const styles = StyleSheet.create({
   button: {
     width: '77%',
     height: 60,
-    backgroundColor: '#40513B',
-    marginBottom: 7,
+    backgroundColor: '#9DC08B',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -13,7 +12,7 @@ export const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 22,
-    fontWeight: 'bold',
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Bold',
+    fontWeight: 'bold'
   },
 });

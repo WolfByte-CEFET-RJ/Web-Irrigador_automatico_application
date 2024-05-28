@@ -57,6 +57,15 @@ export const styles = StyleSheet.create({
     marginTop: 32,
     fontFamily: 'Montserrat-Bold'
   },
+  nenhumaHorta:{
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#40513B',
+    marginTop: 100,
+    marginLeft: 10,
+    marginRight: 10,
+    fontFamily: 'Montserrat-Bold'
+  },
   hortas_container: {
     display: 'flex',
     overflow: 'scroll',    

@@ -92,6 +92,7 @@ export const styles = StyleSheet.create({
   view_horta_text: {
     fontFamily: 'Montserrat-Bold',
     marginTop: 10,
+
   },
 
   svg: {
@@ -109,12 +110,13 @@ export const styles = StyleSheet.create({
   info_graph: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
 
   btndiv: {
     alignItems: 'center',
     display: 'flex',
-    marginTop: '30%',
+    marginTop: '20%',
   },
   editButton: {
     display: 'flex',
@@ -124,6 +126,8 @@ export const styles = StyleSheet.create({
     width: '77%',
     borderRadius: 8,
     height: 36,
+    marginLeft: 5,
+    marginRight:5,
   },
   buttonText: {
     color: '#FFFFFF',
@@ -134,6 +138,6 @@ export const styles = StyleSheet.create({
   info_container: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 10,
+    marginLeft: -28,
   }
 });

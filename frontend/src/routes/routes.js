@@ -5,6 +5,8 @@ import LogIn from './../pages/signIn/LogIn';
 import Home from './../pages/home/Home';
 import AddGarden from '../pages/addGarden/AddGarden';
 import ViewGarden from '../pages/viewGarden/ViewGarden';
+import Profile from "../pages/profile/Profile";
+import ViewConfig from '../pages/ViewConfig/ViewConfig';
 
 const Stack = createStackNavigator();
 const Navigation = () => {
@@ -16,6 +18,8 @@ const Navigation = () => {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="AddGarden" component={AddGarden} />
         <Stack.Screen name="ViewGarden" component={ViewGarden} />
+        <Stack.Screen name="ViewConfig" component={ViewConfig} />
+        <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -14,12 +14,12 @@ const EditModal = ({visible, onClose}) => {
   const api = createAxiosInstance();
 
   const handleSaveChanges = async (id) => {
+    const updatedData = {
+      name: newName,
+      description: newDescription,
+      irrigationId: newIrrigationId,
+    };
     try {
-      const updatedData = {
-        name: newName,
-        description: newDescription,
-        irrigationId: newIrrigationId,
-      };
       const response = await api.patch(`/garden/${id}`, updatedData) ;
       setSelectedGarden(updatedData)
       console.log(response);
@@ -58,7 +58,7 @@ const EditModal = ({visible, onClose}) => {
               <TextInput style={styles.inputConfiguracao} value={newIrrigationId} onChangeText={text=>setNewIrrigationId(text)} placeholder={selectedGarden.irrigationId}></TextInput>
             </View>
             <View style={styles.buttonContainer}>
-              <ButtonOrange title="Salvar alterações" onPress={() => handleSaveChanges(selectedGarden.id)}/>
+              <ButtonOrange title="Salvar alterações" onclick={() => handleSaveChanges(selectedGarden.id)}/>
             </View>
           </View>
         </View>
