@@ -119,7 +119,7 @@ const ViewConfig = () => {
         </View>
       </View>
       <View style={styles.config_all_container}>
-        {/* {configData ? (
+        {configData ? (
           configData.map((config) => (
             <Pressable style={styles.configuracao}>
               <Text style={styles.config_name}> {config.nomeConfiguracao} </Text>
@@ -156,7 +156,7 @@ const ViewConfig = () => {
           ))
         ) : (
           <Text> não possui configurações de hortas </Text>
-        )} */}
+        )}
       </View>
       <View style={styles.bottomBar_container}>
         <BottomBar />

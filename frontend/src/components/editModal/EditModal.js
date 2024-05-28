@@ -7,21 +7,33 @@ import { useGarden } from "../../contexts/GardenContext";
 import { createAxiosInstance } from "../../services/api";
 
 const EditModal = ({ visible, onClose }) => {
-  const { selectedGarden, setSelectedGarden } = useGarden();
-  const [newName, setNewName] = useState("");
-  const [newDescription, setNewDescription] = useState("");
-  const [newIrrigationId, setNewIrrigationId] = useState("");
+  const { selectedGarden, setSelectedGarden, setGarden, gardenData } = useGarden();
+  const [newName, setNewName] = useState(selectedGarden.name);
+  const [newDescription, setNewDescription] = useState(selectedGarden.description);
+  const [newIrrigationId, setNewIrrigationId] = useState(selectedGarden.irrigationId);
   const api = createAxiosInstance();
 
   const handleSaveChanges = async (id) => {
     const updatedData = {
       name: newName,
       description: newDescription,
-      irrigationId: newIrrigationId,
+    //   irrigationId: newIrrigationId,
     };
+    debugger;
     try {
+      
+      //patch e atualiza no context "selectedGarden"
       const response = await api.patch(`/garden/${id}`, updatedData);
-      setSelectedGarden(updatedData);
+      const updatedHorta = await api.get(`/garden/${id}`);
+      setSelectedGarden(updatedHorta.data);
+
+      //atualiza todas as hortas no context
+      const attGarden = await api.get(`/myGardens`);
+      setGarden(attGarden.data);
+      
+      console.log(updatedHorta);
+      //dá update só no selected garden
+      //tarefa: substituir o selectedGarden?
       console.log(response);
     } catch (error) {
       console.error("Erro ao salvar alterações:", error);
@@ -79,7 +91,7 @@ const EditModal = ({ visible, onClose }) => {
             <View style={styles.buttonContainer}>
               <ButtonOrange
                 title="Salvar alterações"
-                onclick={() => handleSaveChanges(selectedGarden.id)}
+                onPress={() => handleSaveChanges(selectedGarden.id)}
               />
             </View>
           </View>

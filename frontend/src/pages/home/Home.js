@@ -10,10 +10,9 @@ import { StatusBar } from "expo-status-bar";
 import EditModal from "../../components/editModal/EditModal";
 import Button from "../../components/button/Button";
 import { useAuth } from "../../contexts/AuthContext";
-import { createAxiosInstance } from "../../services/api";
 import { useGarden } from "../../contexts/GardenContext";
+import { createAxiosInstance } from "../../services/api";
 
-// !ATENÇÃO: Para fazer as hortas rodarem você tem que digitar "json-server --watch hortas.json --port 3001" na pasta data
 const API_URL = "http://localhost:3001";
 
 export default function Home() {
@@ -27,27 +26,22 @@ export default function Home() {
   useEffect(() => {
     async function fetchHortas() {
       try {
+        console.log("entrou no fetch");
         const response = await api.get(`/myGardens`);
         setGarden(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Erro ao buscar hortas:", error);
       }
     }
     fetchHortas();
-  }, [gardenData]);
+  }, [gardenData.length]);
 
   useEffect(() => {
     async function fetchUsuario() {
       try {
-        const responseD = await api.get(`/user`); //erro campo waterNotification da requisição. (branch está desatualizada com a develop)
-        // const response = await axios.get("http://localhost:5000/user", {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // });
-        setName(responseD.data.name);
-        // handleUserNameSave(response.data.name);
-        // console.log(userName);
+        const response = await api.get(`/user`);
+        setName(response.data.name);
       } catch (error) {
         console.error("Erro na solicitação:", error);
       }
@@ -73,11 +67,9 @@ export default function Home() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/garden/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await api.delete(`/garden/${id}`);
+      const hortas = await api.get(`/myGardens`);
+      setGarden(hortas.data);
       setModalVisible(false);
     } catch (error) {
       console.error("Erro ao excluir horta:", error);

@@ -25,7 +25,7 @@ const InputDark = ({
         style={[styles.label, isFocused || value ? styles.labelFocused : null]}
       >
         {label}
-      </Text>{" "}
+      </Text>
       {/* aqui eh o label */}
       <TextInput
         multiline={isDescricaoInput && editable}

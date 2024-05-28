@@ -21,6 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import LogoutModal from "../../components/logoutModal/LogoutModal";
+import { createAxiosInstance } from "../../services/api";
 
 export default function Profile() {
   const [irrigationNotification, setIrrigationNotification] = useState();
@@ -30,7 +31,7 @@ export default function Profile() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const { signOut } = useAuth();
-  const { token } = useAuth();
+  const api = createAxiosInstance();
 
   const handleUserNameSave = (newUserName) => {
     return setUserName(newUserName);
@@ -43,8 +44,8 @@ export default function Profile() {
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
-
-  const handleSave = () => {
+  
+  const handleSave = async () => {
     // TODO: salvar as config no back
     const data = {
       name: userName,
@@ -53,23 +54,14 @@ export default function Profile() {
     };
 
     try {
-      const resp = axios.patch("http://localhost:5000/user", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const resp = await api.patch("/user", data);
     } catch (error) {
       console.log(error);
     }
   };
-  const handleDelete = () => {
+  const handleDelete = async () => {
     try {
-      axios
-        .delete("http://localhost:5000/user/", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+      await api.delete("/user")
         .then((response) => {
           const message = response.data.message;
           if (message == "Usuário deletado com sucesso!") {
@@ -99,11 +91,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchUsuario = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/user", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await api.get("/user");
         setUserName(response.data.name);
         setIrrigationNotification(response.data.humidityNotification);
         // handleUserNameSave(response.data.name);

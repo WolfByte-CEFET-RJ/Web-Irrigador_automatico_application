@@ -17,6 +17,7 @@ import { Platform } from "react-native";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import { createAxiosInstance } from "../../services/api";
 import SucessComponent from "../../components/sucess/SucessComponent";
+import { useGarden } from "../../contexts/GardenContext";
 
 const AddGarden = () => {
   const dismissKeyboard = () => {
@@ -32,6 +33,8 @@ const AddGarden = () => {
   const [error, setError] = useState("");
   const [sucess, setSucess] = useState("");
 
+  const { setGarden, gardenData, setSelectedGarden } = useGarden();
+  
   const handleSubmit = async () => {
     const data = {
       name,
@@ -54,6 +57,8 @@ const AddGarden = () => {
     } else {
       try {
         const response = await api.post("/garden", data);
+        const attGarden = await api.get(`/myGardens`);
+        setGarden(attGarden.data);
         console.log(response.data);
         setSucess("Horta cadastrada com sucesso!");
         setTimeout(() => {

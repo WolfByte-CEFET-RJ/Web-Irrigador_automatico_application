@@ -6,6 +6,7 @@ import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import { useNavigation } from "@react-navigation/native";
+import { createAxiosInstance } from "../../services/api";
 import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -16,6 +17,7 @@ const LogIn = () => {
   const [error, setError] = useState("");
   const { signIn } = useAuth();
   const { token } = useAuth();
+  const api = createAxiosInstance();
 
   const handleSubmit = async () => {
     //* Dados de input do usuário
@@ -33,7 +35,7 @@ const LogIn = () => {
     } else {
       try {
         //* Envia os dados a API e caso esteja cadastrado irá ser redirecionado a tela de Home
-        const response = await axios.post("http://localhost:5000/login", data);
+        const response = await api.post("/login", data);
         const token = response.data.token;
         signIn(token);
         navigation.navigate("Home");

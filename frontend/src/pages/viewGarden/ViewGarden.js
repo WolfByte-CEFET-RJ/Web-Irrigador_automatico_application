@@ -20,6 +20,7 @@ import { useGarden } from "../../contexts/GardenContext";
 
 const ViewGarden = () => {
   const { selectedGarden } = useGarden();
+  console.log(selectedGarden);
 
   const porcentagemUmidade = 50;
   const porcentagemAgua = 20;
@@ -31,6 +32,7 @@ const ViewGarden = () => {
   const handleDeleteIconPress = () => {
     setModalVisible(true);
   };
+
 
   return (
     <View style={styles.view_container}>
@@ -44,7 +46,7 @@ const ViewGarden = () => {
             onPress={() => navigation.navigate("Home")}
           />
         </Pressable>
-        <Text style={styles.view_title}>{selectedGarden.name}</Text>
+        <Text style={styles.view_title}>{selectedGarden.name}</Text> 
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <SafeAreaView style={styles.view_description}>

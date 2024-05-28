@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import SucessComponent from "../../components/sucess/SucessComponent";
+import { createAxiosInstance } from "../../services/api";
 
 export default function SignUp() {
   const navigation = useNavigation();
@@ -31,6 +32,7 @@ export default function SignUp() {
   const [waterNotification, setWaterNotification] = useState(1);
   const [error, setError] = useState("");
   const [sucess, setSucess] = useState("");
+  const api = createAxiosInstance();
 
   const handleSubmit = async () => {
     const data = {
@@ -58,7 +60,7 @@ export default function SignUp() {
       }, 3000);
     } else {
       try {
-        const response = await axios.post("http://localhost:5000/user", data); //solicitação POST (criar dados) para a URL do backend
+        const response = await api.post("http://localhost:5000/user", data); //solicitação POST (criar dados) para a URL do backend
         setSucess("Usuário cadastrado com sucesso!");
         setTimeout(() => {
           setSucess("");

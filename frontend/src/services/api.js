@@ -10,7 +10,6 @@ const createAxiosInstance = () => {
       Authorization: `Bearer ${token}`,
     },
   });
-
   return api;
 };
 
