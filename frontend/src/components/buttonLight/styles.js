@@ -1,18 +1,18 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   button: {
-    width: '77%',
+    width: "77%",
     height: 60,
-    backgroundColor: '#9DC08B',
+    backgroundColor: "#9DC08B",
     borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 22,
-    fontFamily: 'Montserrat-Bold',
-    fontWeight: 'bold'
+    fontFamily: "Montserrat-Bold",
+    fontWeight: "bold",
   },
 });

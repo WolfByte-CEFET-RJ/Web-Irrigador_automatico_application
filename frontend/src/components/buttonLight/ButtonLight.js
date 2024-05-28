@@ -1,6 +1,6 @@
-import React from 'react';
-import { styles } from './styles';
-import { Text, Pressable } from 'react-native';
+import React from "react";
+import { styles } from "./styles";
+import { Text, Pressable } from "react-native";
 
 const ButtonLight = ({ onPress, title, buttonHeight, fontSize }) => {
   const dynamicStyles = {

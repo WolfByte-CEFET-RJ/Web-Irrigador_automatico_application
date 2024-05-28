@@ -14,15 +14,13 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
   };
 
-
   return (
     <Context.Provider value={{ token, signIn, signOut }}>
       {children}
     </Context.Provider>
-  )
+  );
 };
 
 export const useAuth = () => {
   return useContext(Context);
 };
-

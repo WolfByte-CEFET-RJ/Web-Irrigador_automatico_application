@@ -5,7 +5,7 @@ import ButtonOrange from "../buttonOrange/ButtonOrange";
 import Button from "../../components/button/Button";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-const DeleteModal = ({ visible, onClose, onClick, texto }) => {
+const LogoutModal = ({ visible, onClose, onClick, texto, label }) => {
   return (
     <Modal
       visible={visible}
@@ -25,7 +25,7 @@ const DeleteModal = ({ visible, onClose, onClick, texto }) => {
           <Text style={styles.message}>{texto}</Text>
           <View style={styles.buttonContainer}>
             <ButtonOrange
-              title="Excluir"
+              title={label}
               buttonHeight={35}
               fontSize={15}
               onPress={onClick}
@@ -37,4 +37,4 @@ const DeleteModal = ({ visible, onClose, onClick, texto }) => {
   );
 };
 
-export default DeleteModal;
+export default LogoutModal;

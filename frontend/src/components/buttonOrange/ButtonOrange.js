@@ -1,6 +1,6 @@
-import React from 'react';
-import { styles } from './styles'
-import { TouchableOpacity, Text } from 'react-native';
+import React from "react";
+import { styles } from "./styles";
+import { TouchableOpacity, Text } from "react-native";
 
 const ButtonOrange = ({ onPress, title }) => {
   return (
