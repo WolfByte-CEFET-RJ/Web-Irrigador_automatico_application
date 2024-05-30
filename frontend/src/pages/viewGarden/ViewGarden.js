@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -17,12 +17,24 @@ import { StatusBar } from "expo-status-bar";
 import Button from "../../components/button/Button";
 import EditModal from "../../components/editModal/EditModal";
 import { useGarden } from "../../contexts/GardenContext";
+import { createAxiosInstance } from "../../services/api";
 
 const ViewGarden = () => {
   const { selectedGarden } = useGarden();
+  const api = createAxiosInstance();
   console.log(selectedGarden);
 
-  const porcentagemUmidade = 50;
+  //fetch para pegar a umidade da horta
+  useEffect(() => {
+    async function fetchUmidade() {
+      var measuresGarden = await api.get(`/measures/garden/${selectedGarden.id}`);
+      console.log(measuresGarden);
+    }
+    fetchUmidade();
+  }, [])
+
+  //variaveis que mexem no grafico da horta
+  const porcentagemUmidade = 10;
   const porcentagemAgua = 20;
 
   const navigation = useNavigation();
