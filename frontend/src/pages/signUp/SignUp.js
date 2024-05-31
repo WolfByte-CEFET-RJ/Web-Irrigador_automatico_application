@@ -18,7 +18,7 @@ import { Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import ErrorComponent from "../../components/Error/ErrorComponent";
-import SucessComponent from "../../components/sucess/SucessComponent";
+import SucessComponent from "../../components/success/SuccessComponent";
 import { createAxiosInstance } from "../../services/api";
 
 export default function SignUp() {

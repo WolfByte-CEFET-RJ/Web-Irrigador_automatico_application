@@ -23,28 +23,14 @@ import BottomBar from "../../components/bottomBar/BottomBar";
 import DeleteModal from "../../components/deleteModal/DeleteModal";
 import NewConfigModal from "../../components/newConfigModal/newConfigModal";
 import UpdateConfigModal from "../../components/updateConfig/updateConfig";
+import { useIrrigationSettings  } from "../../contexts/IrrigationConfigContext";
 
 const ViewConfig = () => {
-  const fakeConfig = [
-    {
-      nomeConfiguracao: "Configuração 1",
-      porcentagemUmidade: 50,
-      porcentagemAgua: 30,
-    },
-    {
-      nomeConfiguracao: "Configuração 2",
-      porcentagemUmidade: 60,
-      porcentagemAgua: 40,
-    },
-    {
-      nomeConfiguracao: "Configuração 3",
-      porcentagemUmidade: 70,
-      porcentagemAgua: 50,
-    },
-  ];
+
 
   const api = createAxiosInstance();
-  const { configData, setConfig } = useState([]);
+  // const { configData, setConfig } = useState([]);
+  const { IrrigationConfig, setIrrigationConfig } = useIrrigationSettings();
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -54,9 +40,10 @@ const ViewConfig = () => {
     async function fetchConfig() {
       try {
         console.log("entrou no fetchConfig");
-        const response = await api.get("/userSettings");
-        setConfig(response.data);
-        console.log(response.data);
+        const userIrrigationSettings = await api.get(`/userSettings`);
+        console.log(userIrrigationSettings.data);
+        setIrrigationConfig(userIrrigationSettings.data);
+
       } catch (error) {
         console.error("Erro ao buscar configuração", error);
       }
@@ -91,13 +78,12 @@ const ViewConfig = () => {
           <Text style={styles.config_name}> Default </Text>
           <View style={styles.config_stats_container}>
             <Text style={styles.config_stats}>
-              {" "}
               Umidade: <Text style={styles.config_number}> 25% </Text>{" "}
             </Text>
-            <Text style={styles.config_stats}>
+            {/* <Text style={styles.config_stats}>
               {" "}
               Água: <Text style={styles.config_number}> 14% </Text>{" "}
-            </Text>
+            </Text> */}
           </View>
         </View>
       </View>
@@ -119,13 +105,12 @@ const ViewConfig = () => {
         </View>
       </View>
       <View style={styles.config_all_container}>
-        {configData ? (
-          configData.map((config) => (
+        {IrrigationConfig ? (
+          IrrigationConfig.map((config) => (
             <Pressable style={styles.configuracao}>
-              <Text style={styles.config_name}> {config.nomeConfiguracao} </Text>
+              <Text style={styles.config_name}> {config.name} </Text>
               <View style={styles.config_stats_container}>
-                <Text style={styles.config_stats}> Umidade: <Text style={styles.config_number}> {config.porcentagemUmidade} </Text> </Text>
-                <Text style={styles.config_stats}> Água: <Text style={styles.config_number}> {config.porcentagemAgua} </Text> </Text> 
+                {/* <Text style={styles.config_stats}> Umidade: <Text style={styles.config_number}> {config.humidityValue} </Text> </Text> */}
               </View>
               <Ionicons
                 style={styles.updateConfig}

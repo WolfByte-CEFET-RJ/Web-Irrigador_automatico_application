@@ -22,7 +22,6 @@ import { createAxiosInstance } from "../../services/api";
 const ViewGarden = () => {
   const { selectedGarden } = useGarden();
   const api = createAxiosInstance();
-  console.log(selectedGarden);
 
   //fetch para pegar a umidade da horta
   useEffect(() => {
@@ -34,8 +33,7 @@ const ViewGarden = () => {
   }, [])
 
   //variaveis que mexem no grafico da horta
-  const porcentagemUmidade = 10;
-  const porcentagemAgua = 20;
+  const porcentagemUmidade = 30;
 
   const navigation = useNavigation();
 

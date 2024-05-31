@@ -1,11 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { styles } from "./styles";
 import { Modal, View, Text } from "react-native";
 import Button from "../button/Button";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import InputDark from "../inputDark/InputDark";
+import SuccessComponent from "../success/SuccessComponent";
+import ErrorComponent from "../Error/ErrorComponent";
+import { useIrrigationSettings  } from "../../contexts/IrrigationConfigContext";
 
 const newConfigModal = ({ visible, onClose, texto }) => {
+  
+  const[name,setName]=useState('');
+  const[humidityValue,setHumidityValue] = useState('');
+  const[success, setSuccess] = useState("");
+  const[Error, setError] = useState("");
+  //rota: post(/setting)
+  const { setIrrigationConfig } = useIrrigationSettings();
+
+  async function handleCreateConfig(){
+    const data = {
+      name: name,
+      humidityValue: humidityValue
+    };
+    if (name === "" || humidityValue === "") {
+      // setError("Preencha todos os campos");
+      // setTimeout(() => {
+      //   setError("");
+      // }, 3000);
+    } else {
+      try {
+        console.log("entrou post");
+        await api.post("/setting", data);
+        console.log("passou post");
+        const userIrrigationSettings = await api.get(`/userSettings`);
+        setIrrigationConfig(userIrrigationSettings.data);
+
+        setSuccess("Configuração cadastrada com sucesso!");
+        setTimeout(() => {
+          setSuccess("");
+        }, 3000);
+      } catch (error) {
+        // setError(error.response.data.message);
+        // setTimeout(() => {
+        //   setError("");
+        // }, 3000);
+      }
+    }
+  }
+
   return (
     <Modal
       visible={visible}
@@ -23,15 +65,16 @@ const newConfigModal = ({ visible, onClose, texto }) => {
             onPress={onClose}
           />
           <View style={styles.input_container}>
-            <InputDark label="Nome" placeHolder="Ex: Configuração #001" />
-            <InputDark label="Nível de Umidade" placeHolder="Ex: 45" />
-            <InputDark label="Nível de Água" placeHolder="Ex: 50" />
+            <InputDark label="Nome" placeHolder="Ex: Configuração #001" value ={name} onChangeText={(text)=>setName(text)} />
+            <InputDark label="Nível de Umidade" placeHolder="Ex: 45" value ={humidityValue} onChangeText={(text)=>setHumidityValue(text)} />
+            {/* <InputDark label="Nível de Água" placeHolder="Ex: 50" /> */}
           </View>
           <View style={styles.buttonContainer}>
             <Button
               title="Adicionar configuração"
               buttonHeight={36.6}
               fontSize={17}
+              onPress = {() => handleCreateConfig()}
             />
           </View>
           <View style={styles.alert_container}>
@@ -47,6 +90,8 @@ const newConfigModal = ({ visible, onClose, texto }) => {
               estiver maior do que o estabelecido
             </Text>
           </View>
+          {/* <ErrorComponent message={Error} /> */}
+          <SuccessComponent message={success} />
         </View>
       </View>
     </Modal>

@@ -3,6 +3,7 @@ import { View, Image, StyleSheet, Animated, Text } from "react-native";
 import Routes from "./src/routes/routes";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { GardenProvider } from "./src/contexts/GardenContext";
+import { IrrigationProvider } from "./src/contexts/IrrigationConfigContext";
 import { useFonts } from "expo-font";
 import globalStyles from "./src/style/globalStyles";
 
@@ -59,7 +60,9 @@ export default function App() {
   ) : (
     <AuthProvider>
       <GardenProvider>
+        <IrrigationProvider>
         <Routes />
+        </IrrigationProvider>
       </GardenProvider>
     </AuthProvider>
   );

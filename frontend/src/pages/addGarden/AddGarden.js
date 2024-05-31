@@ -16,7 +16,7 @@ import InputDark from "../../components/inputDark/InputDark";
 import { Platform } from "react-native";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import { createAxiosInstance } from "../../services/api";
-import SucessComponent from "../../components/sucess/SucessComponent";
+import SucessComponent from "../../components/success/SuccessComponent";
 import { useGarden } from "../../contexts/GardenContext";
 
 const AddGarden = () => {
@@ -59,6 +59,7 @@ const AddGarden = () => {
         const response = await api.post("/garden", data);
         const attGarden = await api.get(`/myGardens`);
         setGarden(attGarden.data);
+        
         console.log(response.data);
         setSucess("Horta cadastrada com sucesso!");
         setTimeout(() => {
