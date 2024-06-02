@@ -19,7 +19,6 @@ const EditModal = ({ visible, onClose }) => {
       description: newDescription,
     //   irrigationId: newIrrigationId,
     };
-    debugger;
     try {
       
       //patch e atualiza no context "selectedGarden"
