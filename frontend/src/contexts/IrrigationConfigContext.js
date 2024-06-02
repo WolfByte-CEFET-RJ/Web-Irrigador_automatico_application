@@ -1,22 +1,22 @@
 import React, { createContext, useState, useContext } from "react";
 
-const Context = createContext();
+const IrrigationConfigContext = createContext();
 
 export const IrrigationProvider = ({ children }) => {
-    const [irrigationConfig, setConfig] = useState([]);
+    const [irrigationConfig, setIrrigationConfig] = useState();
     const [selectedIrrigationConfig, setSelectedIrrigationConfig] = useState(null);
 
-  const setIrrigationConfig = (data) => {
-    setConfig(data);
+  const setIrrConfig = (data) => {
+    setIrrigationConfig(data);
   };
 
   return (
-    <Context.Provider value={{ irrigationConfig, setIrrigationConfig ,selectedIrrigationConfig, setSelectedIrrigationConfig }}>
+    <IrrigationConfigContext.Provider value={{ irrigationConfig, setIrrConfig ,selectedIrrigationConfig, setSelectedIrrigationConfig }}>
       {children}
-    </Context.Provider>
+    </IrrigationConfigContext.Provider>
   );
 };
 
 export const useIrrigationSettings = () => {
-  return useContext(Context);
+  return useContext(IrrigationConfigContext);
 };

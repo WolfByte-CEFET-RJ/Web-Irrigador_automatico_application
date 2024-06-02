@@ -7,6 +7,8 @@ import InputDark from "../inputDark/InputDark";
 import SuccessComponent from "../success/SuccessComponent";
 import ErrorComponent from "../Error/ErrorComponent";
 import { useIrrigationSettings  } from "../../contexts/IrrigationConfigContext";
+import { createAxiosInstance } from "../../services/api";
+
 
 const newConfigModal = ({ visible, onClose, texto }) => {
   
@@ -14,6 +16,7 @@ const newConfigModal = ({ visible, onClose, texto }) => {
   const[humidityValue,setHumidityValue] = useState('');
   const[success, setSuccess] = useState("");
   const[Error, setError] = useState("");
+  const api = createAxiosInstance();
   //rota: post(/setting)
   const { setIrrigationConfig } = useIrrigationSettings();
 
@@ -30,7 +33,8 @@ const newConfigModal = ({ visible, onClose, texto }) => {
     } else {
       try {
         console.log("entrou post");
-        await api.post("/setting", data);
+        const response = await api.post("/setting", data);
+        console.log(response.data);
         console.log("passou post");
         const userIrrigationSettings = await api.get(`/userSettings`);
         setIrrigationConfig(userIrrigationSettings.data);

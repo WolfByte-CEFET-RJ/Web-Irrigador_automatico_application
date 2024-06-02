@@ -29,8 +29,8 @@ const ViewConfig = () => {
 
 
   const api = createAxiosInstance();
-  // const { configData, setConfig } = useState([]);
-  const { IrrigationConfig, setIrrigationConfig } = useIrrigationSettings();
+  const [ configData, setConfig ] = useState([]);
+  const { setIrrConfig, irrigationConfig } = useIrrigationSettings();
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -41,8 +41,10 @@ const ViewConfig = () => {
       try {
         console.log("entrou no fetchConfig");
         const userIrrigationSettings = await api.get(`/userSettings`);
+        setConfig(userIrrigationSettings.data);
         console.log(userIrrigationSettings.data);
-        setIrrigationConfig(userIrrigationSettings.data);
+        setIrrConfig(userIrrigationSettings.data);
+        console.log(irrigationConfig);
 
       } catch (error) {
         console.error("Erro ao buscar configuração", error);
@@ -54,6 +56,11 @@ const ViewConfig = () => {
   const [isModalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [isModalConfigVisible, setModalConfigVisible] = useState(false);
   const [isModalUpdateVisible, setModalUpdateVisible] = useState(false);
+
+
+  const handleButtonDeletePress = () => {
+    setModalConfigVisible(!isModalConfigVisible);
+  };
 
   const handleDeleteIconPress = () => {
     setModalDeleteVisible(true);
@@ -67,6 +74,17 @@ const ViewConfig = () => {
     setModalUpdateVisible(true);
   };
 
+  const handleConfigDelete = async (id) => {
+    try{
+      const response = await api.delete(`/setting/${id}`);
+      console.log(response);
+      const userIrrigationSettings = await api.get(`/userSettings`);
+      setConfig(userIrrigationSettings.data);
+
+    }catch(error){
+      console.log(error);
+    }
+  }
   return (
     <View style={styles.config_container}>
       <View style={styles.config_title_container}>
@@ -105,8 +123,8 @@ const ViewConfig = () => {
         </View>
       </View>
       <View style={styles.config_all_container}>
-        {IrrigationConfig ? (
-          IrrigationConfig.map((config) => (
+        {configData ? (
+          configData.map((config, key) => (
             <Pressable style={styles.configuracao}>
               <Text style={styles.config_name}> {config.name} </Text>
               <View style={styles.config_stats_container}>
@@ -135,6 +153,7 @@ const ViewConfig = () => {
                 onClose={() => setModalDeleteVisible(false)}
                 // onDelete={() => handleDelete(garden.id)}
                 // hortaToDelete={garden.id}
+                onClick={() => handleConfigDelete(config.id)}
                 texto={"Deseja mesmo excluir esta configuração?"}
                 />        
             </Pressable>
