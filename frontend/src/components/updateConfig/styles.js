@@ -28,11 +28,11 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
 
-  // iconHorta:{
-  //     position: 'absolute',
-  //     right: '5%',
-  //     top: "5%",
-  //   },
+  iconHorta:{
+      position: 'absolute',
+      right: '5%',
+      top: "5%",
+    },
 
   alert_container: {
     display: "flex",

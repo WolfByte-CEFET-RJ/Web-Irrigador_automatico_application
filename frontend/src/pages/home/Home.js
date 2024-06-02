@@ -29,7 +29,7 @@ export default function Home() {
         console.log("entrou no fetch");
         const response = await api.get(`/myGardens`);
         setGarden(response.data);
-        console.log(response.data);
+        console.log(gardenData);
       } catch (error) {
         console.error("Erro ao buscar hortas:", error);
       }

@@ -3,7 +3,7 @@ import React, { createContext, useState, useContext } from "react";
 const IrrigationConfigContext = createContext();
 
 export const IrrigationProvider = ({ children }) => {
-    const [irrigationConfig, setIrrigationConfig] = useState();
+    const [irrigationConfig, setIrrigationConfig] = useState([]);
     const [selectedIrrigationConfig, setSelectedIrrigationConfig] = useState(null);
 
   const setIrrConfig = (data) => {
@@ -11,7 +11,8 @@ export const IrrigationProvider = ({ children }) => {
   };
 
   return (
-    <IrrigationConfigContext.Provider value={{ irrigationConfig, setIrrConfig ,selectedIrrigationConfig, setSelectedIrrigationConfig }}>
+    <IrrigationConfigContext.Provider 
+    value={{ selectedIrrigationConfig, setSelectedIrrigationConfig, irrigationConfig, setIrrConfig }}>
       {children}
     </IrrigationConfigContext.Provider>
   );

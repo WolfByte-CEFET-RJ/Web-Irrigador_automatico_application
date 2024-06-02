@@ -18,7 +18,7 @@ const newConfigModal = ({ visible, onClose, texto }) => {
   const[Error, setError] = useState("");
   const api = createAxiosInstance();
   //rota: post(/setting)
-  const { setIrrigationConfig } = useIrrigationSettings();
+  const { setIrrConfig } = useIrrigationSettings();
 
   async function handleCreateConfig(){
     const data = {
@@ -37,12 +37,14 @@ const newConfigModal = ({ visible, onClose, texto }) => {
         console.log(response.data);
         console.log("passou post");
         const userIrrigationSettings = await api.get(`/userSettings`);
-        setIrrigationConfig(userIrrigationSettings.data);
-
+        setIrrConfig(userIrrigationSettings.data);
         setSuccess("Configuração cadastrada com sucesso!");
         setTimeout(() => {
           setSuccess("");
         }, 3000);
+        setName("");
+        setHumidityValue("");
+        onClose();
       } catch (error) {
         // setError(error.response.data.message);
         // setTimeout(() => {

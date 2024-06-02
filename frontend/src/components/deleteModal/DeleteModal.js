@@ -28,7 +28,10 @@ const DeleteModal = ({ visible, onClose, onClick, texto }) => {
               title="Excluir"
               buttonHeight={35}
               fontSize={15}
-              onPress={onClick}
+              onPress={() => {
+                onClick();
+                onClose();
+              }}
             />
           </View>
         </View>

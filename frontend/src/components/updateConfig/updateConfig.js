@@ -1,11 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { styles } from "./styles";
 import { Modal, View, Text } from "react-native";
 import Button from "../button/Button";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import InputDark from "../inputDark/InputDark";
+import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
+import { createAxiosInstance } from "../../services/api";
 
-const updateConfigModal = ({ visible, onClose, texto }) => {
+const updateConfigModal = ({ visible, onClose, texto, nome, umidade }) => {
+  const api = createAxiosInstance();
+  const { selectedIrrigationConfig, setIrrConfig } = useIrrigationSettings();
+  const [name, setName] = useState(nome);
+  const [Umidade, setUmidade] = useState(umidade);
+
+  const data = {
+    name: name,
+    humidityValue: Umidade
+  }
+  
+  const handleUpdateConfig = async () => {
+    try{
+      const response = await api.patch(`/setting/${selectedIrrigationConfig.id}`, data);
+      console.log(response.data);
+      const IrrigationConfigUpdated = await api.get("/userSettings");
+      setIrrConfig(IrrigationConfigUpdated.data);
+      onClose();
+    }catch(error){
+      console.log(error);
+    }
+  }
+
   return (
     <Modal
       visible={visible}
@@ -22,16 +46,19 @@ const updateConfigModal = ({ visible, onClose, texto }) => {
             color={"#40513B"}
             onPress={onClose}
           />
+          {selectedIrrigationConfig &&(
           <View style={styles.input_container}>
-            <InputDark label="Nome" placeHolder="Ex: Configuração #001" />
-            <InputDark label="Nível de Umidade" placeHolder="Ex: 45" />
-            <InputDark label="Nível de Água" placeHolder="Ex: 50" />
+              <InputDark label="Nome" value= {name} onChangeText={(text) => setName(text)} />
+              <InputDark label="Nível de Umidade" value = {Umidade} onChangeText={(text) => setUmidade(text)} />
           </View>
+          )}
+          
           <View style={styles.buttonContainer}>
             <Button
               title="Alterar configuração"
               buttonHeight={36.6}
               fontSize={17}
+              onPress={() => handleUpdateConfig()}
             />
           </View>
           <View style={styles.alert_container}>
