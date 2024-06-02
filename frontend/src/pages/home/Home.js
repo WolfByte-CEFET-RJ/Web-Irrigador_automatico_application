@@ -13,8 +13,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useGarden } from "../../contexts/GardenContext";
 import { createAxiosInstance } from "../../services/api";
 
-const API_URL = "http://localhost:3001";
-
 export default function Home() {
   const api = createAxiosInstance();
   const navigation = useNavigation();
@@ -26,10 +24,8 @@ export default function Home() {
   useEffect(() => {
     async function fetchHortas() {
       try {
-        console.log("entrou no fetch");
         const response = await api.get(`/myGardens`);
         setGarden(response.data);
-        console.log(gardenData);
       } catch (error) {
         console.error("Erro ao buscar hortas:", error);
       }
@@ -49,9 +45,6 @@ export default function Home() {
     fetchUsuario();
   }, [name]);
 
-  useEffect(() => {
-    console.log(gardenData.length);
-  }, []);
 
   const filtrarHortas = () => {
     return gardenData.filter((garden) =>

@@ -45,7 +45,6 @@ export default function App() {
     "Montserrat-Bold": require("./assets/fonts/Montserrat-Bold.ttf"),
   });
 
-  console.log(fontsLoaded);
   useEffect(() => {
     const fetchData = async () => {
       // Aguarda 3 s

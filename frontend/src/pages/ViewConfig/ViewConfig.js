@@ -38,11 +38,8 @@ const ViewConfig = () => {
   useEffect(() => {
     async function fetchConfig() {
       try {
-        console.log("entrou no fetchConfig");
         const userIrrigationSettings = await api.get(`/userSettings`);
         setIrrConfig(userIrrigationSettings.data);
-        console.log(irrigationConfig);
-
       } catch (error) {
         console.error("Erro ao buscar configuração", error);
       }
@@ -74,7 +71,6 @@ const ViewConfig = () => {
   const handleConfigDelete = async (id) => {
     try{
       const response = await api.delete(`/setting/${id}`);
-      console.log(response);
       const userIrrigationSettings = await api.get(`/userSettings`);
       setIrrConfig(userIrrigationSettings.data);
     }catch(error){

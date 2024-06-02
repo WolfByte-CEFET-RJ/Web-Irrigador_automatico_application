@@ -38,6 +38,7 @@ const LogIn = () => {
         const response = await api.post("/login", data);
         const token = response.data.token;
         signIn(token);
+        
         navigation.navigate("Home");
       } catch (error) {
         //* Verifica o erro e printa na tela para o usuário

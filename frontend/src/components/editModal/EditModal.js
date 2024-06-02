@@ -31,10 +31,8 @@ const EditModal = ({ visible, onClose }) => {
       const attGarden = await api.get(`/myGardens`);
       setGarden(attGarden.data);
       
-      console.log(updatedHorta);
       //dá update só no selected garden
       //tarefa: substituir o selectedGarden?
-      console.log(response);
     } catch (error) {
       console.error("Erro ao salvar alterações:", error);
     }

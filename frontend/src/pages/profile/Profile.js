@@ -94,8 +94,6 @@ export default function Profile() {
         const response = await api.get("/user");
         setUserName(response.data.name);
         setIrrigationNotification(response.data.humidityNotification);
-        // handleUserNameSave(response.data.name);
-        // console.log(userName);
       } catch (error) {
         console.error("Erro na solicitação:", error);
       }

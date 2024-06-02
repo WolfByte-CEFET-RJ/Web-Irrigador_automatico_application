@@ -67,11 +67,6 @@ export default function SignUp() {
         }, 3000);
         setTimeout(() => navigation.navigate("SignIn"), 2200); //retorna à tela de início após cadastro
       } catch (error) {
-        //caso ocorra um erro na solicitação
-        //mensagem de erro -> usuário já cadastrado
-        // Alert.alert('Erro', 'Usuário já cadastrado');
-        // console.log(error, 'Usuário já cadastrado');
-        console.log(data);
         setError(error.response.data.message);
         setTimeout(() => {
           setError("");

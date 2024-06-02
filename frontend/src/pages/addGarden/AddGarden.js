@@ -60,7 +60,6 @@ const AddGarden = () => {
         const attGarden = await api.get(`/myGardens`);
         setGarden(attGarden.data);
         
-        console.log(response.data);
         setSucess("Horta cadastrada com sucesso!");
         setTimeout(() => {
           setSucess("");

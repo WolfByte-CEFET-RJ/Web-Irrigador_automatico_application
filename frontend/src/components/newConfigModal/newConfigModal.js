@@ -32,24 +32,14 @@ const newConfigModal = ({ visible, onClose, texto }) => {
       // }, 3000);
     } else {
       try {
-        console.log("entrou post");
         const response = await api.post("/setting", data);
-        console.log(response.data);
-        console.log("passou post");
         const userIrrigationSettings = await api.get(`/userSettings`);
         setIrrConfig(userIrrigationSettings.data);
-        setSuccess("Configuração cadastrada com sucesso!");
-        setTimeout(() => {
-          setSuccess("");
-        }, 3000);
         setName("");
         setHumidityValue("");
         onClose();
       } catch (error) {
-        // setError(error.response.data.message);
-        // setTimeout(() => {
-        //   setError("");
-        // }, 3000);
+        console.log(error);
       }
     }
   }

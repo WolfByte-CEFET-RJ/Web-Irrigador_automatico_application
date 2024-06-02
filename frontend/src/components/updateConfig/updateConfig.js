@@ -21,7 +21,6 @@ const updateConfigModal = ({ visible, onClose, texto, nome, umidade }) => {
   const handleUpdateConfig = async () => {
     try{
       const response = await api.patch(`/setting/${selectedIrrigationConfig.id}`, data);
-      console.log(response.data);
       const IrrigationConfigUpdated = await api.get("/userSettings");
       setIrrConfig(IrrigationConfigUpdated.data);
       onClose();
