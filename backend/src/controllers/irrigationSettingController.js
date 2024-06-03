@@ -58,11 +58,11 @@ module.exports = {
     },
     async deleteIrrigationSetting(req, res) {
         const userId = req.user_id;
-        const {settingId} = req.params;
+        const { id } = req.params;
 
         try {
           
-            const setting = await irrigationSettingService.deleteIrrigationSetting(settingId, userId);
+            const setting = await irrigationSettingService.deleteIrrigationSetting(id, userId);
             if(setting){
                 res.json({message: 'Config deletada com sucesso!'})
             }

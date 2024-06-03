@@ -12,6 +12,11 @@ const MY_GARDENS_PATH = require("./paths/myGardenPath");
 const GARDEN_PATH = require("./paths/gardenPaths");
 const MEASURES_GARDENS_PATH = require("./paths/measuresGardensPath.js");
 const MEASURES_GARDEN_PATH = require("./paths/measuresGardenPath.js");
+const CREATE_SETTING_PATH = require("./paths/createSettingPath.js");
+const GET_USERS_SETTING_PATH = require("./paths/getUserSettingPath.js");
+const SETTING_PATH = require("./paths/settingPath.js");
+const HISTORY_PATH = require("./paths/historyPath.js");
+const HISTORY_SEARCH_PATH = require("./paths/historySearchPath.js");
 
 /**
  * Lidando com o swagger document como um object para aplicar mais modularização
@@ -72,7 +77,14 @@ const openApiDocument = {
       "/garden/{id}": GARDEN_PATH ,  //get, delete, and patch
       "/myGardens": MY_GARDENS_PATH,
       "/measures/garden/{id}": MEASURES_GARDEN_PATH,
-      "/measures/garden": MEASURES_GARDENS_PATH
+      "/measures/garden": MEASURES_GARDENS_PATH,
+
+      "/setting": CREATE_SETTING_PATH,         //post only
+      "/userSettings": GET_USERS_SETTING_PATH, 
+      "/setting/{id}": SETTING_PATH,            //get, delete and patch
+      
+      "/history": HISTORY_PATH,
+      "/history/busca": HISTORY_SEARCH_PATH
     },
     components: {
       schemas: SCHEMAS,
