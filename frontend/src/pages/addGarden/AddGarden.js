@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   ScrollView,
@@ -18,6 +18,9 @@ import ErrorComponent from "../../components/Error/ErrorComponent";
 import { createAxiosInstance } from "../../services/api";
 import SucessComponent from "../../components/success/SuccessComponent";
 import { useGarden } from "../../contexts/GardenContext";
+import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
+import { SelectList } from "react-native-dropdown-select-list";
+
 
 const AddGarden = () => {
   const dismissKeyboard = () => {
@@ -33,16 +36,22 @@ const AddGarden = () => {
   const [error, setError] = useState("");
   const [sucess, setSucess] = useState("");
 
+  const { irrigationConfig } = useIrrigationSettings();
   const { setGarden, gardenData, setSelectedGarden } = useGarden();
+
+  const configDataArray = irrigationConfig.map((irr, index) => ({
+    key: irr.id,
+    value: irr.name
+  }))
   
   const handleSubmit = async () => {
     const data = {
       name,
       description,
       identifier,
-      irrigationId: 1,
-      // userId: 3,
+      irrigationId
     };
+
 
     if (name === "" || description === "" || identifier === "") {
       setError("Preencha todos os campos");
@@ -56,6 +65,7 @@ const AddGarden = () => {
       }, 3000);
     } else {
       try {
+        console.log(data);
         const response = await api.post("/garden", data);
         const attGarden = await api.get(`/myGardens`);
         setGarden(attGarden.data);
@@ -95,18 +105,20 @@ const AddGarden = () => {
             <InputDark
               label="Descrição"
               placeHolder="solo fértil, fileiras organizadas, irrigação suave, luz solar adequada..."
+              value={description}
               onChangeText={(text) => setDescription(text)}
             />
             <InputDark
-              label="Identificador"
-              placeHolder="001"
-              onChangeText={(text) => setIdentifier(text)}
+            label="Identificador"
+            placeHolder="001"
+            onChangeText={(text) => setIdentifier(text)}
             />
+            <SafeAreaView style={styles.subtitle_container}>
+              <Text style={styles.subtitle}>Configuração de irrigação</Text>
+            </SafeAreaView>
+            <InputDark placeHolder="default" editable={false} />
+            {/* <Text style={styles.label}>Configuração de irrigação</Text> */}
           </SafeAreaView>
-          <SafeAreaView style={styles.subtitle_container}>
-            <Text style={styles.subtitle}>Configuração de irrigação</Text>
-          </SafeAreaView>
-          <InputDark placeHolder="default" editable={false} />
           <SafeAreaView style={styles.btndiv}>
             <Button title="Adicionar horta" onPress={() => handleSubmit()} />
           </SafeAreaView>

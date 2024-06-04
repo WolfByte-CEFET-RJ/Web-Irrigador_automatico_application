@@ -12,6 +12,7 @@ import Button from "../../components/button/Button";
 import { useAuth } from "../../contexts/AuthContext";
 import { useGarden } from "../../contexts/GardenContext";
 import { createAxiosInstance } from "../../services/api";
+import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
 
 export default function Home() {
   const api = createAxiosInstance();
@@ -20,12 +21,15 @@ export default function Home() {
   const { setGarden, gardenData, setSelectedGarden } = useGarden();
   const { token } = useAuth();
   const [name, setName] = useState("");
+  const { setIrrConfig } = useIrrigationSettings();
 
   useEffect(() => {
     async function fetchHortas() {
       try {
         const response = await api.get(`/myGardens`);
         setGarden(response.data);
+        const userIrrigationSettings = await api.get(`/userSettings`);
+        setIrrConfig(userIrrigationSettings.data);
       } catch (error) {
         console.error("Erro ao buscar hortas:", error);
       }

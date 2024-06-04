@@ -7,9 +7,9 @@ import InputDark from "../inputDark/InputDark";
 import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
 import { createAxiosInstance } from "../../services/api";
 
-const updateConfigModal = ({ visible, onClose, texto, nome, umidade }) => {
+const updateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
   const api = createAxiosInstance();
-  const { selectedIrrigationConfig, setIrrConfig } = useIrrigationSettings();
+  const {setIrrConfig } = useIrrigationSettings();
   const [name, setName] = useState(nome);
   const [Umidade, setUmidade] = useState(umidade);
 
@@ -20,7 +20,7 @@ const updateConfigModal = ({ visible, onClose, texto, nome, umidade }) => {
   
   const handleUpdateConfig = async () => {
     try{
-      const response = await api.patch(`/setting/${selectedIrrigationConfig.id}`, data);
+      const response = await api.patch(`/setting/${id}`, data);
       const IrrigationConfigUpdated = await api.get("/userSettings");
       setIrrConfig(IrrigationConfigUpdated.data);
       onClose();
@@ -45,12 +45,11 @@ const updateConfigModal = ({ visible, onClose, texto, nome, umidade }) => {
             color={"#40513B"}
             onPress={onClose}
           />
-          {selectedIrrigationConfig &&(
+        
           <View style={styles.input_container}>
               <InputDark label="Nome" value= {name} onChangeText={(text) => setName(text)} />
               <InputDark label="Nível de Umidade" value = {Umidade} onChangeText={(text) => setUmidade(text)} />
           </View>
-          )}
           
           <View style={styles.buttonContainer}>
             <Button

@@ -29,7 +29,7 @@ const ViewConfig = () => {
 
 
   const api = createAxiosInstance();
-  const { irrigationConfig, setIrrConfig, setSelectedIrrigationConfig} = useIrrigationSettings();
+  const { irrigationConfig, setIrrConfig} = useIrrigationSettings();
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -49,7 +49,7 @@ const ViewConfig = () => {
 
   const [isModalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [isModalConfigVisible, setModalConfigVisible] = useState(false);
-  const [isModalUpdateVisible, setModalUpdateVisible] = useState(false);
+  const [modalUpdateVisible, setModalUpdateVisible] = useState({});
 
 
   const handleButtonDeletePress = () => {
@@ -65,7 +65,11 @@ const ViewConfig = () => {
   };
 
   const handleUpdateConfigPress = (id) => {
-    setModalUpdateVisible(true);
+    setModalUpdateVisible(prevState => ({ ...prevState, [id]: true }));
+  };
+
+  const handleCloseUpdateModal = (id) => {
+    setModalUpdateVisible(prevState => ({ ...prevState, [id]: false }));
   };
 
   const handleConfigDelete = async (id) => {
@@ -128,22 +132,21 @@ const ViewConfig = () => {
         {irrigationConfig ? (
           irrigationConfig.slice(1).map((config) => (
             <Pressable 
-            style={styles.configuracao} 
-            key={config.id} 
-            onPress={() => {
-              setSelectedIrrigationConfig(config);
-              handleUpdateConfigPress();
-            }}>
+  style={styles.configuracao} 
+  key={config.id} 
+  onPress={() => handleUpdateConfigPress(config.id)}
+>
               <Text style={styles.config_name}> {config.name} </Text>
               <View style={styles.config_stats_container}>
-                {/* <Text style={styles.config_stats}> Umidade: <Text style={styles.config_number}> {config.humidityValue} </Text> </Text> */}
+                <Text style={styles.config_stats}> Umidade: <Text style={styles.config_number}> {config.Umidade}% </Text> </Text>
               </View>
               <UpdateConfigModal
-                visible={isModalUpdateVisible}
-                onClose={() => setModalUpdateVisible(false)}
-                nome={config.name}
-                umidade={config.Umidade}
-              />
+    visible={modalUpdateVisible[config.id] || false}
+    onClose={() => handleCloseUpdateModal(config.id)}
+    id={config.id}
+    nome={config.name}
+    umidade={config.Umidade}
+  />
               <Ionicons
                 style={styles.iconConfig}
                 name={'close-circle'}
@@ -154,8 +157,6 @@ const ViewConfig = () => {
               <DeleteModal
                 visible={isModalDeleteVisible}
                 onClose={() => setModalDeleteVisible(false)}
-                // onDelete={() => handleDelete(garden.id)}
-                // hortaToDelete={garden.id}
                 onClick={() => handleConfigDelete(config.id)}
                 texto={"Deseja mesmo excluir esta configuração?"}
                 />        

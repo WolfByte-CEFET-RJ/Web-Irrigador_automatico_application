@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   },
   modalContent: {
     width: "90%",
-    height: 393,
+    height: "50%",
     display: "flex",
     flexDirection: "column",
     backgroundColor: "#EDF1D6",
@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
     fontFamily: "Montserrat-Bold",
   },
   informationConfiguration: {
-    display: "flex",
+    // display: "flex",
     alignItems: "center",
   },
   labelConfiguracao: {
@@ -85,4 +85,32 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
+  selectContainer:{
+    display: "flex",
+    width: "100%",
+    height: "40px",
+    // margin: "auto",
+    // marginRight:30,
+    // marginLeft:30,
+    color: "#40513B",
+    borderColor: "#609966",
+    borderWidth: 0,
+    fontWeight: "bold",
+    fontFamily: "Montserrat-Bold",
+    backgroundColor: "#D8E4C2",
+  },
+  dropdownBox:{
+    display: "flex",
+    width: "100%",
+    height: "70px",
+    // margin: "auto",
+    // marginRight:30,
+    // marginLeft:30,
+    color: "rgba(64,81,59,0.6)",
+    borderColor: "#609966",
+    borderWidth: 0,
+    fontWeight: "bold",
+    fontFamily: "Montserrat-Bold",
+    backgroundColor: "#D8E4C2",
+  }
 });

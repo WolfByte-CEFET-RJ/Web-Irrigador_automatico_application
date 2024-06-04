@@ -5,6 +5,14 @@ export const styles = StyleSheet.create({
     backgroundColor: "#EDF1D6",
     height: "100%",
   },
+  label: {
+    margin: "auto",
+    fontSize: 12,
+    marginBottom: 8,
+    color: "#40513B",
+    fontWeight: "bold",
+    fontFamily: "Montserrat-Bold",
+  },
   home_title_container: {
     width: "100%",
     display: "flex",
@@ -57,4 +65,5 @@ export const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
   },
+  
 });

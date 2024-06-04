@@ -21,27 +21,31 @@ import { createAxiosInstance } from "../../services/api";
 
 const ViewGarden = () => {
   const { selectedGarden } = useGarden();
+  const [irrigationName, setIrrigationName] = useState("Default");
   const api = createAxiosInstance();
 
   //fetch para pegar a umidade da horta
   useEffect(() => {
-    async function fetchUmidade() {
-      var measuresGarden = await api.get(`/measures/garden/${selectedGarden.id}`);
-      console.log(measuresGarden);
+    async function fetchNameIrrigation() {
+      console.log(selectedGarden);
+      // var measuresGarden = await api.get(`/measures/garden/${selectedGarden.id}`);
+      
+      const response = await api.get(`/setting/${selectedGarden.irrigationId}`);
+      setIrrigationName(response.data.name);
     }
-    fetchUmidade();
-  }, [])
+    fetchNameIrrigation();
+  }, [selectedGarden.irrigationId]);
 
   //variaveis que mexem no grafico da horta
-  const porcentagemUmidade = 30;
+  const porcentagemUmidade = 50;
 
   const navigation = useNavigation();
 
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const handleDeleteIconPress = () => {
-    setModalVisible(true);
-  };
+  // const handleDeleteIconPress = () => {
+  //   setModalVisible(true);
+  // };
 
 
   return (
@@ -65,7 +69,7 @@ const ViewGarden = () => {
           </Text>
         </SafeAreaView>
         <Text style={styles.config_Text}>
-          Configuração: <b>{selectedGarden.irrigationId}</b>
+          Configuração: <b>{irrigationName}</b>
         </Text>
 
         <SafeAreaView style={styles.view_bars}>

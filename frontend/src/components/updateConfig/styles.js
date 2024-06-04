@@ -40,6 +40,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   alert_text: {
-    fontSize: 10,
+    fontSize: 15,
+    margin:"auto",
   },
 });
