@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const irrgationHistoryController = require("../controllers/irrigationHistoryController");
+const irrigationHistoryController = require("../controllers/irrigationHistoryController");
 const auth = require("../middleware/auth");
 
 router
-      .get("/history", auth, irrgationHistoryController.getAllUserGardensHistory)
-      .get("/history/busca", auth, irrgationHistoryController.getOneGardenHistory)
+      .get("/history", auth, irrigationHistoryController.getAllUserGardensHistory)
+      .get("/history/busca", auth, irrigationHistoryController.getOneGardenHistory)
 
 
 

@@ -16,6 +16,8 @@ module.exports = {
         const { name } = req.query;
         const userId = req.user_id;
 
+        if (!name) return res.status(400).json({ message: "O nome da horta é necessário!" });
+        
         try{
             const gardenHistory = await irrigationHistoryService.getOneGardenHistory(userId, name);
             return res.status(200).json(gardenHistory);
