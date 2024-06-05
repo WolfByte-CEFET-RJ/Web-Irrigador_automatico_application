@@ -67,7 +67,7 @@ module.exports = {
         const { email } = req.body;
 
         try {
-            const response = await userService.fogotPassword(email);
+            const response = await userService.forgotPassword(email);
             return res.status(200).json({message: response});
             
         } catch (error) {
