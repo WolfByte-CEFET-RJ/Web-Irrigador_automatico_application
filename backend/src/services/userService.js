@@ -143,6 +143,11 @@ module.exports = {
       }
 
       await passwordSchema.validate(password)
+
+      if (!user.code) {
+        	throw new Error('Código de verificação inválido ou já usado!');
+    	}
+			
       const salt = await bcrypt.genSalt();
       const hash = await bcrypt.hash(password, salt);
       

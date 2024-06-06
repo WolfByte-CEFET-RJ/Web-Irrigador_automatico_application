@@ -98,6 +98,7 @@ module.exports = {
             }
             const resetToken = req.headers['x-reset-token'];
             const { password, confirmPassword } = req.body;
+
             try {
                 const decodedToken = jwt.verify(resetToken, process.env.TOKEN_KEY);
                 if (decodedToken.type !== 'reset') {
@@ -106,7 +107,7 @@ module.exports = {
                 
                 const { email } = decodedToken;
                 const response = await userService.resetPassword(email, password, confirmPassword);
-                
+
                 return res.status(200).json({ message: response });
             } catch (error) {
                 return res.status(400).json({ message: error.message });
