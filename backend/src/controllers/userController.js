@@ -84,22 +84,35 @@ module.exports = {
                 return res.status(400).json({message: 'Código inválido!'});
             }
 
-            const token = jwt.sign({ email }, process.env.TOKEN_KEY, { expiresIn: '1h' });
+            const resetToken = jwt.sign({ email, type: 'reset' }, process.env.TOKEN_KEY, { expiresIn: '15m' });
             
-            return res.status(200).json({ token });
+            return res.status(200).json({ resetToken });
         } catch (error) {
             return res.status(500).json({message: error.message});
         }
     },
     async resetPassword(req, res) {
-        const token = req.token;
-        const { password, confirmPassword } = req.body;
         try {
-            const { email } = jwt.verify(token, process.env.TOKEN_KEY);
-            const response = await userService.resetPassword(email, password, confirmPassword);
-            return res.status(200).json({message: response});
+            if (!req.headers['x-reset-token']) {
+                return res.status(400).json({ message: 'Token não encontrado nos cabeçalhos da requisição' });
+            }
+            const resetToken = req.headers['x-reset-token'];
+            const { password, confirmPassword } = req.body;
+            try {
+                const decodedToken = jwt.verify(resetToken, process.env.TOKEN_KEY);
+                if (decodedToken.type !== 'reset') {
+                    throw new Error('Token inválido para redefinição de senha');
+                }
+                
+                const { email } = decodedToken;
+                const response = await userService.resetPassword(email, password, confirmPassword);
+                
+                return res.status(200).json({ message: response });
+            } catch (error) {
+                return res.status(400).json({ message: error.message });
+            }
         } catch (error) {
-            return res.status(400).json({message: error.message});
+            return res.status(400).json({ message: error.message });
         }
     }
 };

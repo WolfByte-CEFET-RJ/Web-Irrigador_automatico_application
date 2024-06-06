@@ -94,7 +94,7 @@ module.exports = {
     },
 
     async forgotPassword(email) {
-      const user = await knex('user').select('*').where({email}).first();
+      const user = await knex('user').select('*').where({ email }).first();
       if (!user){
           throw new Error('Este usuário não existe!')
       }
@@ -102,7 +102,7 @@ module.exports = {
       const code = Math.round(Math.random() * 9999);
       const expirationDate = moment().add(1, 'hour').format('YYYY-MM-DD HH:mm:ss');
       
-      await knex('user').where({email}).update({code, expirationDate});
+      await knex('user').where({email}).update({ code, expirationDate });
   
       // chamar a função que enviará o código para o email
       await sendEmail(email, code);
@@ -112,7 +112,7 @@ module.exports = {
     },
 
     async verifyCode(email, code) {
-      const user = await knex('user').select('*').where({email}).first();
+      const user = await knex('user').select('*').where({ email }).first();
       
       if (!user) {
           throw new Error('Este usuário não existe!')
@@ -123,7 +123,7 @@ module.exports = {
 
       const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
       if (moment(currentDateTime).isAfter(user.expirationDate)) {
-          await knex('user').where({email}).update({code: null, expirationDate: null});
+          await knex('user').where({email}).update({ code: null, expirationDate: null });
           throw new Error('Código expirado! Por favor, solicite um novo código!');
       }
       
