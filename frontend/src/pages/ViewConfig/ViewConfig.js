@@ -132,21 +132,21 @@ const ViewConfig = () => {
         {irrigationConfig ? (
           irrigationConfig.slice(1).map((config) => (
             <Pressable 
-  style={styles.configuracao} 
-  key={config.id} 
-  onPress={() => handleUpdateConfigPress(config.id)}
->
+              style={styles.configuracao} 
+              key={config.id} 
+              onPress={() => handleUpdateConfigPress(config.id)}
+            >
               <Text style={styles.config_name}> {config.name} </Text>
               <View style={styles.config_stats_container}>
                 <Text style={styles.config_stats}> Umidade: <Text style={styles.config_number}> {config.Umidade}% </Text> </Text>
               </View>
               <UpdateConfigModal
-    visible={modalUpdateVisible[config.id] || false}
-    onClose={() => handleCloseUpdateModal(config.id)}
-    id={config.id}
-    nome={config.name}
-    umidade={config.Umidade}
-  />
+                visible={modalUpdateVisible[config.id] || false}
+                onClose={() => handleCloseUpdateModal(config.id)}
+                id={config.id}
+                nome={config.name}
+                umidade={config.Umidade}
+              />
               <Ionicons
                 style={styles.iconConfig}
                 name={'close-circle'}

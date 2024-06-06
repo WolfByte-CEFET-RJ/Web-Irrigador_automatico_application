@@ -7,17 +7,17 @@ import { useGarden } from "../../contexts/GardenContext";
 import { createAxiosInstance } from "../../services/api";
 import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
 import { SelectList } from "react-native-dropdown-select-list";
+import { Rect } from "react-native-svg";
 
 const EditModal = ({ visible, onClose }) => {
   const { selectedGarden, setSelectedGarden, setGarden, gardenData } = useGarden();
+  const { irrigationConfig, setIrrConfig } = useIrrigationSettings();
 
   const [newName, setNewName] = useState(selectedGarden.name);
   const [newDescription, setNewDescription] = useState(selectedGarden.description);
   const [newIrrigationId, setNewIrrigationId] = useState(irrigationConfig.irrigationId);
   const api = createAxiosInstance();
 
-  
-  const { irrigationConfig, setIrrConfig } = useIrrigationSettings();
  
 
   const configDataArray = irrigationConfig.map((irr, index) => ({
@@ -109,6 +109,7 @@ const EditModal = ({ visible, onClose }) => {
               dropdownTextStyles={{color:"rgba(64,81,59,0.6)"}}
             />
             </View>
+            
             <View style={styles.buttonContainer}>
               <ButtonOrange
                 title="Salvar alterações"

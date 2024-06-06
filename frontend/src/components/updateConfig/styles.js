@@ -43,4 +43,33 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     margin:"auto",
   },
+  
+  view_bars_status: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  view_horta_text: {
+    fontFamily: "Montserrat-Bold",
+    marginTop: 10,
+  },
+  svg: {
+    borderRadius: 40, // Defina o borderRadius desejado
+    backgroundColor: "#D8E4C2",
+  },
+  bar_icon: {
+    position: "absolute",
+    width: 30,
+    height: 30,
+    top: "5%",
+  },
+  info_graph: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  info_container: {
+    display: "flex",
+    flexDirection: "row",
+    marginLeft: -28,
+  },
 });

@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { styles } from "./styles";
-import { Modal, View, Text } from "react-native";
+import { Modal, View, Text, Image } from "react-native";
 import Button from "../button/Button";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import InputDark from "../inputDark/InputDark";
 import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
 import { createAxiosInstance } from "../../services/api";
+import { Rect, Svg } from "react-native-svg";
+import Ion_water from "./../../../assets/ion_water.png";
 
-const updateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
+const UpdateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
   const api = createAxiosInstance();
-  const {setIrrConfig } = useIrrigationSettings();
+  const { setIrrConfig } = useIrrigationSettings();
   const [name, setName] = useState(nome);
   const [Umidade, setUmidade] = useState(umidade);
 
@@ -19,12 +21,12 @@ const updateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
   }
   
   const handleUpdateConfig = async () => {
-    try{
+    try {
       const response = await api.patch(`/setting/${id}`, data);
       const IrrigationConfigUpdated = await api.get("/userSettings");
       setIrrConfig(IrrigationConfigUpdated.data);
       onClose();
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   }
@@ -48,15 +50,43 @@ const updateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
         
           <View style={styles.input_container}>
               <InputDark label="Nome" value= {name} onChangeText={(text) => setName(text)} />
+              
               <InputDark label="Nível de Umidade" value = {Umidade} onChangeText={(text) => setUmidade(text)} />
           </View>
-          
+          <View style={styles.view_bars_status}>
+              <View style={styles.info_container}>
+                <Text
+                  style={[
+                    styles.view_horta_text,
+                    { marginTop: 233.93 - Umidade * 2.33 - 20 },
+                  ]}
+                >
+                  {Umidade}%
+                </Text>
+                <View style={styles.info_graph}>
+                  <Image
+                    source={Ion_water}
+                    style={styles.bar_icon}
+                  />
+                  <Svg height="233.93" width="65.15" style={styles.svg}>
+                    <Rect
+                      x="0"
+                      y={233.93 - Umidade * 2.33}
+                      width="65.15"
+                      height={Umidade * 2.33}
+                      fill="#609966"
+                    />
+                  </Svg>
+                  <Text style={styles.view_horta_text}>Umidade</Text>
+                </View>
+              </View>
+            </View>
           <View style={styles.buttonContainer}>
             <Button
               title="Alterar configuração"
               buttonHeight={36.6}
               fontSize={17}
-              onPress={() => handleUpdateConfig()}
+              onPress={handleUpdateConfig}
             />
           </View>
           <View style={styles.alert_container}>
@@ -79,4 +109,4 @@ const updateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
   );
 };
 
-export default updateConfigModal;
+export default UpdateConfigModal;
