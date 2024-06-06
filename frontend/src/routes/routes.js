@@ -7,6 +7,7 @@ import AddGarden from "../pages/addGarden/AddGarden";
 import ViewGarden from "../pages/viewGarden/ViewGarden";
 import Profile from "../pages/profile/Profile";
 import ViewConfig from "../pages/ViewConfig/ViewConfig";
+import irrigationHistory from "../pages/irrigationHistory/irrigationHistory";
 
 const Stack = createStackNavigator();
 const Navigation = () => {
@@ -23,6 +24,7 @@ const Navigation = () => {
         <Stack.Screen name="ViewGarden" component={ViewGarden} />
         <Stack.Screen name="ViewConfig" component={ViewConfig} />
         <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="IrrigationHistory" component={irrigationHistory}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

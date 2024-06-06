@@ -39,12 +39,14 @@ export default function BottomBar() {
           color={isHomeScreen ? "#40513B" : "#609966"}
         />
       </Pressable>
+      <Pressable onPress={() => navigation.navigate("IrrigationHistory")}>
       <Ionicons
         style={styles.iconCadastro}
         name={"rainy"}
         size={24}
         color={"#609966"}
       />
+      </Pressable>
       <Pressable onPress={() => navigation.navigate("Profile")}>
         <Ionicons
           style={styles.iconCadastro}
