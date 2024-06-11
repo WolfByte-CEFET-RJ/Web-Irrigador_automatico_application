@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/userController');
 const auth = require('../middleware/auth');
+const verifyResetToken = require('../middleware/verifyResetToken');
 const userController = require('../controllers/userController');
 
 router
@@ -15,7 +16,7 @@ router
 
       .post('/verify_code/:email', UserController.verifyCodeAndGenerateToken)
 
-      .post('/reset_password', UserController.resetPassword)
+      .post('/reset_password', verifyResetToken, UserController.resetPassword)
 
       .patch('/user/',auth, UserController.updateUser)
 

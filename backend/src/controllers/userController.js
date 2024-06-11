@@ -92,26 +92,12 @@ module.exports = {
         }
     },
     async resetPassword(req, res) {
+        const { password, confirmPassword } = req.body;
+        const email = req.email;
+
         try {
-            if (!req.headers['x-reset-token']) {
-                return res.status(400).json({ message: 'Token não encontrado nos cabeçalhos da requisição' });
-            }
-            const resetToken = req.headers['x-reset-token'];
-            const { password, confirmPassword } = req.body;
-
-            try {
-                const decodedToken = jwt.verify(resetToken, process.env.TOKEN_KEY);
-                if (decodedToken.type !== 'reset') {
-                    throw new Error('Token inválido para redefinição de senha');
-                }
-                
-                const { email } = decodedToken;
-                const response = await userService.resetPassword(email, password, confirmPassword);
-
-                return res.status(200).json({ message: response });
-            } catch (error) {
-                return res.status(400).json({ message: error.message });
-            }
+            const response = await userService.resetPassword(email, password, confirmPassword);
+            return res.status(200).json({ message: response });
         } catch (error) {
             return res.status(400).json({ message: error.message });
         }
