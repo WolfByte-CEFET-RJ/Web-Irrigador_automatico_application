@@ -22,7 +22,6 @@ const UpdateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
   
   const handleUpdateConfig = async () => {
     const data2 = {
-      name,
       humidityValue: Umidade
     }
     try {
