@@ -23,21 +23,22 @@ const ViewGarden = () => {
   const { selectedGarden } = useGarden();
   const [irrigationName, setIrrigationName] = useState("Default");
   const api = createAxiosInstance();
+  console.log(selectedGarden);
 
   //fetch para pegar a umidade da horta
   useEffect(() => {
-    async function fetchNameIrrigation() {
-      console.log(selectedGarden);
+    async function fetchIrrigationName() {
+
       // var measuresGarden = await api.get(`/measures/garden/${selectedGarden.id}`);
       
       const response = await api.get(`/setting/${selectedGarden.irrigationId}`);
       setIrrigationName(response.data.name);
     }
-    fetchNameIrrigation();
-  }, [selectedGarden.irrigationId]);
+    fetchIrrigationName();
+  }, [selectedGarden]);
 
   //variaveis que mexem no grafico da horta
-  const porcentagemUmidade = 50;
+  const porcentagemUmidade = selectedGarden.lastMeasures ? selectedGarden.lastMeasures[0].measurement : 0;
 
   const navigation = useNavigation();
 

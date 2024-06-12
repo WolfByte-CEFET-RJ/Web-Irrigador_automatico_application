@@ -3,13 +3,9 @@ import { View, Text, Image, Pressable, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { styles } from "./styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import axios from "axios";
 import BottomBar from "../../components/bottomBar/BottomBar";
 import DeleteModal from "../../components/deleteModal/DeleteModal";
 import { StatusBar } from "expo-status-bar";
-import EditModal from "../../components/editModal/EditModal";
-import Button from "../../components/button/Button";
-import { useAuth } from "../../contexts/AuthContext";
 import { useGarden } from "../../contexts/GardenContext";
 import { createAxiosInstance } from "../../services/api";
 import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
@@ -18,8 +14,7 @@ export default function Home() {
   const api = createAxiosInstance();
   const navigation = useNavigation();
   const [buscarHorta, setBuscarHorta] = useState("");
-  const { setGarden, gardenData, setSelectedGarden } = useGarden();
-  const { token } = useAuth();
+  const { setGarden, gardenData, setSelectedGardenFunction } = useGarden();
   const [name, setName] = useState("");
   const { setIrrConfig } = useIrrigationSettings();
 
@@ -27,9 +22,13 @@ export default function Home() {
     async function fetchHortas() {
       try {
         const response = await api.get(`/myGardens`);
-        setGarden(response.data);
+        const gardens = response.data;
+        setGarden(gardens);
+        console.log(gardens);
+
         const userIrrigationSettings = await api.get(`/userSettings`);
         setIrrConfig(userIrrigationSettings.data);
+        
       } catch (error) {
         console.error("Erro ao buscar hortas:", error);
       }
@@ -104,8 +103,8 @@ export default function Home() {
             <Pressable
               key={garden.id}
               style={styles.horta}
-              onPress={() => {
-                setSelectedGarden(garden);
+              onPress={async () => {
+                await setSelectedGardenFunction(garden);
                 navigation.navigate("ViewGarden");
               }}
             >

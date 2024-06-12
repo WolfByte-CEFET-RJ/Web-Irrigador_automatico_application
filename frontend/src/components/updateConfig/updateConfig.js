@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { styles } from "./styles";
 import { Modal, View, Text, Image } from "react-native";
-import Button from "../button/Button";
+import ButtonOrange from "../buttonOrange/ButtonOrange";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import InputDark from "../inputDark/InputDark";
 import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
@@ -21,11 +21,24 @@ const UpdateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
   }
   
   const handleUpdateConfig = async () => {
+    const data2 = {
+      name,
+      humidityValue: Umidade
+    }
     try {
-      const response = await api.patch(`/setting/${id}`, data);
-      const IrrigationConfigUpdated = await api.get("/userSettings");
-      setIrrConfig(IrrigationConfigUpdated.data);
-      onClose();
+      if(name==nome){
+        const resp = await api.patch(`/setting/${id}`, data2);
+        const IrrigationConfigUpdated = await api.get("/userSettings");
+        setIrrConfig(IrrigationConfigUpdated.data);
+        onClose();
+      }
+      else{
+        const response = await api.patch(`/setting/${id}`, data);
+        const IrrigationConfigUpdated = await api.get("/userSettings");
+        setIrrConfig(IrrigationConfigUpdated.data);
+        onClose();
+
+      }
     } catch (error) {
       console.log(error);
     }
@@ -54,7 +67,7 @@ const UpdateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
               <InputDark label="Nível de Umidade" value = {Umidade} onChangeText={(text) => setUmidade(text)} />
           </View>
           <View style={styles.view_bars_status}>
-              <View style={styles.info_container}>
+              {/* <View style={styles.info_container}>
                 <Text
                   style={[
                     styles.view_horta_text,
@@ -79,11 +92,11 @@ const UpdateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
                   </Svg>
                   <Text style={styles.view_horta_text}>Umidade</Text>
                 </View>
-              </View>
+              </View> */}
             </View>
           <View style={styles.buttonContainer}>
-            <Button
-              title="Alterar configuração"
+            <ButtonOrange
+              title="Salvar Alterações"
               buttonHeight={36.6}
               fontSize={17}
               onPress={handleUpdateConfig}
@@ -99,7 +112,6 @@ const UpdateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
             <Text style={styles.alert_text}>
               A alteração ocorrerá brevemente após o envio dessas informações e
               acionada imediatamente caso a umidade estiver abaixo do
-              estabelecido e o nível de água no reservatório estiver acima do
               estabelecido.
             </Text>
           </View>

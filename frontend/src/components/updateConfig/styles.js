@@ -40,8 +40,8 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   alert_text: {
-    fontSize: 15,
-    margin:"auto",
+    fontSize: 14,
+    margin:3,
   },
   
   view_bars_status: {
