@@ -30,9 +30,10 @@ const ViewGarden = () => {
     async function fetchIrrigationName() {
 
       // var measuresGarden = await api.get(`/measures/garden/${selectedGarden.id}`);
-      
-      const response = await api.get(`/setting/${selectedGarden.irrigationId}`);
-      setIrrigationName(response.data.name);
+      if(selectedGarden.irrigationId !== 1){
+        const response = await api.get(`/setting/${selectedGarden.irrigationId}`);
+        setIrrigationName(response.data.name);
+      }
     }
     fetchIrrigationName();
   }, [selectedGarden]);

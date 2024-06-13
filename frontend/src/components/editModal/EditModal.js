@@ -10,7 +10,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { Rect } from "react-native-svg";
 
 const EditModal = ({ visible, onClose }) => {
-  const { selectedGarden, setSelectedGarden, setGarden, gardenData } = useGarden();
+  const { selectedGarden, setSelectedGardenFunction, setGarden } = useGarden();
   const { irrigationConfig, setIrrConfig } = useIrrigationSettings();
 
   const [newName, setNewName] = useState(selectedGarden.name);
@@ -38,12 +38,12 @@ const EditModal = ({ visible, onClose }) => {
       const response = await api.patch(`/garden/${id}`, updatedData);
       
       const updatedHorta = await api.get(`/garden/${id}`);
-      setSelectedGarden(updatedHorta.data);
+      setSelectedGardenFunction(updatedHorta.data);
 
       //atualiza todas as hortas no context
       const attGarden = await api.get(`/myGardens`);
       setGarden(attGarden.data);
-      
+      onClose(onClose);
       //dá update só no selected garden
       //tarefa: substituir o selectedGarden?
     } catch (error) {
@@ -90,24 +90,26 @@ const EditModal = ({ visible, onClose }) => {
             </View>
             <View style={styles.informationConfiguration}>
               <Text style={styles.label}>Configuração de irrigação</Text>
+            </View>
               {/* <TextInput
                 style={styles.inputConfiguracao}
                 value={newIrrigationId}
                 onChangeText={(text) => setNewIrrigationId(text)}
                 placeholder={selectedGarden.irrigationId}
               ></TextInput> */}
+            <View style={{height: "120px"}}>
               <SelectList 
-              boxStyles={styles.selectContainer}
-              dropdownStyles={styles.dropdownBox}
-              setSelected={setNewIrrigationId}
-              data={configDataArray}
-              save="key"
-              defaultOption={configDataArray[0]}
-              fontFamily="Montserrat-Bold"
-              // color="rgba(64,81,59,0.6)"
-              inputStyles={{color:"rgba(64,81,59,0.6)"}}
-              dropdownTextStyles={{color:"rgba(64,81,59,0.6)"}}
-            />
+                boxStyles={styles.selectContainer}
+                dropdownStyles={styles.dropdownBox}
+                setSelected={setNewIrrigationId}
+                data={configDataArray}
+                save="key"
+                defaultOption={configDataArray[0]}
+                fontFamily="Montserrat-Bold"
+                // color="rgba(64,81,59,0.6)"
+                inputStyles={{color:"rgba(64,81,59,0.6)"}}
+                dropdownTextStyles={{color:"rgba(64,81,59,0.6)"}}
+              />
             </View>
             
             <View style={styles.buttonContainer}>

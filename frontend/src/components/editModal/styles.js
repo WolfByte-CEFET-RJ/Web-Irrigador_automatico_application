@@ -2,14 +2,16 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   modalContainer: {
-    flex: 1,
+    display: "flex",
+    // flex: 1,
     justifyContent: "center",
+    height: "100%",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.3)",
   },
   modalContent: {
     width: "90%",
-    height: "50%",
+    height: "55%",
     display: "flex",
     flexDirection: "column",
     backgroundColor: "#EDF1D6",
@@ -25,6 +27,7 @@ export const styles = StyleSheet.create({
     // borderColor: 'red',
     // borderWidth: 2,
     width: "90%",
+    // height:"90%",
     marginTop: "10%",
     gap: 18,
   },
@@ -32,7 +35,7 @@ export const styles = StyleSheet.create({
     color: "#40513B",
     fontSize: 12,
     fontWeight: "bold",
-    marginBottom: 5,
+    marginBottom: 2,
     marginLeft: 10,
     fontFamily: "Montserrat-Bold",
   },
@@ -59,8 +62,9 @@ export const styles = StyleSheet.create({
     fontFamily: "Montserrat-Bold",
   },
   informationConfiguration: {
-    // display: "flex",
+    display: "flex",
     alignItems: "center",
+    width: "100%"
   },
   labelConfiguracao: {
     color: "#40513B",
@@ -81,15 +85,16 @@ export const styles = StyleSheet.create({
   },
   buttonContainer: {
     display: "flex",
+    marginBottom: 15,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
   },
   selectContainer:{
-    display: "flex",
+    display:"flex",
     width: "100%",
     height: "40px",
-    // margin: "auto",
+    margin: "auto",
     // marginRight:30,
     // marginLeft:30,
     color: "#40513B",
@@ -100,10 +105,10 @@ export const styles = StyleSheet.create({
     backgroundColor: "#D8E4C2",
   },
   dropdownBox:{
-    display: "flex",
+    display:"flex",
     width: "100%",
     height: "70px",
-    // margin: "auto",
+    margin: "auto",
     // marginRight:30,
     // marginLeft:30,
     color: "rgba(64,81,59,0.6)",

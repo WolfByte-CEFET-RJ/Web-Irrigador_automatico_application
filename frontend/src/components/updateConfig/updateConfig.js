@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styles } from "./styles";
 import { Modal, View, Text, Image } from "react-native";
 import ButtonOrange from "../buttonOrange/ButtonOrange";
@@ -8,12 +8,34 @@ import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
 import { createAxiosInstance } from "../../services/api";
 import { Rect, Svg } from "react-native-svg";
 import Ion_water from "./../../../assets/ion_water.png";
+import { SelectList } from "react-native-dropdown-select-list";
 
 const UpdateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
   const api = createAxiosInstance();
   const { setIrrConfig } = useIrrigationSettings();
   const [name, setName] = useState(nome);
-  const [Umidade, setUmidade] = useState(umidade);
+
+  const configArray = [
+    {key:25, value:"Pouco Úmido"},
+    {key:50, value:"Úmido"},
+    {key:75, value:"Muito Úmido"}
+  ];
+
+  const defaultHumidity = () => {
+    switch (parseInt(umidade)){
+      case 25:{
+        return configArray[0];
+      }
+      case 50:{
+        return configArray[1];
+      }
+      case 75:{
+        return configArray[2];
+      }
+    }
+  }
+
+  const [Umidade, setUmidade] = useState(null);
 
   const data = {
     name: name,
@@ -63,7 +85,22 @@ const UpdateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
           <View style={styles.input_container}>
               <InputDark label="Nome" value= {name} onChangeText={(text) => setName(text)} />
               
-              <InputDark label="Nível de Umidade" value = {Umidade} onChangeText={(text) => setUmidade(text)} />
+              {/* <InputDark label="Nível de Umidade" value ={Umidade} onChangeText={(text) => setUmidade(text)} /> */}
+          </View>
+          <View style={{width:"77%",marginBottom:10}}>
+            <Text style={styles.label}>Nível de Umidade</Text>
+            <SelectList 
+              boxStyles={styles.selectContainer}
+              dropdownStyles={styles.dropdownBox}
+              setSelected={setUmidade}
+              data={configArray}
+              save="key"
+              defaultOption={defaultHumidity()}
+              fontFamily="Montserrat-Bold"
+              // color="rgba(64,81,59,0.6)"
+              inputStyles={{color:"rgba(64,81,59,0.6)"}}
+              dropdownTextStyles={{color:"rgba(64,81,59,0.6)"}}
+            />
           </View>
           <View style={styles.view_bars_status}>
               {/* <View style={styles.info_container}>
