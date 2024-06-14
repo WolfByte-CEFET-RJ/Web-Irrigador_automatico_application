@@ -4,7 +4,6 @@ const yup = require('yup');
 const sendEmail = require('../utils/sendEmail');
 const moment = require('moment/moment');
 const { CodeExpired, InvalidCode, NoCode, PasswordMismatch, UserNotFound } = require('../errors/userError');
-const { HttpCode } = require('../utils/app.error');
 
 module.exports = {
     // Método para obter todos os usuários
