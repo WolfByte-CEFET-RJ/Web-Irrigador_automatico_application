@@ -23,9 +23,8 @@ export default function Home() {
       try {
         const response = await api.get(`/myGardens`);
         const gardens = response.data;
-        setGarden(gardens);
-        console.log(gardens);
-
+        await setGarden(gardens);
+  
         const userIrrigationSettings = await api.get(`/userSettings`);
         setIrrConfig(userIrrigationSettings.data);
         
@@ -104,6 +103,7 @@ export default function Home() {
               key={garden.id}
               style={styles.horta}
               onPress={async () => {
+                console.log(garden);
                 await setSelectedGardenFunction(garden);
                 navigation.navigate("ViewGarden");
               }}
@@ -112,7 +112,7 @@ export default function Home() {
                 <Text style={styles.textoSuperior}>{garden.name}</Text>
               </View>
               <View style={styles.textoInferiorContainer}>
-                <Text style={styles.textoInferior}>Umidade: {}</Text>
+                <Text style={styles.textoInferior}>Umidade: {garden.lastMeasures ? garden.lastMeasures[0].measurement : 0} %</Text>
                 {/*<Text style={styles.textoInferior}>Água: {}</Text>*/}
               </View>
               <Ionicons

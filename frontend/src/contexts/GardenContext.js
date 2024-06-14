@@ -8,15 +8,28 @@ export const GardenProvider = ({ children }) => {
   const [gardenData, setGardenData] = useState([]);
   const [selectedGarden, setSelectedGarden] = useState(null);
 
-  const setGarden = (data) => {
-
-    
+  const setGarden = async (data) => {
+    for(let i = 0 ; i < data.length ; i++){
+      try{
+        const response = await api.get(`/measures/garden/${data[i].id}`);
+        if(response.data){
+          data[i] = response.data;
+        }
+      }catch(error){
+        console.log(error);
+      }
+    }
     setGardenData(data);
   };
 
   const setSelectedGardenFunction = async (data) => {
-    const response = await api.get(`/measures/garden/${data.id}`);
-    setSelectedGarden(response.data);
+    try{
+      const response = await api.get(`/measures/garden/${data.id}`);
+      setSelectedGarden(response.data);
+    }catch(error){
+      setSelectedGarden(data);
+      console.log(error);
+    }
       // lastMeasure: response.data.lastMeasures ? response.data.lastMeasures[0] : null});
   }
 

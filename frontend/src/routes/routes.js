@@ -7,7 +7,7 @@ import AddGarden from "../pages/addGarden/AddGarden";
 import ViewGarden from "../pages/viewGarden/ViewGarden";
 import Profile from "../pages/profile/Profile";
 import ViewConfig from "../pages/ViewConfig/ViewConfig";
-import irrigationHistory from "../pages/irrigationHistory/irrigationHistory";
+import irrigationHistory from "../pages/IrrigationHistory/IrrigationHistory";
 
 const Stack = createStackNavigator();
 const Navigation = () => {
