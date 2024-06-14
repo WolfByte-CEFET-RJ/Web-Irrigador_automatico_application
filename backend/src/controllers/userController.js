@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const userService = require('../services/userService');
+const { HttpCode, HttpError } = require('../utils/app.error');
+const { InvalidCode } = require('../errors/userError')
 
 module.exports = {
     async getAllUsers(req, res) {
@@ -68,10 +70,17 @@ module.exports = {
 
         try {
             const response = await userService.forgotPassword(email);
-            return res.status(200).json({message: response});
-            
-        } catch (error) {
-            return res.status(400).json({message: error.message});
+            return res.status(HttpCode.OK).json({message: response});
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(error.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
+            } else {
+                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
+					code: HttpCode.INTERNAL_SERVER_ERROR,
+					message: e.message,
+					type: 'ERR_CONTROLLER_USER_INTERNAL' 
+				});
+            }
         }
     },
     async verifyCodeAndGenerateToken(req, res) {
@@ -81,14 +90,20 @@ module.exports = {
         try {
             const isValidCode = await userService.verifyCode(email, code);
             if (!isValidCode) {
-                return res.status(400).json({message: 'Código inválido!'});
+                throw new InvalidCode();
             }
-
             const resetToken = jwt.sign({ email, type: 'reset' }, process.env.TOKEN_KEY, { expiresIn: '15m' });
-            
-            return res.status(200).json({ resetToken });
-        } catch (error) {
-            return res.status(500).json({message: error.message});
+            return res.status(HttpCode.OK).json({ resetToken });
+        } catch (e) {
+            if (e instanceof HttpError) {
+                res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
+            } else {
+                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
+					code: HttpCode.INTERNAL_SERVER_ERROR,
+					message: e.message,
+					type: 'ERR_CONTROLLER_USER_INTERNAL' 
+				});
+            }
         }
     },
     async resetPassword(req, res) {
@@ -97,9 +112,17 @@ module.exports = {
 
         try {
             const response = await userService.resetPassword(email, password, confirmPassword);
-            return res.status(200).json({ message: response });
-        } catch (error) {
-            return res.status(400).json({ message: error.message });
+            return res.status(HttpCode.OK).json({ message: response });
+        } catch (e) {
+            if (e instanceof HttpError) {
+                res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
+            } else {
+                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
+					code: HttpCode.INTERNAL_SERVER_ERROR,
+					message: e.message,
+					type: 'ERR_CONTROLLER_USER_INTERNAL' 
+				});
+            }
         }
     }
 };
