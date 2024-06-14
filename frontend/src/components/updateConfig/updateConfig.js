@@ -87,8 +87,8 @@ const UpdateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
               
               {/* <InputDark label="Nível de Umidade" value ={Umidade} onChangeText={(text) => setUmidade(text)} /> */}
           </View>
-          <View style={{width:"77%",marginBottom:10}}>
             <Text style={styles.label}>Nível de Umidade</Text>
+          <View style={{width:"77%",marginBottom:10}}>
             <SelectList 
               boxStyles={styles.selectContainer}
               dropdownStyles={styles.dropdownBox}

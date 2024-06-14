@@ -97,7 +97,7 @@ const EditModal = ({ visible, onClose }) => {
                 onChangeText={(text) => setNewIrrigationId(text)}
                 placeholder={selectedGarden.irrigationId}
               ></TextInput> */}
-            <View style={{height: "120px"}}>
+            <View /*style={{height: "120px"}}*/>
               <SelectList 
                 boxStyles={styles.selectContainer}
                 dropdownStyles={styles.dropdownBox}

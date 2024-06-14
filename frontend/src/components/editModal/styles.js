@@ -2,18 +2,18 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   modalContainer: {
-    display: "flex",
+    flex:1,
+    // display: "flex",
     // flex: 1,
     justifyContent: "center",
-    height: "100%",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.3)",
   },
   modalContent: {
     width: "90%",
-    height: "55%",
-    display: "flex",
-    flexDirection: "column",
+    // height: "55%",
+    // display: "flex",
+    // flexDirection: "column",
     backgroundColor: "#EDF1D6",
     borderRadius: 8,
     alignItems: "center",
