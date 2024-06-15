@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const yup = require('yup');
 const sendEmail = require('../utils/sendEmail');
 const moment = require('moment/moment');
-const { CodeExpired, InvalidCode, NoCode, PasswordMismatch, UserNotFound } = require('../errors/userError');
+const { CodeExpired, InvalidCode, NoCode, PasswordMismatch, UserNotFound, AlreadyExists, NotAllowedChangeEmail } = require('../errors/userError');
 
 module.exports = {
     // Método para obter todos os usuários
@@ -16,7 +16,7 @@ module.exports = {
     async getUser(id) {
         const user = await knex('user').select('id', 'name', 'email', 'humidityNotification').where({ id }).first();
         if (!user) {
-            throw new Error('Usuário não existe!');
+            throw new UserNotFound();
         }
         return user;
     },
@@ -33,7 +33,7 @@ module.exports = {
 
         const user = await knex('user').select('email').where({ email }).first();
         if (user) {
-            throw new Error('Usuário já existe!');
+            throw new AlreadyExists();
         }
 
         const salt = await bcrypt.genSalt();
@@ -59,14 +59,14 @@ module.exports = {
         });
 
         if (userData.email) {
-            throw new Error('Não é permitido alterar o email');
+            throw new NotAllowedChangeEmail();
         }
 
         await userUpdateSchema.validate(userData);
 
         const user = await this.getUser(userId);
         if (!user) {
-            throw new Error('Este usuário não existe!')
+            throw new UserNotFound();
         }
 
         if (userData.password) {
@@ -87,7 +87,7 @@ module.exports = {
         const user = await this.getUser(userId);
 
         if (!user) {
-            throw new Error('Este usuário não existe!')
+            throw new UserNotFound();
         }
 
         return knex('user').where({ id: userId }).del();

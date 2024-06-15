@@ -18,9 +18,17 @@ module.exports = {
 
         try{
             const user = await userService.getUser(userId);
-            return res.status(200).json(user);
-        } catch(error){
-            return res.status(400).json({message: error.message});
+            return res.status(HttpCode.OK).json(user);
+        } catch(e){
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type});
+            } else {
+                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
+					code: HttpCode.INTERNAL_SERVER_ERROR,
+					message: e.message,
+					type: 'ERR_CONTROLLER_USER_INTERNAL' 
+				});
+            }
         }
     },
 
@@ -29,10 +37,18 @@ module.exports = {
         
         try {
             const response = await userService.createUser(name, email, password, humidityNotification);
-            return res.status(201).json({message: response});
+            return res.status(HttpCode.CREATED).json({message: response});
 
-        } catch (error) {
-          return res.status(400).json({message: error.message});
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
+            } else {
+                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
+					code: HttpCode.INTERNAL_SERVER_ERROR,
+					message: e.message,
+					type: 'ERR_CONTROLLER_USER_INTERNAL' 
+				});
+            }
         }
     },
     async updateUser(req, res) {
@@ -44,11 +60,19 @@ module.exports = {
            
             const user = await userService.updateUser(id, userData);
             if(user){
-                res.json({message: 'Usuário atualizado com sucesso'})
+                res.status(HttpCode.OK).json({message: 'Usuário atualizado com sucesso'})
             }
 
-        } catch (error) {
-            return res.status(400).json({message: error.message});
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
+            } else {
+                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
+					code: HttpCode.INTERNAL_SERVER_ERROR,
+					message: e.message,
+					type: 'ERR_CONTROLLER_USER_INTERNAL' 
+				});
+            }
         }
     },
     async deleteUser(req, res) {
@@ -58,11 +82,19 @@ module.exports = {
           
             const user = await userService.deleteUser(id);
             if(user){
-                res.json({message: 'Usuário deletado com sucesso!'})
+                res.status(HttpCode.OK).json({message: 'Usuário deletado com sucesso!'})
             }
 
         } catch (error) {
-            return res.status(400).json({message: error.message});
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
+            } else {
+                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
+					code: HttpCode.INTERNAL_SERVER_ERROR,
+					message: e.message,
+					type: 'ERR_CONTROLLER_USER_INTERNAL' 
+				});
+            }
         }
     },
     async forgotPassword(req, res) {
