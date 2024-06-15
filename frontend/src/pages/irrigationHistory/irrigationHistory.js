@@ -1,35 +1,56 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput } from "react-native";
+import {styles} from "./styles"
+import { View, Text, TextInput, Pressable } from "react-native";
 import { createAxiosInstance } from "../../services/api";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import BottomBar from "../../components/bottomBar/BottomBar";
-import { styles } from "./styles";
 
 export default function IrrigationHistory() {
   const [buscarHorta, setBuscarHorta] = useState("");
   const [historico, setHistorico] = useState([]);
+  const [dates, setDates]= useState([]);
   const api = createAxiosInstance();
 
+  function groupByDate(irrigations) {
+    return irrigations.reduce((acc, irrigation) => {
+      const date = irrigation.date.split(" ")[2];
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(irrigation);
+      return acc;
+    }, {});
+  }
 
-  // useEffect(()=>{
-  //   async function fetchHistory() {
-  //       try{
-  //           const resp = await api.get(`/history`);
-  //           setHistorico(resp.data)
 
-  //       }catch(error){
-  //           console.error("Erro ao buscar hortas:", error);
-  //       }
 
-  //   }
-  //   fetchHistory
-  // },[historico.length])
+  useEffect(()=>{
+    async function fetchHistory() {
+        try{
+            const resp = await api.get(`/history`);
+            console.log(resp);
+            const data = groupByDate(resp.data);
+            setHistorico(data);
+            setDates(Object.keys(data));
+            // setData(resp.data);
+            console.log(historico);
+            console.log(dates);
+            // console.log(data[0]);
 
-  // const filtrarIrrigations = () => {
-  //   return gardenData.filter((garden) =>
-  //     garden.name.toLowerCase().includes(buscarHorta.toLowerCase())
-  //   );
-  //};
+        }catch(error){
+            console.error("Erro ao buscar hortas:", error);
+        }
+
+    }
+    fetchHistory();
+  },[historico.length])
+  
+
+  const filtrarIrrigations = () => {
+    return historico.filter((historico) =>
+      historico.gardenName.toLowerCase().includes(buscarHorta.toLowerCase())
+  );
+  };
   return (
     <View style={styles.irrigation_container}>
       <View style={styles.irrigation_title_container}>
@@ -52,31 +73,28 @@ export default function IrrigationHistory() {
       <View style={styles.irrigation_History_container}>
         {historico != "Nenhum histórico de irrigação foi encontrado!" ? (
 
-        historico.map((hist)=>(
-          <View>
-          <Text style={styles.irrigation_title}>{hist.horta}</Text>
-          {/*
-          // filtrarIrrigations()
-          historico.map((irr) => (
+        dates.map((date)=>(
+          <View style={{width:"90%", alignItems:"center", justifyContent:"center"}}>
+          <Text style={styles.irrigation_title}>{date}</Text>
+          
+          {historico[date].map((irr, index) => (
             <Pressable
-              // key={irr.id}
+              key={index}
               style={styles.Irrigation}
               onPress={async () => {
                 console.log(irr);
               }}
             >
               <View>
-                <Text style={styles.textoSuperior}>{irr.name}</Text>
+                <Text style={styles.textoSuperior}>{irr.gardenName}</Text>
               </View>
               <View style={styles.textoInferiorContainer}>
                 <Text style={styles.textoInferior}>Horario:
-                  <Text style={styles.textoInferiorBold}>{irr.horario ? irr.horario : 0}</Text>
-                   {/* {irr.lastMeasures ? irr.lastMeasures[0].data : 0} 
-                   </Text>
-                {/*<Text style={styles.textoInferior}>Água: {}</Text>
+                  <Text style={styles.textoInferiorBold}>{irr.date}</Text>
+                  </Text>
               </View>
             </Pressable>
-          ))*/}
+            ))}
           </View>
         ))
       ) : (

@@ -64,6 +64,12 @@ export const styles = StyleSheet.create({
     paddingLeft: 9,
     gap: 3,
   },
+  textoSuperior: {
+    color: "#ffffff",
+    fontSize: 17,
+    fontWeight: "bold",
+    fontFamily: "Montserrat-Bold",
+  },
   textoInferiorContainer: {
     display: "flex",
     flexDirection: "row",
