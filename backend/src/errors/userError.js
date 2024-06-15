@@ -1,7 +1,7 @@
 const { HttpCode, HttpError } = require('../utils/app.error');
 
 class UserError extends HttpError {
-    constructor({httpCode, type, message = 'An error occurred while processing the request in User entity'}) {
+    constructor({ httpCode, type, message = 'An error occurred while processing the request in User entity' }) {
         super({
             httpCode: httpCode,
             message: message,
@@ -60,10 +60,31 @@ class PasswordMismatch extends UserError {
     }
 }
 
+class AlreadyExists extends UserError {
+    constructor() {
+        super({
+            httpCode: HttpCode.CONFLICT,
+            type: 'ERR_SERVICE_USER-ALREADY-EXISTS',
+            message: 'User already exists'
+        })
+    }
+}
+
+class NotAllowedChangeEmail extends UserError {
+    constructor() {
+        super({
+            httpCode: HttpCode.CONFLICT,
+            type: 'ERR_SERVICE_USER-NOT-ALLOWED-CHANGE-EMAIL',
+            message: 'It is not allowed to change the email'
+        })
+    }
+}
 module.exports = {
     UserNotFound,
     InvalidCode,
     NoCode,
     CodeExpired,
-    PasswordMismatch
+    PasswordMismatch,
+    AlreadyExists,
+    NotAllowedChangeEmail
 }
