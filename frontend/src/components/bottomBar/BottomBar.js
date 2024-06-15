@@ -12,6 +12,7 @@ export default function BottomBar() {
   const isHomeScreen = route.name === "Home";
   const isViewConfig = route.name === "ViewConfig";
   const isProfile = route.name === "Profile";
+  const isIrrigationHistory = route.name === "IrrigationHistory";
 
   return (
     <View style={styles.bottomBar_container}>
@@ -44,7 +45,7 @@ export default function BottomBar() {
         style={styles.iconCadastro}
         name={"rainy"}
         size={24}
-        color={"#609966"}
+        color={isIrrigationHistory? "#40513B" : "#609966"}
       />
       </Pressable>
       <Pressable onPress={() => navigation.navigate("Profile")}>
