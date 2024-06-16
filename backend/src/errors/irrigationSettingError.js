@@ -10,6 +10,28 @@ class IrrigationSettingError extends HttpError {
     }
 }
 
+class IrrigationSettingNotFound extends IrrigationSettingError {
+    constructor(type){
+        super({
+            httpCode: HttpCode.NOT_FOUND,
+            message: 'Esta configuração de irrigação não existe',
+            type: type
+        });
+    }
+}
+
+class UnauthorizedIrrigationSettingOperation extends IrrigationSettingError {
+    constructor(type){
+        super({
+            httpCode: HttpCode.NOT_FOUND,
+            message: 'Essa configuração de irrigação não pertence à você',
+            type: type
+        });
+    }
+}
+
 module.exports = {
-    IrrigationSettingError
+    IrrigationSettingError,
+    IrrigationSettingNotFound,
+    UnauthorizedIrrigationSettingOperation
 }

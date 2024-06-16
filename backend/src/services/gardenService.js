@@ -1,15 +1,17 @@
 const knex = require('../database');
 const yup = require('yup');
+const { IdentifierNotFound, IdentifierAlreadyAssociated, UnauthorizedGardenUpdate, UnauthorizedUserIdUpdate, GardenNotFound, UnauthorizedGardenDelete, UnauthorizedGardenReturn } = require('../errors/gardenError');
+const { IrrigationSettingNotFound, UnauthorizedIrrigationSettingOperation } = require('../errors/irrigationSettingError');
 
 // Função para verificar se o identificador já existe em alguma horta
 async function verifyIdentifer(identifier){
     const identifierExists = await knex('identifier').select("id", "gardenId").where({ value: identifier }).first();
 
     if (!identifierExists){ // Se o identificador não existe, lança um erro
-        throw new Error('O identificador inserido não pertence a uma horta existente!')}
+        throw new IdentifierNotFound()}
 
     if (identifierExists.gardenId != null){ // Se o identificador já pertence a uma horta, lança um erro
-        console.log("entri"); throw new Error('O identificador inserido já pertence a uma horta!')}
+        throw new IdentifierAlreadyAssociated()}
 
     return identifierExists; // Retorna as informações do identificador
 }
@@ -22,8 +24,8 @@ module.exports = {
     async getOneGarden(id, userId) {
         const garden = await knex('garden').where({ id }).first();
         
-        if (!garden){throw new Error('Esta horta não existe')};
-        if (garden.userId !== userId){throw new Error('Esta horta não pertence a você!')}
+        if (!garden){throw new GardenNotFound()};
+        if (garden.userId !== userId){throw new UnauthorizedGardenReturn()}
 
         return garden;
     },
@@ -79,13 +81,13 @@ module.exports = {
         const {userId} = await this.getOneGarden(gardenId, myId); // Obtém o ID do usuário dono da horta
         
 
-        if (myId != userId){throw new Error("Você só pode atualizar sua própria horta")} // Se o usuário não é o dono da horta, lança um erro
-        if(gardenData.userId){throw new Error('Você não pode alterar o userId')} // Se tentar alterar o ID do usuário, lança um erro
+        if (myId != userId){throw new UnauthorizedGardenUpdate()} // Se o usuário não é o dono da horta, lança um erro
+        if(gardenData.userId){throw new UnauthorizedUserIdUpdate()} // Se tentar alterar o ID do usuário, lança um erro
 
         if(gardenData.irrigationId){ // Se estiver atualizando a configuração de irrigação
                 const userSetting = await knex('irrigationSetting').select("*") .where({ id: gardenData.irrigationId }).first();
-                if (!userSetting) {throw new Error('Essa configuração não existe!')} // Se a configuração de irrigação não existe, lança um erro
-                if (userSetting.userId != myId){throw new Error('Essa configuração não pertence à você!')} // Se a configuração não pertence ao usuário, lança um erro
+                if (!userSetting) {throw new IrrigationSettingNotFound('ERR_SERVICE_GARDEN-IRRIGATION_SETTING_NOT_FOUND')} // Se a configuração de irrigação não existe, lança um erro
+                if (userSetting.userId != myId){throw new UnauthorizedIrrigationSettingOperation('ERR_SERVICE_GARDEN-UNAUTHORIZED_IRRIGATION_SETTING_OPERATION')} // Se a configuração não pertence ao usuário, lança um erro
         }
 
         if (gardenData.identifier) { // Se estiver atualizando o identificador
@@ -97,8 +99,8 @@ module.exports = {
 
         const garden = await knex('garden').where({ id: gardenId }).update(gardenData); // Atualiza os dados da horta
 
-        if (!garden) { // Se a horta não existe, lança um erro
-            throw new Error('Esta horta não existe');
+        if (!garden) { 
+            throw new GardenNotFound();
         }
 
 
@@ -108,10 +110,10 @@ module.exports = {
     async deleteGarden(myId, id) {
         const {userId} = await this.getOneGarden(id, myId);
         
-        if (myId != userId){throw new Error("Você só pode deletar sua própria horta")}
+        if (myId != userId){throw new UnauthorizedGardenDelete()}
         await knex('identifier').where({ gardenId: id }).update({gardenId: null});
         const garden = await knex('garden').where({ id }).del();
-        if (!garden){throw new Error('Esta horta não existe')}
+        if (!garden){throw new GardenNotFound()}
 
         return "Horta deletada com sucesso"
     }
