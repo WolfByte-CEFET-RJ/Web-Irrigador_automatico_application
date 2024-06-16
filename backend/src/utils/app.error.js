@@ -16,20 +16,24 @@ const HttpCode = {
 
 
 class HttpError extends Error {
-    constructor({ httpCode, type, message = 'An error ocurred while processing the request'}) {
-        // A superclasse Error já define 'this.message = message'
-        super(message); 
+    constructor({ httpCode, type, message = 'An error occurred while processing the request' }) {
+        super(message);
 
         this.httpCode = httpCode;
-        
-        //formato de 'type': ERR_<TIPO DE ARQUIVO>_<ENTIDADE>_<PROBLEMA ENCONTRADO>
-        this.type = type; 
-        
+        this.type = type;
+
         if (Error.captureStackTrace) {
-            //Salva pilha de execução até o momemto em que o erro foi lançado
             Error.captureStackTrace(this, this.constructor);
         }
-      }
+    }
+
+    toJSON() {
+        return {
+            httpCode: this.httpCode,
+            type: this.type,
+            message: this.message
+        };
+    }
 }
 
 module.exports = { HttpCode, HttpError };
