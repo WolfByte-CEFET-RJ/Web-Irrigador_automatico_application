@@ -105,7 +105,7 @@ module.exports = {
             return res.status(HttpCode.OK).json({message: response});
         } catch (e) {
             if(e instanceof HttpError) {
-                return res.status(error.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
+                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
             } else {
                 res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
 					code: HttpCode.INTERNAL_SERVER_ERROR,
