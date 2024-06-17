@@ -1,0 +1,103 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  irrigation_container: {
+    flex: 1,
+    backgroundColor: "#EDF1D6",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    height: "100vh",
+  },
+  irrigation_title_container: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "20%",
+    // borderColor: 'red',
+    // borderWidth: 1,
+  },
+  irrigation_title: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#40513B",
+  },
+  search_container: {
+    width: "77%",
+    height: 45,
+    marginTop: 20,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    backgroundColor: "#D8E4C2",
+    borderRadius: 8,
+    paddingLeft: 16,
+  },
+  searcher: {
+    width: "100%",
+    height: 45,
+    color: "rgba(64, 81, 59, 0.6)",
+    fontWeight: "bold",
+    fontFamily: "Montserrat-Bold",
+  },
+  iconSearch: {
+    position: "absolute",
+    right: "5%",
+    bottom: "20%",
+  },
+  irrigation_History_container: {
+    display: "flex",
+    overflow: "scroll",
+    alignItems: "center",
+    width: "100%",
+    marginTop: 20,
+  },
+  Irrigation: {
+    display: "flex",
+    justifyContent: "center",
+    width: "80%",
+    height: 60,
+    backgroundColor: "#40513B",
+    borderRadius: 8,
+    marginBottom: 24,
+    paddingLeft: 9,
+    gap: 3,
+  },
+  textoSuperior: {
+    color: "#ffffff",
+    fontSize: 17,
+    fontWeight: "bold",
+    fontFamily: "Montserrat-Bold",
+  },
+  textoInferiorContainer: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+  },
+  textoInferior: {
+    color: "#ffffff",
+    // fontFamily: "Montserrat-Bold",
+  },
+  textoInferiorBold: {
+    color: "#ffffff",
+    fontFamily: "Montserrat-Bold",
+  },
+  noIrrigation: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#40513B",
+    marginTop: 100,
+    marginLeft: 10,
+    marginRight: 10,
+    fontFamily: "Montserrat-Bold",
+
+  },
+  bottomBar_container: {
+    backgroundColor: "#EDF1D6",
+    position: "absolute",
+    width: "100%",
+    height: 95,
+    bottom: 0,
+  },
+});
