@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {styles} from "./styles"
+import {styles} from "./styles.js"
 import { View, Text, TextInput, Pressable } from "react-native";
-import { createAxiosInstance } from "../../services/api";
+import { createAxiosInstance } from "../../services/api.js";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import BottomBar from "../../components/bottomBar/BottomBar";
+import BottomBar from "../../components/bottomBar/BottomBar.js";
 
 export default function IrrigationHistory() {
   const [buscarHorta, setBuscarHorta] = useState("");
@@ -38,19 +38,22 @@ export default function IrrigationHistory() {
             // console.log(data[0]);
 
         }catch(error){
-            console.error("Erro ao buscar hortas:", error);
+          setHistorico(error.response.data);
+          console.log(error.response.data);
+            // console.error("Erro ao buscar hortas:", error);
         }
 
     }
     fetchHistory();
-  },[historico.length])
+  },[historico.length, setHistorico])
   
 
   const filtrarIrrigations = () => {
     return historico.filter((historico) =>
       historico.gardenName.toLowerCase().includes(buscarHorta.toLowerCase())
-  );
+    );
   };
+
   return (
     <View style={styles.irrigation_container}>
       <View style={styles.irrigation_title_container}>
@@ -71,7 +74,7 @@ export default function IrrigationHistory() {
         />
       </View>
       <View style={styles.irrigation_History_container}>
-        {historico != "Nenhum histórico de irrigação foi encontrado!" ? (
+        {historico === "Nenhum histórico de irrigação foi encontrado!" ? (
 
         dates.map((date)=>(
           <View style={{width:"90%", alignItems:"center", justifyContent:"center"}}>
@@ -98,9 +101,9 @@ export default function IrrigationHistory() {
           </View>
         ))
       ) : (
-        <Text style={styles.noIrrigation}>
-         Nenhum histórico de irrigação foi encontrado!
-        </Text>
+        <View >
+          <Text style={styles.noIrrigation}> Nenhum histórico de irrigação foi encontrado! </Text>
+        </View>
       )}
 
       </View>
