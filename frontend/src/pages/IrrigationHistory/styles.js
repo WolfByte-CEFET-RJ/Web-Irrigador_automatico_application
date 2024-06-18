@@ -22,6 +22,14 @@ export const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     color: "#40513B",
+    
+  },
+  irrigation_title_data: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#40513B",
+    marginLeft:-160,
+    marginBottom:5,
   },
   search_container: {
     width: "77%",
@@ -48,10 +56,11 @@ export const styles = StyleSheet.create({
   },
   irrigation_History_container: {
     display: "flex",
-    overflow: "scroll",
+    position:"static",
+    // overflow: "scroll",
     alignItems: "center",
     width: "100%",
-    marginTop: 20,
+    marginTop: 120,
   },
   Irrigation: {
     display: "flex",

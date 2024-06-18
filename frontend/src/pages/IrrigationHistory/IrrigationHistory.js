@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {styles} from "./styles.js"
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
 import { createAxiosInstance } from "../../services/api.js";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import BottomBar from "../../components/bottomBar/BottomBar.js";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function IrrigationHistory() {
   const [buscarHorta, setBuscarHorta] = useState("");
@@ -30,6 +31,7 @@ export default function IrrigationHistory() {
             const resp = await api.get(`/history`);
             console.log(resp);
             const data = groupByDate(resp.data);
+            console.log(data);
             setHistorico(data);
             setDates(Object.keys(data));
             // setData(resp.data);
@@ -73,38 +75,46 @@ export default function IrrigationHistory() {
           color={"rgba(64, 81, 59, 0.6)"}
         />
       </View>
-      <View style={styles.irrigation_History_container}>
+      <SafeAreaView style={styles.irrigation_History_container}>
+      <ScrollView>
         {historico === "Nenhum histórico de irrigação foi encontrado!" ? (
         <View >
           <Text style={styles.noIrrigation}> Nenhum histórico de irrigação foi encontrado! </Text>
         </View>
         ) : (
-        dates.map((date)=>(
-          <View style={{width:"90%", alignItems:"center", justifyContent:"center"}}>
-          <Text style={styles.irrigation_title}>{date}</Text>
-          
-          {filtrarIrrigations(date).map((irr, index) => (
-            <Pressable
-              key={index}
-              style={styles.Irrigation}
-              onPress={async () => {
-                console.log(irr);
-              }}
-            >
-              <View>
-                <Text style={styles.textoSuperior}>{irr.gardenName}</Text>
-              </View>
-              <View style={styles.textoInferiorContainer}>
-                <Text style={styles.textoInferior}>Horario:
-                  <Text style={styles.textoInferiorBold}>{irr.date}</Text>
-                  </Text>
-              </View>
-            </Pressable>
-            ))}
-          </View>
-        ))
-      )}
-      </View>
+          dates.reverse().map((date) => {
+            const filteredIrrigations = filtrarIrrigations(date);
+            if (filteredIrrigations.length > 0) {
+              return (
+                <View key={date} style={{ width: "90%", alignItems: "center", justifyContent: "center" }}>
+                  <Text style={styles.irrigation_title_data}>{date}</Text>
+                  {filteredIrrigations.map((irr, index) => (
+                    <Pressable
+                      key={index}
+                      style={styles.Irrigation}
+                      onPress={async () => {
+                        console.log(irr);
+                      }}
+                    >
+                      <View>
+                        <Text style={styles.textoSuperior}>{irr.gardenName}</Text>
+                      </View>
+                      <View style={styles.textoInferiorContainer}>
+                        <Text style={styles.textoInferior}>
+                          Horario:{" "}
+                          <Text style={styles.textoInferiorBold}>{ irr.date.split(" ")[0]}</Text>
+                        </Text>
+                      </View>
+                    </Pressable>
+                  ))}
+                </View>
+              );
+            }
+            return null;
+          })
+        )}
+      </ScrollView>
+      </SafeAreaView>
       <View style={styles.bottomBar_container}>
         <BottomBar />
       </View>
