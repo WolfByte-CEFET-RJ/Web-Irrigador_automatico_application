@@ -28,22 +28,31 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
 
-  iconHorta:{
-      position: 'absolute',
-      right: '5%',
-      top: "5%",
-    },
+  iconHorta: {
+    position: "absolute",
+    right: "5%",
+    top: "5%",
+  },
 
   alert_container: {
     display: "flex",
     flexDirection: "row",
+    marginTop: 10,
+    marginRight: 17,
+    marginLeft: 22,
     justifyContent: "space-between",
   },
-  alert_text: {
-    fontSize: 14,
-    margin:3,
-  },
   
+  alert_text: {
+    fontSize: 11,
+    color: "#40513B",
+    fontWeight: "bold",
+    fontFamily: "Montserrat-Bold",
+    lineHeight: 15.5,
+    overflow:"wrap",
+    width:"90%"
+  },
+
   view_bars_status: {
     flexDirection: "column",
     alignItems: "center",
@@ -79,8 +88,8 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "Montserrat-Bold",
   },
-  selectContainer:{
-    display:"flex",
+  selectContainer: {
+    display: "flex",
     width: "100%",
     height: "40px",
     margin: "auto",
@@ -93,8 +102,8 @@ export const styles = StyleSheet.create({
     fontFamily: "Montserrat-Bold",
     backgroundColor: "#D8E4C2",
   },
-  dropdownBox:{
-    display:"flex",
+  dropdownBox: {
+    display: "flex",
     width: "100%",
     height: "70px",
     margin: "auto",
@@ -106,5 +115,5 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "Montserrat-Bold",
     backgroundColor: "#D8E4C2",
-  }
+  },
 });

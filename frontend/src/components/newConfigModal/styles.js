@@ -37,12 +37,6 @@ export const styles = StyleSheet.create({
       top: "5%",
   },
 
-  alert_container: {
-    display: "flex",
-    flexDirection: "row",
-    margin:"auto",
-    justifyContent: "space-between",
-  },
   label: {
     fontSize: 12,
     marginBottom: 8,
@@ -50,9 +44,21 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "Montserrat-Bold",
   },
-
+  alert_container: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop:10,
+    marginRight:15,
+    marginLeft:22,
+    justifyContent: "space-between",
+  },
+  
   alert_text: {
-    fontSize: 10,
+    fontSize: 11,
+    color: "#40513B",
+    fontWeight: "bold",
+    fontFamily: "Montserrat-Bold",
+    lineHeight:15.5,
   },
   selectContainer:{
     display:"flex",

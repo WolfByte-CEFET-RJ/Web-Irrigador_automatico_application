@@ -147,8 +147,8 @@ const UpdateConfigModal = ({ visible, onClose, id, nome, umidade }) => {
             />
             <Text style={styles.alert_text}>
               A alteração ocorrerá brevemente após o envio dessas informações e
-              acionada imediatamente caso a umidade estiver abaixo do
-              estabelecido.
+              acionada imediatamente caso a umidade estiver abaixo da
+              estabelecida.
             </Text>
           </View>
         </View>

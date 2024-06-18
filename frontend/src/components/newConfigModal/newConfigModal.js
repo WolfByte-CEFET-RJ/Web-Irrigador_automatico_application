@@ -107,8 +107,7 @@ const newConfigModal = ({ visible, onClose, texto }) => {
             />
             <Text style={styles.alert_text}>
               A irrigação será acionada automaticamente se a umidade estiver
-              menor do que a estabelecida e se o nível de água do reservatório
-              estiver maior do que o estabelecido
+              menor do que a estabelecida.
             </Text>
           </View>
           {/* <ErrorComponent message={Error} /> */}
