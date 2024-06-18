@@ -38,8 +38,8 @@ export default function IrrigationHistory() {
             // console.log(data[0]);
 
         }catch(error){
-          setHistorico(error.response.data);
-          console.log(error.response.data);
+          setHistorico(error.response.data.message);
+          console.log(historico);
             // console.error("Erro ao buscar hortas:", error);
         }
 
