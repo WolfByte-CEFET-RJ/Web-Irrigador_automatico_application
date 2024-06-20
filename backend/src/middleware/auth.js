@@ -1,24 +1,28 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const { InvalidToken, TokenNotFound } = require('../errors/authError');
+const { HttpError, HttpCode } = require('../utils/app.error');
 
-function auth(req, res, next) {
-  const authToken = req.headers.authorization;
+module.exports = (req, res, next) => {
+    const authToken = req.headers.authorization;
     
-    if(!authToken) return res.status(400).json({msg: "Token não identificado"});
+    if(!authToken){
+        throw new TokenNotFound();
+    }
         
     const [,token] = authToken.split(" ");
 
-    jwt.verify(token, process.env.TOKEN_KEY, (error,data) => {
-
-        if(error){
-            return res.status(401).json({err:"Token inválido"});
+    try {
+        const decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+        
+        req.user_id = decodedToken.id;
+        req.token = token;
+        next();        
+    } catch (e) {
+        if(e instanceof HttpError){
+            return res.status(e.httpCode).json(e);
         }
-        else{
-            req.user_id = data.id;
-            req.token = token;
-            return next();
-        }  
-    })
-}
 
-module.exports = auth;
+        return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
+    }
+};
