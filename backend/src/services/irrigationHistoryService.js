@@ -1,4 +1,5 @@
 const knex = require("../database");
+const { IrrigationHistoryNotFound } = require("../errors/irrigationHistoryError");
 const convertDate = require("../utils/convertDate")
 
 module.exports = {
@@ -9,7 +10,9 @@ module.exports = {
         .join('irrigationHistory as ih', 'ih.gardenId', '=', 'g.id')
         .where({'u.id': userId}).orderBy('date', 'asc')
 
-        if (!userGardensHistory.length){throw new Error("Nenhum histórico de irrigação foi encontrado!")}
+        if (!userGardensHistory.length){
+            throw new IrrigationHistoryNotFound()
+        }
 
         const finalUserGardensHistory = userGardensHistory.map(object => ({gardenName: object.gardenName, date: convertDate(object.date)}));
 
@@ -27,7 +30,7 @@ module.exports = {
         .orderBy('date', 'asc');
 
         if(!userGardenHistory.length){
-            throw new Error("Nenhum histórico de irrigação para essa horta foi encontrado ou essa não é sua horta!")
+            throw new IrrigationHistoryNotFound()
         }
 
         const finalUserGardenHistory = userGardenHistory.map(object => ({

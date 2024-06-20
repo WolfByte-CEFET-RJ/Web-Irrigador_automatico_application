@@ -10,6 +10,17 @@ class IrrigationHistoryError extends HttpError {
     }
 }
 
+class IrrigationHistoryNotFound extends IrrigationHistoryError{
+    constructor(){
+        super({
+            httpCode: HttpCode.NOT_FOUND,
+            message: 'Nenhum histórico de irrigação foi encontrado',
+            type: 'ERR_SERVICE_IRRIGATION_HISTORY-NOT_FOUND'
+        });
+    }
+}
+
 module.exports = {
-    IrrigationHistoryError
+    IrrigationHistoryError,
+    IrrigationHistoryNotFound
 }

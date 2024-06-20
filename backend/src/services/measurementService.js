@@ -1,4 +1,6 @@
 const knex = require('../database');
+const { UnauthorizedGardenReturn } = require('../errors/gardenError');
+const { SensorConfigurationNotFound } = require('../errors/measurementError');
 const irrigationSettingServicce = require("../services/irrigationSettingService");
 
 
@@ -12,7 +14,7 @@ async function returnConfigValues (irrigationId){
             }).first();
 
         if (!configSensorUmidade) {
-            throw new Error('A configuração do sensor não foi encontrada!');
+            throw new SensorConfigurationNotFound()
         }
 
         return { configHumidityValue: configSensorUmidade.value }
@@ -31,7 +33,7 @@ async function verifyMeasurements(humidityValue, configHumidityValue){
 module.exports = {
     async lastMeasures (userId, gardenUserId, gardenIrrigationId, gardenId) {
         if (userId !== gardenUserId){
-            throw new Error("Esta horta não pertence a você!");
+            throw new UnauthorizedGardenReturn();
         }
 
         let lastMeasures = [];

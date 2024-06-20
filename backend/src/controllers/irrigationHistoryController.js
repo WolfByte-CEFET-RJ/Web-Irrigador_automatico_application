@@ -1,4 +1,5 @@
 const irrigationHistoryService = require("../services/irrigationHistoryService");
+const { HttpCode, HttpError } = require("../utils/app.error");
 
 module.exports = {
     async getAllUserGardensHistory(req, res){
@@ -7,8 +8,16 @@ module.exports = {
         try{
             const gardensHistory = await irrigationHistoryService.getAllUserGardensHistory(userId);
             return res.status(200).json(gardensHistory);
-        } catch(error){
-            return res.status(400).json({ message: error.message });
+        } catch(e){
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+             
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
+					code: HttpCode.INTERNAL_SERVER_ERROR,
+					message: e.message,
+					type: 'ERR_CONTROLLER_GARDEN_HISTORY-INTERNAL' 
+			});
         }
     },
 
@@ -21,8 +30,16 @@ module.exports = {
         try{
             const gardenHistory = await irrigationHistoryService.getOneGardenHistory(userId, name);
             return res.status(200).json(gardenHistory);
-        } catch(error){
-            return res.status(400).json({ message: error.message });
+        } catch(e){
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+             
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
+                code: HttpCode.INTERNAL_SERVER_ERROR,
+                message: e.message,
+                type: 'ERR_CONTROLLER_GARDEN_HISTORY-INTERNAL' 
+        });
         }
     }
 }
