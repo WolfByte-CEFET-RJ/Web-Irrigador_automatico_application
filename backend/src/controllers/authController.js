@@ -1,5 +1,6 @@
 const authService = require("../services/authService");
 const { HttpCode, HttpError } = require('../utils/app.error');
+const { ValidationError } = require('yup');
 
 module.exports = {
     async login(req, res){
@@ -10,14 +11,14 @@ module.exports = {
             return res.status(HttpCode.OK).json({ token });
         } catch(e){
             if (e instanceof HttpError){
-                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
-            } else {
-                return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-                    code: HttpCode.INTERNAL_SERVER_ERROR,
-                    message: e.message,
-                    type: 'ERR_SERVICE_LOGIN-INTERNAL-SERVER-ERROR'
-                });
+                return res.status(e.httpCode).json(e);
             }
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     }
 }

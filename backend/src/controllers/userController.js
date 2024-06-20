@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const userService = require('../services/userService');
 const { HttpCode, HttpError } = require('../utils/app.error');
 const { InvalidCode } = require('../errors/userError')
+const { ValidationError } = require('yup');
 
 module.exports = {
     async getAllUsers(req, res) {
@@ -105,14 +106,14 @@ module.exports = {
             return res.status(HttpCode.OK).json({message: response});
         } catch (e) {
             if(e instanceof HttpError) {
-                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
-            } else {
-                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_USER_INTERNAL' 
-				});
+                return res.status(e.httpCode).json(e);
             }
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async verifyCodeAndGenerateToken(req, res) {
@@ -128,14 +129,14 @@ module.exports = {
             return res.status(HttpCode.OK).json({ resetToken });
         } catch (e) {
             if (e instanceof HttpError) {
-                res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
-            } else {
-                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_USER_INTERNAL' 
-				});
+                res.status(e.httpCode).json(e);
             }
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async resetPassword(req, res) {
@@ -147,14 +148,14 @@ module.exports = {
             return res.status(HttpCode.OK).json({ message: response });
         } catch (e) {
             if (e instanceof HttpError) {
-                res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
-            } else {
-                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_USER_INTERNAL' 
-				});
+                res.status(e.httpCode).json(e);
             }
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     }
 };
