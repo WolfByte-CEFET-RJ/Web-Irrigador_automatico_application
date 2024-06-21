@@ -133,7 +133,7 @@ module.exports = {
             
             garden['lastMeasures'] = measurements;
 
-            return res.status(200).json(garden);
+            return res.status(HttpCode.OK).json(garden);
 
         } catch (e) {
             if(e instanceof HttpError) {
@@ -156,7 +156,7 @@ module.exports = {
             let gardens = await gardenService.getUserGardens(userId);
             const measurements = await measurementService.lastMeasuresAllGardens(gardens);
 
-            return res.status(200).json(measurements);
+            return res.status(HttpCode.OK).json(measurements);
 
         } catch (e) {
             if(e instanceof HttpError) {

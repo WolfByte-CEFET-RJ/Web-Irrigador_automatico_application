@@ -20,7 +20,18 @@ class IrrigationHistoryNotFound extends IrrigationHistoryError{
     }
 }
 
+class GardenNotInformed extends IrrigationHistoryError{
+    constructor(){
+        super({
+            httpCode: HttpCode.BAD_REQUEST,
+            message: 'O nome da horta é necessário!',
+            type: 'ERR_CONTROLLER_IRRIGATION_HISTORY-GARDEN_NOT_INFORMED'
+        })
+    }
+}
+
 module.exports = {
     IrrigationHistoryError,
-    IrrigationHistoryNotFound
+    IrrigationHistoryNotFound,
+    GardenNotInformed,
 }

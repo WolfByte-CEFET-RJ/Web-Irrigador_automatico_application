@@ -78,7 +78,7 @@ module.exports = {
             }
         }
 
-        // Caso o usuáerio tenha hortas com medidas, insere o status da horta e o nome da configuração de irrigação usada por ela 
+        // Caso o usuário tenha hortas com medidas, insere o status da horta e o nome da configuração de irrigação usada por ela 
         for (const obj of lastMeasuresGardens) {
             if (obj.lastMeasures.length) {
                 let { configHumidityValue } = await returnConfigValues(obj.irrigationId);
