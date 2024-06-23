@@ -14,11 +14,7 @@ module.exports = {
                 return res.status(e.httpCode).json(e);
             } 
              
-            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_GARDEN_HISTORY-INTERNAL' 
-			});
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
 
@@ -36,11 +32,7 @@ module.exports = {
                 return res.status(e.httpCode).json(e);
             } 
              
-            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-                code: HttpCode.INTERNAL_SERVER_ERROR,
-                message: e.message,
-                type: 'ERR_CONTROLLER_GARDEN_HISTORY-INTERNAL' 
-        });
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     }
 }
