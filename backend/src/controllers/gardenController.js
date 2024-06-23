@@ -23,11 +23,7 @@ module.exports = {
                 return res.status(e.httpCode).json(e);
             } 
             
-            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_GARDEN_INTERNAL' 
-			});
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async getUserGardens(req, res) {
@@ -41,11 +37,7 @@ module.exports = {
                 return res.status(e.httpCode).json(e);
             } 
             
-            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_GARDEN_INTERNAL' 
-			});
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
 
@@ -90,12 +82,7 @@ module.exports = {
                 return res.status(HttpCode.BAD_REQUEST).json({message: e.message});
             }
                 
-            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_GARDEN_INTERNAL' 
-				});
-            
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
 
@@ -114,11 +101,7 @@ module.exports = {
                 return res.status(e.httpCode).json(e);
             } 
             
-            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_GARDEN_INTERNAL' 
-			});
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
 
@@ -140,12 +123,7 @@ module.exports = {
                 return res.status(e.httpCode).json(e);
             } 
                 
-            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_GARDEN_INTERNAL' 
-			});
-            
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     }, 
 
@@ -163,12 +141,7 @@ module.exports = {
                 return res.status(e.httpCode).json(e);
             } 
              
-            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_GARDEN_INTERNAL' 
-			});
-            
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     }
 }

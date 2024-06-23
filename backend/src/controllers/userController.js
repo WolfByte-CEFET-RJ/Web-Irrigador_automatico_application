@@ -8,9 +8,9 @@ module.exports = {
     async getAllUsers(req, res) {
         try {
             const users = await userService.getAllUsers();
-            return res.status(200).json(users);
-        } catch (error) {
-            return res.status(400).json({message: error.message});
+            return res.status(HttpCode.OK).json(users);
+        } catch (e) {
+            return res.status(httpCode.BAD_REQUEST).json({message: e.message});
         }
     },
 
@@ -22,14 +22,10 @@ module.exports = {
             return res.status(HttpCode.OK).json(user);
         } catch(e){
             if(e instanceof HttpError) {
-                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type});
-            } else {
-                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_USER_INTERNAL' 
-				});
-            }
+                return res.status(e.httpCode).json(e);
+            } 
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
 
@@ -42,14 +38,14 @@ module.exports = {
 
         } catch (e) {
             if(e instanceof HttpError) {
-                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
-            } else {
-                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_USER_INTERNAL' 
-				});
+                return res.status(e.httpCode).json(e);
+            } 
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
             }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async updateUser(req, res) {
@@ -66,14 +62,14 @@ module.exports = {
 
         } catch (e) {
             if(e instanceof HttpError) {
-                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
-            } else {
-                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_USER_INTERNAL' 
-				});
+                return res.status(e.httpCode).json(e);
+            } 
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
             }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async deleteUser(req, res) {
@@ -88,14 +84,10 @@ module.exports = {
 
         } catch (error) {
             if(e instanceof HttpError) {
-                return res.status(e.httpCode).json({ code: e.httpCode, message: e.message, type: e.type });
-            } else {
-                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ 
-					code: HttpCode.INTERNAL_SERVER_ERROR,
-					message: e.message,
-					type: 'ERR_CONTROLLER_USER_INTERNAL' 
-				});
-            }
+                return res.status(e.httpCode).json(e);
+            } 
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async forgotPassword(req, res) {
