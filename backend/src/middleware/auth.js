@@ -7,7 +7,8 @@ module.exports = (req, res, next) => {
     const authToken = req.headers.authorization;
     
     if(!authToken){
-        throw new TokenNotFound();
+        const error = new TokenNotFound();
+        return res.status(error.httpCode).json(error);
     }
         
     const [,token] = authToken.split(" ");
