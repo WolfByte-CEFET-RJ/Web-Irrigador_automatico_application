@@ -60,7 +60,7 @@ export default function SignUp() {
       }, 3000);
     } else {
       try {
-        const response = await api.post("http://localhost:5000/user", data); //solicitação POST (criar dados) para a URL do backend
+        const response = await api.post("/user", data); //solicitação POST (criar dados) para a URL do backend
         setSucess("Usuário cadastrado com sucesso!");
         setTimeout(() => {
           setSucess("");
