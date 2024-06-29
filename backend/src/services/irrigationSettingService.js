@@ -1,6 +1,6 @@
 const knex = require('../database'); 
 const yup = require('yup'); 
-const { DuplicatedIrrigatonSettingName, InvalidHumidity, DefaultSettingNotDeleteable, UnauthorizedIrrigationSettingOperation, NothingToDeleteError } = require('../errors/irrigationSettingError');
+const { DuplicatedIrrigatonSettingName, InvalidHumidity, DefaultSettingNotDeleteable, UnauthorizedIrrigationSettingOperation, NothingToDeleteError, IrrigationSettingNotFound} = require('../errors/irrigationSettingError');
 
 // Define o esquema de validação para criar uma configuração de irrigação
 const settingSchema = yup.object().shape({
@@ -88,12 +88,12 @@ module.exports = {
 
         // Verifica se a configuração existe
         if (!setting.length) {
-            throw new Error('Esta config não existe!');
+            throw new IrrigationSettingNotFound();
         }
                 
         // Verifica se o usuário é o proprietário da configuração
         if (myId != setting[0].userId && setting[0].id != 1) {
-            throw new Error('Essa config não pertence a você!');
+            throw new UnauthorizedIrrigationSettingOperation();
         }
         const sensors = {};
 
