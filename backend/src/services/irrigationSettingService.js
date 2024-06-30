@@ -1,6 +1,6 @@
 const knex = require('../database'); 
 const yup = require('yup'); 
-const { DuplicatedIrrigatonSettingName, InvalidHumidity, DefaultSettingNotDeleteable, UpdateUmidityValueError, IrrigationSettingAlreadyExists, NoValuePassed, UserIdNotEditable, InvalidUpdateFields
+const { DuplicatedIrrigatonSettingName, InvalidHumidity, DefaultSettingNotDeleteable, UpdateUmidityValueError, IrrigationSettingAlreadyExists, NoValuePassed, UserIdNotEditable, InvalidUpdateFields, 
     UnauthorizedIrrigationSettingOperation, NothingToDeleteError, IrrigationSettingNotFound, DefaultSettingNotEditable} = require('../errors/irrigationSettingError');
 
 // Define o esquema de validação para criar uma configuração de irrigação
