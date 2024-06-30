@@ -11,7 +11,7 @@ class IrrigationSettingError extends HttpError {
 }
 
 class IrrigationSettingNotFound extends IrrigationSettingError {
-    constructor(type){
+    constructor(type = 'ERR_SERVICE_IRRIGATION-SERVICE_IRRIGATION-SETTING-NOT-FOUND'){
         super({
             httpCode: HttpCode.NOT_FOUND,
             message: 'Esta configuração de irrigação não existe',
