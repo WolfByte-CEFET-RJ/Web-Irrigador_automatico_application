@@ -1,6 +1,7 @@
 const knex = require('../database'); 
 const yup = require('yup'); 
-const { DuplicatedIrrigatonSettingName, InvalidHumidity, DefaultSettingNotDeleteable, UnauthorizedIrrigationSettingOperation, NothingToDeleteError, IrrigationSettingNotFound} = require('../errors/irrigationSettingError');
+const { DuplicatedIrrigatonSettingName, InvalidHumidity, DefaultSettingNotDeleteable, UpdateUmidityValueError, IrrigationSettingAlreadyExists, NoValuePassed, UserIdNotEditable, InvalidUpdateFields
+    UnauthorizedIrrigationSettingOperation, NothingToDeleteError, IrrigationSettingNotFound, DefaultSettingNotEditable} = require('../errors/irrigationSettingError');
 
 // Define o esquema de validação para criar uma configuração de irrigação
 const settingSchema = yup.object().shape({
@@ -185,7 +186,7 @@ module.exports = {
 
         // Verifica se a configuração é a padrão
         if (id == 1) {
-            throw new Error('Você não pode alterar uma configuração padrão.');
+            throw new DefaultSettingNotEditable();
         }
         
         // Obtém a informação da configuração
@@ -193,41 +194,41 @@ module.exports = {
 
         // Verifica se o usuário é o proprietário da configuração
         if (myId != settingInfo.userId) {
-            throw new Error("Você só pode atualizar sua própria config.");
+            throw new UnauthorizedIrrigationSettingOperation();
         }
 
         if (Object.keys(settingData).length === 0){
-            throw new Error('Nenhum valor foi passado!');
+            throw new NoValuePassed();
         }
 
         // Verifica se o usuário está tentando alterar o userId (não permitido)
         if (settingData.userId) {
-            throw new Error('Você não pode alterar o userId.');
+            throw new UserIdNotEditable();
         }
 
-        if (!verifyUpdateData(settingData)) {throw new Error('Alguns campos inseridos não fazem parte da entrutura de uma configuração de irrigação!');}
+        if (!verifyUpdateData(settingData)) {throw new InvalidUpdateFields();}
 
         // Verifica e atualiza o nome da configuração, se fornecido
         if (settingData.name) {
             const settingInfo = await knex('irrigationSetting').select("id").where({ name: settingData.name, userId: myId }).first();
             if (settingInfo) {
-                throw new Error('Já existe uma configuração com esse nome!');
+                throw new IrrigationSettingAlreadyExists();
             }
 
             const settingForChange = await knex('irrigationSetting').where({ id }).update({ name: settingData.name });
             if (!settingForChange) {
-                throw new Error('Esta configuração não existe!');
+                throw new IrrigationSettingNotFound();
             }
         }
 
         // Verifica e atualiza o valor da umidade, se fornecido
         if (settingData.humidityValue) {
             const humidityIsValid = validadeHumidityValue(settingData.humidityValue);
-            if (!humidityIsValid) throw new Error('Valor de umidade inválido!');
+            if (!humidityIsValid) throw new InvalidHumidity();
 
             const humidityValue = await knex('configSensor').where({ irrigationId: settingInfo.id, sensorId: 1 }).update({ value: settingData.humidityValue });
             if (!humidityValue) {
-                throw new Error('Erro ao alterar o valor da umidade!');
+                throw new UpdateUmidityValueError();
             }
         }
 
