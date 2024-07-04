@@ -6,6 +6,7 @@ const user = require("./userSchemas");
 const garden = require("./gardenSchema")
 const setting = require("./settingsSchemas")
 const history = require("./historySchema");
+const erro = require("./genericErrorFormat")
 
 module.exports = {
     //Schemas relacionados a Erros
@@ -13,6 +14,8 @@ module.exports = {
     ResponseError400History: erro400History,
     ResponseError401: erro401,
     ResponseError500 : erro500,
+
+    ResponseError: erro,
 
     //Schemas relacionados ao Usuário
     ResponseGetUsers: user.getUsers,

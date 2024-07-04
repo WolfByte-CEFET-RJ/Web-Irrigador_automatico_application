@@ -63,22 +63,32 @@ module.exports = {
                     }
                 }
             },
-            "400": {
-                description: "Bad request",
+            "401": {
+                description: "Authorization not received",
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError400",
+                            $ref: "#/components/schemas/ResponseError",
                         }
                     }
                 }
             },
-            "401": {
-                description: "Invalid credential",
+            "404": {
+                description: "User not found",
+                content: {
+                    "application/json": {
+                        schema: {
+                            $ref: "#/components/schemas/ResponseError",
+                        }
+                    }
+                }
+            },
+            "500": {
+                description: "Internal server error",
                     content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError401",
+                            $ref: "#/components/schemas/ResponseError",
                         }
                     }
                 }
