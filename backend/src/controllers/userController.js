@@ -10,7 +10,7 @@ module.exports = {
             const users = await userService.getAllUsers();
             return res.status(HttpCode.OK).json(users);
         } catch (e) {
-            return res.status(httpCode.BAD_REQUEST).json({message: e.message});
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({message: e.message});
         }
     },
 

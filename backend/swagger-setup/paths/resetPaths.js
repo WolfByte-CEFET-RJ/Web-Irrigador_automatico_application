@@ -46,25 +46,52 @@ module.exports = {
         },
       },
       "400": {
-        description: "Bad request",
+        description: "Incorrect format request",
         content: {
-          "application/json": {
-            schema: {
-              $ref: "#/components/schemas/ResponseError400",
-            },
-          },
-        },
+            "application/json": {
+                schema: {
+                    $ref: "#/components/schemas/ResponseError",
+                }
+            }
+        }
+      },
+      "401": {
+        description: "Authorization not received",
+        content: {
+            "application/json": {
+                schema: {
+                    $ref: "#/components/schemas/ResponseError",
+                }
+            }
+        }
+      },
+      "404": {
+          description: "User not found",
+          content: {
+              "application/json": {
+                  schema: {
+                      $ref: "#/components/schemas/ResponseError",
+                  }
+              }
+          }
       },
       "500": {
-        description: "Intern server error",
-        content: {
-          "application/json": {
-            schema: {
-              $ref: "#/components/schemas/ResponseError500",
-            },
-          },
-        },
-      },
-    },
+          description: "Internal server error",
+          content: {
+              "application/json": {
+                  schema: {
+                      type: "object",
+                      properties:{
+                          message:{
+                              type: "string",
+                              description: "Error message",
+                              example: "Internal error while processing the request"
+                          }
+                      }
+                  }
+              }
+          }
+      }
+    }
   },
 }

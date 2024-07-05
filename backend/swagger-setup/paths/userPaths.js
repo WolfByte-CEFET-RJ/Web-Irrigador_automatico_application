@@ -31,11 +31,35 @@ module.exports = {
                 }
             },
             "400": {
-                description: "Bad request",
+                description: "Validaton Error",
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError400",
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Validation error message",
+                                    example: "Some of the information provided is poorly formatted"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "500": {
+                description: "Internal server error",
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Error message",
+                                    example: "Internal error while processing the request"
+                                }
+                            }
                         }
                     }
                 }
@@ -85,10 +109,17 @@ module.exports = {
             },
             "500": {
                 description: "Internal server error",
-                    content: {
+                content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError",
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Error message",
+                                    example: "Internal error while processing the request"
+                                }
+                            }
                         }
                     }
                 }
@@ -133,25 +164,69 @@ module.exports = {
                 }
             },
             "400": {
-                description: "Bad request",
+                description: "Validaton Error",
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError400",
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Validation error message",
+                                    example: "Some of the information provided is poorly formatted"
+                                }
+                            }
                         }
                     }
                 }
             },
             "401": {
-                description: "Invalid credential",
-                    content: {
+                description: "Authorization not received",
+                content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError401",
+                            $ref: "#/components/schemas/ResponseError",
                         }
                     }
                 }
-            }
+            },
+            "404": {
+                description: "User not found",
+                content: {
+                    "application/json": {
+                        schema: {
+                            $ref: "#/components/schemas/ResponseError",
+                        }
+                    }
+                }
+            },
+            "409": {
+                description: "Conflict in change email adress",
+                content: {
+                    "application/json": {
+                        schema: {
+                            $ref: "#/components/schemas/ResponseError",
+                        }
+                    }
+                }
+            },
+            "500": {
+                description: "Internal server error",
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Error message",
+                                    example: "Internal error while processing the request"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
         }
     },
 
@@ -181,22 +256,39 @@ module.exports = {
                     }
                 }
             },
-            "400": {
-                description: "Bad request",
+            "401": {
+                description: "Authorization not received",
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError400",
+                            $ref: "#/components/schemas/ResponseError",
                         }
                     }
                 }
             },
-            "401": {
-                description: "Invalid credential",
-                    content: {
+            "404": {
+                description: "User not found",
+                content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError401",
+                            $ref: "#/components/schemas/ResponseError",
+                        }
+                    }
+                }
+            },
+            "500": {
+                description: "Internal server error",
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Error message",
+                                    example: "Internal error while processing the request"
+                                }
+                            }
                         }
                     }
                 }

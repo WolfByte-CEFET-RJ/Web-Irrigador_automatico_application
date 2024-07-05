@@ -1,3 +1,5 @@
+const { type, properties } = require("../schemas/erro400Schema");
+
 module.exports = {
     get: {
         summary: "View data of all registered users",
@@ -22,22 +24,29 @@ module.exports = {
                     }
                 }
             },
-            "400": {
-                description: "Bad request",
+            "401": {
+                description: "Authorization not received",
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError400",
+                            $ref: "#/components/schemas/ResponseError",
                         }
                     }
                 }
             },
-            "401": {
-                description: "Invalid credential",
-                    content: {
+            "500": {
+                description: "Internal server error",
+                content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError401",
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Error message",
+                                    example: "Internal error while processing the request"
+                                }
+                            }
                         }
                     }
                 }
