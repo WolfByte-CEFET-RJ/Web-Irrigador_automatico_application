@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: {
+  profile_container: {
     flex: 1,
     backgroundColor: "#EDF1D6",
     display: "flex",
@@ -77,7 +77,6 @@ export const styles = StyleSheet.create({
     marginTop: 40,
   },
   delete_text: {
-    fontWeight: 12,
     color: "#40513B",
     fontFamily: "Montserrat-Bold",
   },

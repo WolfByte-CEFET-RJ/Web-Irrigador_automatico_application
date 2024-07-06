@@ -71,7 +71,7 @@ const ViewGarden = () => {
           </Text>
         </SafeAreaView>
         <Text style={styles.config_Text}>
-          Configuração: <b>{irrigationName}</b>
+          Configuração: {irrigationName}
         </Text>
 
         <SafeAreaView style={styles.view_bars}>

@@ -114,7 +114,7 @@ export default function Profile() {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -50}
-        style={styles.container}
+        style={styles.profile_container}
       >
         <StatusBar />
         <View style={styles.logo_container}>
@@ -198,7 +198,7 @@ export default function Profile() {
           <Text style={styles.delete_text}>
             Deseja excluir a sua conta?{" "}
             <Pressable>
-              <Text style={styles.clickHere} onClick={handleDeleteModal}>
+              <Text style={styles.clickHere} onPress={handleDeleteModal}>
                 Clique aqui
               </Text>
               <DeleteModal
