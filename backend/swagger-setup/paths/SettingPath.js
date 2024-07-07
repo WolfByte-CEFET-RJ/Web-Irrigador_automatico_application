@@ -35,17 +35,34 @@ module.exports = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError400",
+                            $ref: "#/components/schemas/ResponseError",
                         }
                     }
                 }
             },
             "401": {
-                description: "Invalid credential",
+                description: "Authorization not received",
                     content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError401",
+                            $ref: "#/components/schemas/ResponseError",
+                        }
+                    }
+                }
+            },
+            "500": {
+                description: "Internal server error",
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Error message",
+                                    example: "Internal error while processing the request"
+                                }
+                            }
                         }
                     }
                 }
@@ -104,7 +121,7 @@ module.exports = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError400",
+                            $ref: "#/components/schemas/ResponseError",
                         }
                     }
                 }
@@ -114,7 +131,24 @@ module.exports = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError401",
+                            $ref: "#/components/schemas/ResponseError",
+                        }
+                    }
+                }
+            },
+            "500": {
+                description: "Internal server error",
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Error message",
+                                    example: "Internal error while processing the request"
+                                }
+                            }
                         }
                     }
                 }
@@ -164,7 +198,7 @@ module.exports = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError400",
+                            $ref: "#/components/schemas/ResponseError",
                         }
                     }
                 }
@@ -174,7 +208,24 @@ module.exports = {
                     content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError401",
+                            $ref: "#/components/schemas/ResponseError",
+                        }
+                    }
+                }
+            },
+            "500": {
+                description: "Internal server error",
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Error message",
+                                    example: "Internal error while processing the request"
+                                }
+                            }
                         }
                     }
                 }
