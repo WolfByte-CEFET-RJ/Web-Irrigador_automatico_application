@@ -19,7 +19,6 @@ import { createAxiosInstance } from "../../services/api";
 import SucessComponent from "../../components/success/SuccessComponent";
 import { useGarden } from "../../contexts/GardenContext";
 import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
-import { useNavigation } from "@react-navigation/native";
 import { SelectList } from "react-native-dropdown-select-list";
 
 
@@ -29,7 +28,7 @@ const AddGarden = () => {
   };
 
   const api = createAxiosInstance();
- const navigation = useNavigation()
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [identifier, setIdentifier] = useState("");
@@ -75,9 +74,6 @@ const AddGarden = () => {
         setTimeout(() => {
           setSucess("");
         }, 3000);
-        setTimeout(()=>{
-          navigation.navigate("Home");
-        },1000);
       } catch (error) {
         setError(error.response.data.message);
         setTimeout(() => {

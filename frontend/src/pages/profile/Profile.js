@@ -114,7 +114,7 @@ export default function Profile() {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -50}
-        style={styles.profile_container}
+        style={styles.container}
       >
         <StatusBar />
         <View style={styles.logo_container}>
