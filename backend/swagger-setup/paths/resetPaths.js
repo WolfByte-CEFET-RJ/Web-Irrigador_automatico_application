@@ -46,7 +46,7 @@ module.exports = {
         },
       },
       "400": {
-        description: "Incorrect format request",
+        description: "Bad request",
         content: {
             "application/json": {
                 schema: {

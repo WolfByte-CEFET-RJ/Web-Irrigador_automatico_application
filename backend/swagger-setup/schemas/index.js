@@ -1,8 +1,5 @@
-const erro400 = require("./erro400Schema");
-const erro400History = require("./erro400HistorySchema");
-const erro401 = require("./erro401Schema");
-const erro500 = require("./erro500Schema")
 const user = require("./userSchemas");
+const erro400History = require("./erro400HistorySchema");
 const garden = require("./gardenSchema")
 const setting = require("./settingsSchemas")
 const history = require("./historySchema");
@@ -10,12 +7,8 @@ const erro = require("./genericErrorFormat")
 
 module.exports = {
     //Schemas relacionados a Erros
-    ResponseError400: erro400,
-    ResponseError400History: erro400History,
-    ResponseError401: erro401,
-    ResponseError500 : erro500,
-
     ResponseError: erro,
+    ResponseError400History: erro400History,
 
     //Schemas relacionados ao Usuário
     ResponseGetUsers: user.getUsers,

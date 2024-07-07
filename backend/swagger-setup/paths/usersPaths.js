@@ -1,4 +1,3 @@
-const { type, properties } = require("../schemas/erro400Schema");
 
 module.exports = {
     get: {

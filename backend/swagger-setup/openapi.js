@@ -40,11 +40,9 @@ const openApiDocument = {
       }
     },
     externalDocs: {
-        description: "Pesquisa e Prototipagem",
-        url: "https://docs.google.com/document/d/1ZOw6h07MdLoZnEbsfuC1LLb_xfXNLjHfuz_29Xtl8Fo/edit"
-        // MONTAR UM DRIVE COM OS DOCS, O ATRIBUTO SÓ RECEBE 1 LINK
-        // https://docs.google.com/document/d/14bgq_BmYfMkKwTuk0kb8C10kXW0ZQl6CEtnAxMSN7SA/edit
-        // https://drive.google.com/file/d/1GLH6PAzltESBoO5uRdQrc-eh_nThnK55/view
+        description: "Documentação do Projeto",
+        //PASTA DE DO DRIVE DA BOWER
+        url: "https://drive.google.com/drive/u/3/folders/1LHOCC7I7jHEO2XsJ7wEzA7HIZM-T3fXQ"
       },
     tags: [
       {
