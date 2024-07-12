@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "##EDF1D6"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -19,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "##EDF1D6"
-      }
+      },
+      "package": "com.anonymous.frontend"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -28,9 +31,12 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/Montserrat-Bold.ttf"]
+          "fonts": [
+            "./assets/fonts/Montserrat-Bold.ttf"
+          ]
         }
-      ]
+      ],
+      "expo-build-properties"
     ]
   }
 }
