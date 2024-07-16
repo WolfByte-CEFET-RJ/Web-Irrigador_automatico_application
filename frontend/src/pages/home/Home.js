@@ -9,8 +9,13 @@ import { StatusBar } from "expo-status-bar";
 import { useGarden } from "../../contexts/GardenContext";
 import { createAxiosInstance } from "../../services/api";
 import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
+import Button from "../../components/button/Button";
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { useRef } from 'react';
+import { Platform } from 'react-native';
 
-export default function Home() {
+export default async function Home() {
   const api = createAxiosInstance();
   const navigation = useNavigation();
   const [buscarHorta, setBuscarHorta] = useState("");
@@ -70,7 +75,88 @@ export default function Home() {
       console.error("Erro ao excluir horta:", error);
     }
   };
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+   });
 
+
+async function registerForPushNotificationsAsync() {
+    let token;
+    if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+        console.log("Expo push token:", token);
+    } else {
+        alert('Must use physical device for Push Notifications');
+    }
+    
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+        });
+    }
+    
+    return token;
+}
+async function sendPushNotification(expoPushToken) {
+    const message = {
+        to: expoPushToken,
+        sound: 'default',
+        title: 'Test title',
+        body: 'Test body',
+        data: { testData: 'test data' },
+    };
+    
+    await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+    });
+}
+
+
+    const [expoPushToken, setExpoPushToken] = useState('');
+    const [notification, setNotification] = useState(false);
+    const notificationListener = useRef();
+    const responseListener = useRef();
+   
+    useEffect(async () => {
+      await registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+   
+      notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+        setNotification(notification);
+      });
+   
+      responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+        console.log(response);
+      });
+   
+      return () => {
+        Notifications.removeNotificationSubscription(notificationListener.current);
+        Notifications.removeNotificationSubscription(responseListener.current);
+      };
+    }, []);
+  
   return (
     <View style={styles.home_container}>
       <StatusBar style="dark-content" />
@@ -96,6 +182,31 @@ export default function Home() {
         />
       </View>
       <Text style={styles.minhasHortas}>Minhas hortas</Text>
+
+
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'space-around',
+        }}>
+        <Text>Your expo push token: {expoPushToken}</Text>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Text>Notification Title: {notification && notification.request.content.title} </Text>
+          <Text>Notification Body: {notification && notification.request.content.body}</Text>
+          <Text>Notification Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
+        </View>
+
+        <Button
+          title="Press to Send Notification"
+          onPress={async () => {
+            await sendPushNotification(expoPushToken);
+          }}
+        />
+      </View>
+
+
+
       <View style={styles.hortas_container}>
         {gardenData != "O usuário ainda não possui hortas criadas." ? (
           filtrarHortas().map((garden) => (
@@ -143,3 +254,4 @@ export default function Home() {
     </View>
   );
 }
+
