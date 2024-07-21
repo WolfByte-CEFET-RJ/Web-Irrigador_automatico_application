@@ -113,4 +113,28 @@ describe("User Controller", () => {
         });
 
     });
+
+    describe("Create User", () => {
+        it("should create a new user and return 201 status code", async () => {
+            const mockUser = { id: 1, name: 'Lucas Gael', email: 'gael@example.com', password: '123123123',humidityNotification: 1 };
+            const { name, email, password, humidityNotification } = mockUser;
+
+            const req = {
+                body: mockUser
+            };
+
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            userService.createUser.mockResolvedValue(mockUser);
+
+            await userController.createUser(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(HttpCode.CREATED);
+            expect(res.json).toHaveBeenCalledWith({ message: mockUser });
+            expect(userService.createUser).toHaveBeenCalledWith(name, email, password, humidityNotification);
+        })
+    })
 })
