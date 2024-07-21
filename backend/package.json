@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon -L src/server.js",
     "migration": "./node_modules/.bin/knex migrate:latest",
-    "seed": "./node_modules/.bin/knex seed:run"
+    "seed": "./node_modules/.bin/knex seed:run",
+    "test": "jest --passWithNoTests"
   },
   "keywords": [],
   "author": "",
