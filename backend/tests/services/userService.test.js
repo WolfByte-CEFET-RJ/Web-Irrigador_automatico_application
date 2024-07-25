@@ -13,7 +13,7 @@ describe("User Service", () => {
         jest.clearAllMocks();
         jest.clearAllTimers();
     });
-    
+
     describe('Get All Users', () => {
         it('should return all users from the database', async () => {
 
@@ -141,10 +141,32 @@ describe("User Service", () => {
         });
 
         it("should throw validation error if humidityNotification is invalid", async () => {
-            const mockUser = { name: 'Luana', email: 'gael@example.com', password: '123123123', humidityNotification: 'invalid' };
+            const mockUser = { name: 'Luana', email: 'gael@example.com', password: '123123123', humidityNotification: '5' };
             const { name, email, password, humidityNotification } = mockUser;
 
             await expect(userService.createUser(name, email, password, humidityNotification)).rejects.toThrow(yup.ValidationError);
+        });
+
+        it("should throw AlreadyExists error if the user already exists", async () => {
+            const mockUser = { id: 1, name: 'Lucas Gael', email: 'gael@example.com', password: '123123123', humidityNotification: 1 };
+            const { name, email, password, humidityNotification } = mockUser;
+
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            const firstKnexMock = jest.fn().mockResolvedValue({ email: 'gael@example.com' });
+
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock,
+                insert: jest.fn().mockResolvedValue([1])
+            }));
+
+            await expect(userService.createUser(name, email, password, humidityNotification)).rejects.toThrow(AlreadyExists);
+            expect(knex).toHaveBeenCalledWith('user');
+            expect(selectKnexMock).toHaveBeenCalledWith('email');
+            expect(whereKnexMock).toHaveBeenCalledWith({ email });
+            expect(firstKnexMock).toHaveBeenCalled();
         });
     });
 });
