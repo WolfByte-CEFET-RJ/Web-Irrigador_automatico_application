@@ -62,7 +62,7 @@ const LogIn = () => {
       <View style={styles.slogan_container}>
         <Text style={styles.app_name}>SmartGarden</Text>
         <Text style={styles.app_slogan}>
-          Cadastre-se para automatizar sua horta
+          Entre para automatizar sua horta
         </Text>
       </View>
       <Image
@@ -87,7 +87,9 @@ const LogIn = () => {
         />
       </View>
       <View style={styles.remember_forgot}>
-        <Text style={styles.forgot_text}>Esqueceu a senha?</Text>
+        <TouchableOpacity onPress={()=>navigation.navigate("ForgotPassword")}>
+          <Text style={styles.forgot_text}>Esqueceu a senha?</Text>
+        </TouchableOpacity>
       </View>
       <Button title="Acessar" onPress={() => handleSubmit()} />
       <View style={styles.cadastrar_container}>

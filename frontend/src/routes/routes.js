@@ -8,6 +8,7 @@ import ViewGarden from "../pages/viewGarden/ViewGarden";
 import Profile from "../pages/profile/Profile";
 import ViewConfig from "../pages/ViewConfig/ViewConfig";
 import IrrigationHistory from "../pages/IrrigationHistory/IrrigationHistory";
+import ForgotPassword from "../pages/forgotPassword/ForgotPassword";
 
 const Stack = createStackNavigator();
 const Navigation = () => {
@@ -25,6 +26,7 @@ const Navigation = () => {
         <Stack.Screen name="ViewGarden" component={ViewGarden} />
         <Stack.Screen name="IrrigationHistory" component={IrrigationHistory} />
         <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         
       </Stack.Navigator>
     </NavigationContainer>
