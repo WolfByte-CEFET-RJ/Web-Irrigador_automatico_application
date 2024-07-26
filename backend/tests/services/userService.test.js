@@ -169,4 +169,51 @@ describe("User Service", () => {
             expect(firstKnexMock).toHaveBeenCalled();
         });
     });
+
+    describe('Update User', () => {
+        it('should update user data and return success', async () => {
+            const mockUser = { id: 1, name: 'Lucas Gael', email: 'gael@example.com', password: '123123123', humidityNotification: 1 };
+            const { id, name, password, humidityNotification } = mockUser;
+
+            userService.getUser = jest.fn().mockResolvedValue(mockUser);
+
+            bcrypt.genSalt.mockResolvedValue('salt');
+            bcrypt.hash.mockResolvedValue('hashedPassword');
+
+            const updateKnexMock = jest.fn().mockResolvedValue(1);
+            knex.mockImplementation(() => ({
+                update: updateKnexMock,
+                where: jest.fn().mockReturnThis()
+            }));
+
+            const result = await userService.updateUser(id, { name, password, humidityNotification });
+
+            expect(result).toEqual(1);
+            expect(userService.getUser).toHaveBeenCalledWith(id);
+            expect(bcrypt.genSalt).toHaveBeenCalled();
+            expect(bcrypt.hash).toHaveBeenCalledWith(password, 'salt');
+            expect(knex).toHaveBeenCalledWith('user');
+            expect(updateKnexMock).toHaveBeenCalledWith({
+                name,
+                password: 'hashedPassword',
+                humidityNotification
+            });
+        });
+
+        it('should throw error if email is being updated', async () => {
+            await expect(userService.updateUser(1, { email: 'newemail@example.com' })).rejects.toThrow(NotAllowedChangeEmail);
+        });
+
+        it('should throw validation error if data is invalid', async () => {
+            const mockUser = { name: 'Lu', password: '123', humidityNotification: 'invalid' };
+
+            await expect(userService.updateUser(1, mockUser)).rejects.toThrow(yup.ValidationError);
+        });
+
+        it('should throw UserNotFound error if user does not exist', async () => {
+            userService.getUser = jest.fn().mockResolvedValue(null);
+
+            await expect(userService.updateUser(1, { name: 'New Name' })).rejects.toThrow(UserNotFound);
+        });
+    });
 });
