@@ -216,4 +216,43 @@ describe("User Service", () => {
             await expect(userService.updateUser(1, { name: 'New Name' })).rejects.toThrow(UserNotFound);
         });
     });
+
+    describe("Delete User", () => {
+        it("should delete one user and return 1", async () =>{
+            // mocking
+            const user_id = 1
+            const searchedMockUser = { id: user_id, name: "John", email: "john@example.com", humidityNotification: 1 }
+
+            userService.getUser = jest.fn().mockResolvedValue(searchedMockUser)
+
+            const whereKnexMock = jest.fn().mockReturnThis();
+            const delKnexMock = jest.fn().mockResolvedValue(1);
+
+            knex.mockImplementation(() => ({
+                where: whereKnexMock,
+                del: delKnexMock
+            }));
+
+            // execução
+            const deletions = await userService.deleteUser(user_id);
+
+            // asserts
+            expect(deletions).toEqual(1)
+            expect(userService.getUser).toHaveBeenCalledWith(user_id)
+            expect(knex).toHaveBeenCalledWith('user');
+            expect(whereKnexMock).toHaveBeenCalledWith({ id: user_id });
+            expect(delKnexMock).toHaveBeenCalled();
+        })
+
+        it("should throw an error when user not found", async () =>{
+            // mocking
+            const user_id = -1
+            userService.getUser = jest.fn().mockRejectedValue(new UserNotFound());
+
+            // execução e asserts
+            await expect(userService.deleteUser(user_id)).rejects.toThrow(UserNotFound);
+            expect(userService.getUser).toHaveBeenCalledWith(user_id)
+        })
+    });
+    
 });

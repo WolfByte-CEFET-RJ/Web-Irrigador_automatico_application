@@ -42,15 +42,15 @@ describe("User Controller", () => {
                 json: jest.fn()
             }
 
-            const errorMessage = "mocked message";
-            userService.getAllUsers.mockRejectedValue(new Error(errorMessage));
+            const error = new Error("mocked message");
+            userService.getAllUsers.mockRejectedValue(error);
             
             // execução
             await userController.getAllUsers(req, res);
             
             // asserts
             expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
-            expect(res.json).toHaveBeenCalledWith({ message: errorMessage });
+            expect(res.json).toHaveBeenCalledWith({ message: error.message });
         });
     })
 
@@ -82,14 +82,14 @@ describe("User Controller", () => {
                 json: jest.fn()
             };
 
-            const httpError = new HttpError({httpCode: 999, type: 'ERR_MOCKED', message: 'any previst erro message'})
+            const httpError = new HttpError({httpCode: -1, type: 'ERR_MOCKED', message: 'any previst erro message'})
             userService.getUser.mockRejectedValue(httpError)
             
             // execução
             await userController.getUser(req, res);
             
             // asserts
-            expect(res.status).toHaveBeenCalledWith(999)
+            expect(res.status).toHaveBeenCalledWith(httpError.httpCode)
             expect(res.json).toHaveBeenCalledWith(httpError)
         });
 
@@ -101,15 +101,15 @@ describe("User Controller", () => {
                 json: jest.fn()
             }
 
-            const errorMessage = "mocked message"
-            userService.getUser.mockRejectedValue(new Error(errorMessage));
+            const error = new Error("mocked message")
+            userService.getUser.mockRejectedValue(error);
             
             // execução
             await userController.getUser(req, res)
             
             // asserts
             expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR)
-            expect(res.json).toHaveBeenCalledWith({ message: errorMessage })
+            expect(res.json).toHaveBeenCalledWith({ message: error.message })
         });
 
     });
@@ -182,5 +182,65 @@ describe("User Controller", () => {
             expect(res.json).toHaveBeenCalledWith({ message: errorMessage });
         });
     });
-    
+
+    describe("Delete User", () => {
+        it("should delete 1 (one) user and and return status OK", async () =>{
+            // mocking 
+            const req = { user_id: 1 }
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            userService.deleteUser.mockResolvedValue(1)
+
+            // execução
+            await userController.deleteUser(req, res)
+
+            // asserts
+            expect(userService.deleteUser).toHaveBeenCalledTimes(1)
+            expect(userService.deleteUser).toHaveBeenCalledWith(req.user_id)
+            expect(res.status).toHaveBeenCalledWith(HttpCode.OK)
+            expect(res.json).toHaveBeenCalledWith({message: 'Usuário deletado com sucesso!'})
+        })
+
+        it("should return a previst http error", async () =>{
+            // mocking 
+            const req = { user_id: 1 }
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            const httpError = new HttpError({httpCode: -1, type: 'ERR_MOCKED', message: 'any previst erro message'})
+            userService.deleteUser.mockRejectedValue(httpError)
+
+            // execução
+            await userController.deleteUser(req, res)
+
+            // asserts
+            expect(res.status).toHaveBeenCalledWith(httpError.httpCode)
+            expect(res.json).toHaveBeenCalledWith(httpError)
+        })
+
+        it('should return an error message with status INTERNAL SERVER ERROR', async () => {
+            // mocking
+            const req = { user_id: 1 }
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            const error = new Error("mocked message")
+            userService.deleteUser.mockRejectedValue(error);
+            
+            // execução
+            await userController.deleteUser(req, res)
+            
+            // asserts
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR)
+            expect(res.json).toHaveBeenCalledWith({ message: error.message })
+        });
+    });
+
 })

@@ -82,7 +82,7 @@ module.exports = {
                 res.status(HttpCode.OK).json({message: 'Usuário deletado com sucesso!'})
             }
 
-        } catch (error) {
+        } catch (e) {
             if(e instanceof HttpError) {
                 return res.status(e.httpCode).json(e);
             } 
