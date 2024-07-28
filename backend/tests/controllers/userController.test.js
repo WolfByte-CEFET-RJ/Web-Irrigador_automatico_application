@@ -1,6 +1,7 @@
 const userController = require("../../src/controllers/userController.js")
 const userService = require("../../src/services/userService.js")
 const { HttpCode, HttpError } = require("../../src/utils/app.error.js")
+const { ValidationError } = require('yup');
 
 jest.mock("../../src/services/userService.js")
 
@@ -136,6 +137,48 @@ describe("User Controller", () => {
             expect(res.json).toHaveBeenCalledWith({ message: mockUser });
             expect(userService.createUser).toHaveBeenCalledWith(name, email, password, humidityNotification);
         })
+
+        it("should return 400 status code on validation error", async () => {
+            const mockUser = { name: 'Lucas Gael', email: 'invalid-email', password: '123123123', humidityNotification: 1 };
+
+            const req = {
+                body: mockUser
+            };
+
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            const validationError = new ValidationError('Validation failed');
+            userService.createUser.mockRejectedValue(validationError);
+
+            await userController.createUser(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(HttpCode.BAD_REQUEST);
+            expect(res.json).toHaveBeenCalledWith({ message: validationError.message });
+        })
+
+        it("should return an error message with status INTERNAL SERVER ERROR on failure", async () => {
+            const mockUser = { name: 'Lucas Gael', email: 'gael@example.com', password: '123123123', humidityNotification: 1 };
+
+            const req = {
+                body: mockUser
+            };
+
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            const internalServerError = new Error('Internal server error');
+            userService.createUser.mockRejectedValue(internalServerError);
+
+            await userController.createUser(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+            expect(res.json).toHaveBeenCalledWith({ message: internalServerError.message });
+        });
     });
 
     describe("Update User", () => {
