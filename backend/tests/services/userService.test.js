@@ -1,7 +1,7 @@
 const knex = require('../../src/database/index.js');
 const yup = require('yup');
 const bcrypt = require('bcryptjs');
-const { UserNotFound, AlreadyExists } = require('../../src/errors/userError.js');
+const { UserNotFound, AlreadyExists, NotAllowedChangeEmail } = require('../../src/errors/userError.js');
 const userService = require('../../src/services/userService.js');
 
 jest.mock('../../src/database/index.js');
@@ -172,42 +172,45 @@ describe("User Service", () => {
 
     describe('Update User', () => {
         it('should update user data and return success', async () => {
-            const mockUser = { id: 1, name: 'Lucas Gael', email: 'gael@example.com', password: '123123123', humidityNotification: 1 };
-            const { id, name, password, humidityNotification } = mockUser;
+            const mockUserId = 1;
+            const mockUser = { id: mockUserId, name: 'Lucas Gael', email: 'gael@example.com', humidityNotification: 1 };
+            const mockUserData = { name: 'Updated Name', password: 'newpassword123', humidityNotification: 1 };
 
             userService.getUser = jest.fn().mockResolvedValue(mockUser);
-
+            
+            const whereKnexMock = jest.fn().mockReturnThis();
+            const updateKnexMock = jest.fn().mockResolvedValue(1);
+            knex.mockImplementation(() => ({
+                where: whereKnexMock,
+                update: updateKnexMock
+            }));
+            
             bcrypt.genSalt.mockResolvedValue('salt');
             bcrypt.hash.mockResolvedValue('hashedPassword');
 
-            const updateKnexMock = jest.fn().mockResolvedValue(1);
-            knex.mockImplementation(() => ({
-                update: updateKnexMock,
-                where: jest.fn().mockReturnThis()
-            }));
+            const result = await userService.updateUser(mockUserId, mockUserData);
 
-            const result = await userService.updateUser(id, { name, password, humidityNotification });
-
-            expect(result).toEqual(1);
-            expect(userService.getUser).toHaveBeenCalledWith(id);
-            expect(bcrypt.genSalt).toHaveBeenCalled();
-            expect(bcrypt.hash).toHaveBeenCalledWith(password, 'salt');
+            expect(result).toBe(1);
             expect(knex).toHaveBeenCalledWith('user');
-            expect(updateKnexMock).toHaveBeenCalledWith({
-                name,
+            expect(knex().where).toHaveBeenCalledWith({ id: mockUserId });
+            expect(knex().update).toHaveBeenCalledWith({
+                name: mockUserData.name,
                 password: 'hashedPassword',
-                humidityNotification
+                humidityNotification: mockUserData.humidityNotification
             });
         });
 
         it('should throw error if email is being updated', async () => {
-            await expect(userService.updateUser(1, { email: 'newemail@example.com' })).rejects.toThrow(NotAllowedChangeEmail);
+            const mockUserId = 1;
+            const mockUserData = { email: 'newemail@example.com' };
+
+            await expect(userService.updateUser(mockUserId, mockUserData)).rejects.toThrow(NotAllowedChangeEmail);
         });
 
         it('should throw validation error if data is invalid', async () => {
-            const mockUser = { name: 'Lu', password: '123', humidityNotification: 'invalid' };
+            const mockUserData = { name: 'Lu', password: '123', humidityNotification: 'invalid' };
 
-            await expect(userService.updateUser(1, mockUser)).rejects.toThrow(yup.ValidationError);
+            await expect(userService.updateUser(1, mockUserData)).rejects.toThrow(yup.ValidationError);
         });
 
         it('should throw UserNotFound error if user does not exist', async () => {

@@ -183,26 +183,27 @@ describe("User Controller", () => {
 
     describe("Update User", () => {
         it("should update an existing user and return 200 status code", async () => {
-            const mockUser = { id: 1, name: 'Lucas Gael', email: 'gael_updated@example.com', humidityNotification: 0 };
-            const { id, name, email, humidityNotification } = mockUser;
+            const mockUser = { id: 1, name: 'Lucas Gael', humidityNotification: 0 };
+            const { id, name, humidityNotification } = mockUser;
     
+            userService.updateUser = jest.fn().mockResolvedValue(1);
+            
             const req = {
-                user_id: id,
-                body: { name, email, humidityNotification }
+                user_id: mockUser.id,
+                body: { name: mockUser.name, humidityNotification: mockUser.humidityNotification }
             };
     
             const res = {
                 status: jest.fn().mockReturnThis(),
-                json: jest.fn()
+                json: jest.fn().mockReturnThis()
             };
     
-            userService.updateUser.mockResolvedValue(mockUser);
     
             await userController.updateUser(req, res);
     
             expect(res.status).toHaveBeenCalledWith(HttpCode.OK);
-            expect(res.json).toHaveBeenCalledWith({ message: mockUser });
-            expect(userService.updateUser).toHaveBeenCalledWith(id, name, email, humidityNotification);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Usuário atualizado com sucesso' });
+            expect(userService.updateUser).toHaveBeenCalledWith(id, { name, humidityNotification });
         });
     
         it("should return an error message with status INTERNAL SERVER ERROR on failure", async () => {
