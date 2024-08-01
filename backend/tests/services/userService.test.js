@@ -1,7 +1,7 @@
 const knex = require('../../src/database/index.js');
 const yup = require('yup');
 const bcrypt = require('bcryptjs');
-const { UserNotFound, AlreadyExists, NotAllowedChangeEmail } = require('../../src/errors/userError.js');
+const { UserNotFound, AlreadyExists, NotAllowedChangeEmail, PasswordMismatch, NoCode } = require('../../src/errors/userError.js');
 const userService = require('../../src/services/userService.js');
 
 jest.mock('../../src/database/index.js');
@@ -258,4 +258,103 @@ describe("User Service", () => {
         })
     });
     
+    describe("resetPassword", () => {
+        const email = 'test@example.com';
+        const password = 'newpassword123';
+        const confirmPassword = 'newpassword123';
+
+        it('should reset password successfully', async () => {
+            const mockUser = { email, code: '123456' };
+            knex.mockReturnValue({
+                select: jest.fn().mockReturnThis(),
+                where: jest.fn().mockReturnThis(),
+                first: jest.fn().mockResolvedValue(mockUser),
+                update: jest.fn().mockResolvedValue(1)
+            });
+            bcrypt.genSalt.mockResolvedValue('salt');
+            bcrypt.hash.mockResolvedValue('hashedPassword');
+
+            const response = await userService.resetPassword(email, password, confirmPassword);
+
+            expect(knex().select).toHaveBeenCalledWith('*');
+            expect(knex().where).toHaveBeenCalledWith({ email });
+            expect(knex().first).toHaveBeenCalled();
+            expect(bcrypt.genSalt).toHaveBeenCalled();
+            expect(bcrypt.hash).toHaveBeenCalledWith(password, 'salt');
+            expect(knex().update).toHaveBeenCalledWith({ 
+                password: 'hashedPassword', 
+                code: null,
+                expirationDate: null
+            });
+            expect(response).toBe('Senha alterada com sucesso!');
+        });
+
+        it('should throw UserNotFound error if user does not exist', async () => {
+            knex.mockReturnValue({
+                select: jest.fn().mockReturnThis(),
+                where: jest.fn().mockReturnThis(),
+                first: jest.fn().mockResolvedValue(null)
+            });
+
+            await expect(userService.resetPassword(email, password, confirmPassword))
+            .rejects
+            .toThrow(UserNotFound);
+
+            expect(knex().select).toHaveBeenCalledWith('*');
+            expect(knex().where).toHaveBeenCalledWith({ email });
+            expect(knex().first).toHaveBeenCalled();
+        });
+
+        it('should throw PasswordMismatch error if passwords do not match', async () => {
+            const mockUser = { email, code: '123456' };
+            knex.mockReturnValue({
+                select: jest.fn().mockReturnThis(),
+                where: jest.fn().mockReturnThis(),
+                first: jest.fn().mockResolvedValue(mockUser)
+            });
+
+            await expect(userService.resetPassword(email, password, 'differentpassword'))
+            .rejects
+            .toThrow(PasswordMismatch);
+
+            expect(knex().select).toHaveBeenCalledWith('*');
+            expect(knex().where).toHaveBeenCalledWith({ email });
+            expect(knex().first).toHaveBeenCalled();
+        });
+
+        it('should throw ValidationError if password is invalid', async () => {
+            const invalidPassword = 'short';
+            const mockUser = { email, code: '123456' };
+            knex.mockReturnValue({
+                select: jest.fn().mockReturnThis(),
+                where: jest.fn().mockReturnThis(),
+                first: jest.fn().mockResolvedValue(mockUser)
+            });
+
+            await expect(userService.resetPassword(email, invalidPassword, invalidPassword))
+            .rejects
+            .toThrow(yup.ValidationError);
+
+            expect(knex().select).toHaveBeenCalledWith('*');
+            expect(knex().where).toHaveBeenCalledWith({ email });
+            expect(knex().first).toHaveBeenCalled();
+        });
+
+        it('should throw NoCode error if user code is null', async () => {
+            const mockUser = { email, code: null };
+            knex.mockReturnValue({
+                select: jest.fn().mockReturnThis(),
+                where: jest.fn().mockReturnThis(),
+                first: jest.fn().mockResolvedValue(mockUser)
+            });
+
+            await expect(userService.resetPassword(email, password, confirmPassword))
+            .rejects
+            .toThrow(NoCode);
+
+            expect(knex().select).toHaveBeenCalledWith('*');
+            expect(knex().where).toHaveBeenCalledWith({ email });
+            expect(knex().first).toHaveBeenCalled();
+        });
+    });
 });

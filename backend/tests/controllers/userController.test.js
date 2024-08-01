@@ -287,4 +287,56 @@ describe("User Controller", () => {
         });
     });
 
+    describe("Reset Password", () => {
+        let req, res;
+
+        beforeEach(() => {
+            req = {
+                body: { 
+                    password: 'newpassword123',
+                    confirmPassword: 'newpassword123'
+                },
+                email: 'test@example.com'
+            };
+
+            res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            jest.clearAllMocks();
+        });
+
+        it('should reset password successfully', async () => {
+            userService.resetPassword.mockResolvedValue('Password reset successful');
+
+            await userController.resetPassword(req, res);
+
+            expect(userService.resetPassword).toHaveBeenCalledWith(req.email, req.body.password, req.body.confirmPassword);
+            expect(res.status).toHaveBeenCalledWith(HttpCode.OK);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Password reset successful' });
+        });
+
+        it('should handle validation error', async () => {
+            const validationError = new ValidationError('Validation failed');
+            userService.resetPassword.mockRejectedValue(validationError);
+
+            await userController.resetPassword(req, res);
+
+            expect(userService.resetPassword).toHaveBeenCalledWith(req.email, req.body.password, req.body.confirmPassword);
+            expect(res.status).toHaveBeenCalledWith(HttpCode.BAD_REQUEST);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Validation failed' });
+        });
+
+        it('should handle unexpected error', async () => {
+            const unexpectedError = new Error('Unexpected error');
+            userService.resetPassword.mockRejectedValue(unexpectedError);
+
+            await userController.resetPassword(req, res);
+
+            expect(userService.resetPassword).toHaveBeenCalledWith(req.email, req.body.password, req.body.confirmPassword);
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Unexpected error' });
+        });
+    });
 })
