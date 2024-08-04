@@ -19,6 +19,7 @@ const ForgotPassword = () => {
     const [isModalVisible, setModalVisible] = useState(false);
 
     const handleForgotPassword = async () => {
+        setModalVisible(true);
         const forgotPasswordMessage = await api.post('/forgot_password', email);
         if(forgotPasswordMessage.status === 200){
             setModalVisible(true);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styles } from "./styles";
 import { Modal, View, Text } from "react-native";
 import ButtonOrange from "../buttonOrange/ButtonOrange";
@@ -29,6 +29,7 @@ const ForgotPasswordModal = ({ visible, onClose, texto, email }) => {
   const api = createAxiosInstance();
 
   const handleConfirmClick = async () => {
+    navigation.navigate("ConfirmPassword");
     const otpJoined = otp.join();
     console.log(otpJoined);
     const verifyCode = await api.post(`/verify_code/${email}`);
