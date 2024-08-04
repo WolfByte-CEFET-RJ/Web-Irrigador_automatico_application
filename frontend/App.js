@@ -60,7 +60,7 @@ export default function App() {
     <AuthProvider>
       <GardenProvider>
         <IrrigationProvider>
-          <Routes />
+            <Routes />
         </IrrigationProvider>
       </GardenProvider>
     </AuthProvider>

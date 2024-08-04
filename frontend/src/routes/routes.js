@@ -9,6 +9,7 @@ import Profile from "../pages/profile/Profile";
 import ViewConfig from "../pages/ViewConfig/ViewConfig";
 import IrrigationHistory from "../pages/IrrigationHistory/IrrigationHistory";
 import ForgotPassword from "../pages/forgotPassword/ForgotPassword";
+import Confirm_newPasswords from "../pages/confirm_newPassword/Confirm_newPasswords";
 
 const Stack = createStackNavigator();
 const Navigation = () => {
@@ -27,6 +28,7 @@ const Navigation = () => {
         <Stack.Screen name="IrrigationHistory" component={IrrigationHistory} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name= "ConfirmPassword" component={Confirm_newPasswords} />
         
       </Stack.Navigator>
     </NavigationContainer>
