@@ -23,7 +23,7 @@ const OtpInput = ({handleOtpChange, otp, inputs}) => {
         {otp.map((digit, index) => (
           <TextInput
             key={index}
-            style={styles.box}
+            style={styles.boxInput}
             maxLength={1}
             keyboardType="numeric"
             onChangeText={(value) => handleOtpChange(value, index)}

@@ -29,6 +29,7 @@ const ForgotPasswordModal = ({ visible, onClose, texto, email }) => {
   const api = createAxiosInstance();
 
   const handleConfirmClick = async () => {
+    onClose();
     navigation.navigate("ConfirmPassword");
     const otpJoined = otp.join();
     console.log(otpJoined);

@@ -39,7 +39,7 @@ const ForgotPassword = () => {
                 source={require("../../../assets/android-chrome-512x512.png")}
             />
             <View style={styles.input_container}>
-                <Text style={styles.subtittle_input}>Digite seu endereço de email para recuperar a senha</Text>
+                <Text style={styles.subtittle_input}>Digite seu endereço de email para recuperar a senha:</Text>
                 <Input
                     onChangeText={(text) => setEmail(text)}
                     value={email}

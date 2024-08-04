@@ -66,17 +66,22 @@ const Confirm_newPasswords = () => {
                 source={require("../../../assets/android-chrome-512x512.png")}
             />
             <View style={styles.inputConfirm_container}>
+
+                <Text style={styles.subtittle_confirm_input}>Insira sua nova senha:</Text>
                 <Input
-                    label={"Insira sua nova senha"}
+                    // label={"Insira sua nova senha:"}
                     placeHolder="Digite uma senha"
                     onChangeText={(event) => setPassword(event.target.value)}
                     isPassword={true}
+                    isLogin={true}
                 />
+                <Text style={styles.subtittle_confirm_input}>Confirme sua senha:</Text>
                 <Input
-                    label="Confirme sua senha"
+                    // label="Confirme sua senha:"
                     onChangeText={(event) => setConfirmPassword(event.target.value)}
                     placeHolder="Confirme sua senha"
                     isPassword={true}
+                    isLogin={true}
                 />
             </View>
             <View style={styles.button_space}>

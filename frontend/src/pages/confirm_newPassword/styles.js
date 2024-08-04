@@ -35,6 +35,17 @@ export const styles = StyleSheet.create({
         width: "100%",
         marginBottom: "15%"
     },
+    subtittle_confirm_input:{
+        display: "flex",
+        alignItems: "center",
+        left:"12%",
+        fontWeight: "bold",
+        fontSize: 13,
+        color: "#40513b",
+        fontFamily: "Montserrat-Bold",
+        marginBottom: "2%",
+
+    },
     button_space:{
         display: "flex",
         alignItems: "center",
