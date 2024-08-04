@@ -121,11 +121,7 @@ module.exports = {
             return res.status(HttpCode.OK).json({ resetToken });
         } catch (e) {
             if (e instanceof HttpError) {
-                res.status(e.httpCode).json(e);
-            }
-
-            if (e instanceof ValidationError){
-                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+                return res.status(e.httpCode).json(e);
             }
 
             return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });

@@ -1,8 +1,9 @@
 const knex = require('../../src/database/index.js');
 const yup = require('yup');
 const bcrypt = require('bcryptjs');
-const { UserNotFound, AlreadyExists, NotAllowedChangeEmail, PasswordMismatch, NoCode } = require('../../src/errors/userError.js');
+const { UserNotFound, AlreadyExists, NotAllowedChangeEmail, PasswordMismatch, NoCode, InvalidCode, CodeExpired } = require('../../src/errors/userError.js');
 const userService = require('../../src/services/userService.js');
+const moment = require('moment');
 
 jest.mock('../../src/database/index.js');
 jest.mock('bcryptjs');
@@ -357,4 +358,99 @@ describe("User Service", () => {
             expect(knex().first).toHaveBeenCalled();
         });
     });
+
+    describe("Verify Code", () => {
+
+        it("should return a success message if the code is valid", async () => {
+            // mocking
+            const email = "test@example.com"
+            const code = 999
+            const relevantMockUser = { email, code }
+
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            const firstKnexMock = jest.fn().mockResolvedValue(relevantMockUser);
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock
+            }));
+
+            jest.spyOn(moment.fn, 'isAfter').mockReturnValue(false);
+
+            //execução
+            const result = await userService.verifyCode(email, code);
+            
+            //asserts
+            expect(result).toEqual('Código válido! Você já pode recuperar sua senha!');
+            expect(whereKnexMock).toHaveBeenCalledWith({ email })
+        });
+
+        it("should throw UserNotFound if user does not exist", async () => {
+            
+            //mocking
+            const email = "no@fail.com"
+            const code = -1
+
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            const firstKnexMock = jest.fn().mockResolvedValue(null);
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock
+            }));
+
+            //execução e asserts
+            await expect(userService.verifyCode(email, code)).rejects.toThrow(UserNotFound);
+        });
+
+        it("should throw InvalidCode if code is not a number or does not match", async () => {
+            // mocking
+            const invalid_code = "-1" //diferente do registered_code e typeof != number
+            
+            const email = "test@example.com"
+            const registered_code = 999
+            const relevantMockUser = { email, registered_code }
+    
+            const selectKnexMock = jest.fn().mockReturnThis()
+            const whereKnexMock = jest.fn().mockReturnThis()
+            const firstKnexMock = jest.fn().mockResolvedValue(relevantMockUser)
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock
+            }))
+            
+            //execução e asserts
+            expect(invalid_code).not.toBe(registered_code)
+            await expect(userService.verifyCode(email, invalid_code)).rejects.toThrow(InvalidCode)
+        });
+    
+        it("should throw CodeExpired if the code is expired", async () => {
+            // mocking
+            const email = "test@example.com"
+            const code = 999
+            const relevantMockUser = { email, code }
+
+            const selectKnexMock = jest.fn().mockReturnThis()
+            const whereKnexMock = jest.fn().mockReturnThis()
+            const firstKnexMock = jest.fn().mockResolvedValue(relevantMockUser)
+            const updateKnexMock = jest.fn().mockResolvedValue(1)
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock,
+                update: updateKnexMock
+            }));
+
+            jest.spyOn(moment.fn, 'isAfter').mockReturnValue(true);
+    
+            //execução e asserts
+            await expect(userService.verifyCode(email, code)).rejects.toThrow(CodeExpired);
+            expect(updateKnexMock).toHaveBeenCalledWith({ code: null, expirationDate: null });
+            expect(whereKnexMock).toHaveBeenCalledWith({ email });
+        });
+    
+    })
 });

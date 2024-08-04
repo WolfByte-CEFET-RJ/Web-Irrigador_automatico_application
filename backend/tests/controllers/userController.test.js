@@ -1,9 +1,11 @@
 const userController = require("../../src/controllers/userController.js")
 const userService = require("../../src/services/userService.js")
+const jwt = require('jsonwebtoken');
 const { HttpCode, HttpError } = require("../../src/utils/app.error.js")
 const { ValidationError } = require('yup');
 
 jest.mock("../../src/services/userService.js")
+jest.mock("jsonwebtoken")
 
 describe("User Controller", () => {
     
@@ -338,5 +340,97 @@ describe("User Controller", () => {
             expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
             expect(res.json).toHaveBeenCalledWith({ message: 'Unexpected error' });
         });
+    });
+
+    describe("Verify Code", () => {
+
+        it("should return a temporary token and status OK when code is valid", async () => {
+        // mocking
+        const req = {
+            params: {
+                email: 'test@example.com'
+            },
+            body: {
+                code: 999
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        }
+
+        userService.verifyCode.mockResolvedValue("Código válido! Você já pode recuperar sua senha!");
+        
+        const mockToken = "----"
+        jwt.sign.mockReturnValue(mockToken)
+
+        // execução
+        await userController.verifyCodeAndGenerateToken(req, res);
+
+        // asserts
+        expect(userService.verifyCode).toHaveBeenCalledWith(req.params.email, req.body.code);
+        expect(jwt.sign).toHaveBeenCalledWith({ email: req.params.email, type: 'reset' }, process.env.TOKEN_KEY, { expiresIn: '15m' });
+        expect(res.status).toHaveBeenCalledWith(HttpCode.OK);
+        expect(res.json).toHaveBeenCalledWith({ resetToken: mockToken });
+
+        })
+
+        it("should return a previst http error", async () => {
+            // mocking
+            const req = {
+                body: {
+                    code: 999
+                },
+                params: {
+                    email: 'test@example.com'
+                }
+            }
+    
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+    
+            const httpError = new HttpError({httpCode: -1, type: 'ERR_MOCKED', message: 'any previst erro message'})
+            userService.verifyCode.mockRejectedValue(httpError)
+            
+            // execução
+            await userController.verifyCodeAndGenerateToken(req, res);
+    
+            // asserts
+            expect(userService.verifyCode).toHaveBeenCalledWith(req.params.email, req.body.code);
+            expect(res.status).toHaveBeenCalledWith(httpError.httpCode);
+            expect(res.json).toHaveBeenCalledWith(httpError);
+    
+        })
+
+        it("should return an error message with status INTERNAL SERVER ERROR", async () => {
+                // mocking
+                const req = {
+                    body: {
+                        code: 999
+                    },
+                    params: {
+                        email: 'test@example.com'
+                    }
+                }
+        
+                const res = {
+                    status: jest.fn().mockReturnThis(),
+                    json: jest.fn()
+                }
+        
+                const error = new Error("mocked message")
+                userService.verifyCode.mockRejectedValue(error)
+                
+                // execução
+                await userController.verifyCodeAndGenerateToken(req, res);
+        
+                // asserts
+                expect(userService.verifyCode).toHaveBeenCalledWith(req.params.email, req.body.code);
+                expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+                expect(res.json).toHaveBeenCalledWith({message: error.message});
+        
+        })
     });
 })
