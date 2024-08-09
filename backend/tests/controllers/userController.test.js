@@ -433,4 +433,47 @@ describe("User Controller", () => {
         
         })
     });
+
+    describe("Forgot Password", () => {
+        it("should return OK and a success message when the email is valid", async () => {
+            const req = {
+                body: {
+                    email: 'test@example.com'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            userService.forgotPassword.mockResolvedValue("Código enviado para o seu email!");
+
+            await userController.forgotPassword(req, res);
+
+            expect(userService.forgotPassword).toHaveBeenCalledWith(req.body.email);
+            expect(res.status).toHaveBeenCalledWith(HttpCode.OK);
+            expect(res.json).toHaveBeenCalledWith({ message: "Código enviado para o seu email!" });
+    
+        });
+
+        it('should return an error message with status INTERNAL SERVER ERROR', async () => {
+            const req = {
+                body: {
+                    email: 'test@example.com'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+    
+            userService.forgotPassword.mockRejectedValue(new Error("Unexpected error."));
+    
+            await userController.forgotPassword(req, res);
+    
+            expect(userService.forgotPassword).toHaveBeenCalledWith(req.body.email);
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+            expect(res.json).toHaveBeenCalledWith({ message: "Unexpected error." });
+        });
+    })
 })
