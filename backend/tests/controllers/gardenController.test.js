@@ -1,6 +1,7 @@
 const gardenController = require("../../src/controllers/gardenController");
 const gardenService = require("../../src/services/gardenService");
 const { HttpCode, HttpError } = require("../../src/utils/app.error");
+const { ValidationError } = require('yup');
 
 jest.mock("../../src/services/gardenService");
 
@@ -116,5 +117,67 @@ describe("Garden Controller", () => {
                 expect(res.json).toHaveBeenCalledWith({ message: error.message });
             })
         })
-    })
+    });
+
+    describe("createGarden", () => {
+        let req, res;
+
+        beforeEach(() => {
+            req = {
+                body: {
+                    name: "Alface",
+                    description: "Minha horta de alface",
+                    identifier: "2024030801"
+                },
+                user_id: 1
+            };
+
+            res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+        });
+
+        it("should create a garden and return a success message with status CREATED", async () => {
+            gardenService.createGarden.mockResolvedValue("Horta cadastrada!");
+
+            await gardenController.createGarden(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(HttpCode.CREATED);
+            expect(res.json).toHaveBeenCalledWith({ message: "Horta cadastrada!" });
+        });
+
+        it("should return a ValidationError with status BAD REQUEST", async () => {
+            const validationError = new ValidationError("Erro de validação");
+
+            gardenService.createGarden.mockRejectedValue(validationError);
+
+            await gardenController.createGarden(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(HttpCode.BAD_REQUEST);
+            expect(res.json).toHaveBeenCalledWith({ message: validationError.message });
+        });
+
+        it("should return a HttpError with the corresponding status code", async () => {
+            const httpError = new HttpError({ httpCode: -1, type: 'ERR_MOCKED', message: 'Erro HTTP' });
+
+            gardenService.createGarden.mockRejectedValue(httpError);
+
+            await gardenController.createGarden(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(httpError.httpCode);
+            expect(res.json).toHaveBeenCalledWith(httpError);
+        });
+
+        it("should return an error message with status INTERNAL SERVER ERROR", async () => {
+            const error = new Error("Erro interno");
+
+            gardenService.createGarden.mockRejectedValue(error);
+
+            await gardenController.createGarden(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+            expect(res.json).toHaveBeenCalledWith({ message: error.message });
+        });
+    });
 })
