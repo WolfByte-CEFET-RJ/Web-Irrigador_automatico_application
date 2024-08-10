@@ -180,4 +180,68 @@ describe("Garden Controller", () => {
             expect(res.json).toHaveBeenCalledWith({ message: error.message });
         });
     });
+
+    describe("Get User Gardens", () => {
+        it("should return a list of gardens with status OK", async () => {
+            //mocking
+            const req = { user_id: 1 }
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            const user_gardens = [
+                { id: 1, name: "Alface", description: "Minha horta de alface", identifier: "2024030801", userId: 1, irrigationId: 1 },
+                { id: 1, name: "Tomate", description: "Minha horta de tomate", identifier: "2024030802", userId: 2, irrigationId: 2 }
+            ]
+
+            gardenService.getUserGardens.mockResolvedValue(user_gardens)
+
+            //execução
+            await gardenController.getUserGardens(req, res)
+
+            //asserts
+            expect(res.status).toHaveBeenCalledWith(HttpCode.OK);
+            expect(res.json).toHaveBeenCalledWith(user_gardens);
+        })
+
+        it('should return a previst http error', async () => {
+            // mocking
+            const req = { user_id: 1 }
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            const httpError = new HttpError({httpCode: -1, type: 'ERR_MOCKED', message: 'any previst erro message'})
+            gardenService.getUserGardens.mockRejectedValue(httpError);
+
+            // execução
+            await gardenController.getUserGardens(req, res);
+        
+            // asserts
+            expect(res.status).toHaveBeenCalledWith(httpError.httpCode)
+            expect(res.json).toHaveBeenCalledWith(httpError)
+        });
+
+        it('should return an error message with status INTERNAL SERVER ERROR', async () => {
+            // mocking
+            const req = { user_id: 1 }
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            const error = new Error("mocked message")
+            gardenService.getUserGardens.mockRejectedValue(error)
+            
+            // execução
+            await gardenController.getUserGardens(req, res)
+            
+            // asserts
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR)
+            expect(res.json).toHaveBeenCalledWith({ message: error.message })
+        });
+    })
+    
 })

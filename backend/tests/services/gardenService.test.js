@@ -1,6 +1,6 @@
 const gardenService = require("../../src/services/gardenService");
 const knex = require('../../src/database');
-const { GardenNotFound, UnauthorizedGardenReturn } = require("../../src/errors/gardenError");
+const { GardenNotFound, UnauthorizedGardenReturn, NoGardenRegistered } = require("../../src/errors/gardenError");
 const { ValidationError } = require('yup');
 
 jest.mock('../../src/database');
@@ -180,4 +180,45 @@ describe("Garden Service", () => {
             ).rejects.toThrow("Insert failed");
         });
     });
+
+    describe("Get User Gardens", ()=>{
+        it("should return all user gardens from database", async () => {
+            //mocking
+            const userId = 1
+            const mock_gardens = [
+                { id: 1, name: "Alface", description: "Minha horta de alface", identifier: "2024030801", userId: 1, irrigationId: 1 },
+                { id: 1, name: "Tomate", description: "Minha horta de tomate", identifier: "2024030802", userId: 2, irrigationId: 2 }
+            ]
+
+            const whereKnexMock = jest.fn().mockResolvedValue(mock_gardens)
+
+            knex.mockImplementation(() => ({
+                where:  whereKnexMock
+            }));
+
+            //execução
+            const user_gardens = await gardenService.getUserGardens(userId)
+
+            //asserts
+            expect(user_gardens).toEqual(mock_gardens)
+            expect(whereKnexMock).toHaveBeenCalledWith({userId})
+            expect(knex).toHaveBeenCalledWith("garden")
+        })
+
+        it("should throw an error when user has no associated gardens", async () => {
+            //mocking
+            const userId = 1
+            const mock_gardens = []
+
+            const whereKnexMock = jest.fn().mockResolvedValue(mock_gardens)
+            knex.mockImplementation(() => ({
+                where:  whereKnexMock
+            }));
+
+            //execução e asserts
+            await expect(gardenService.getUserGardens(userId)).rejects.toThrow(NoGardenRegistered);
+            expect(mock_gardens.length).toEqual(0);
+        })
+    });
+
 })
