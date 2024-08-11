@@ -1,22 +1,22 @@
 module.exports = {
     get: {
-        summary: "View data of all user's gardens",
+        summary: "View specifications of all user's irrigation settings",
         parameters: [],
         security: [
             {
                 Token_Autenticação: [],
             },
         ],
-        tags: ["Garden"],
+        tags: ["Irrigation Settings"],
         responses: {
             "200": {
-                description: "Expected response",
+            description: "Expected response",
                 content: {
                     "application/json": {
                         schema: {
                             type: "array",
                             items: {
-                                $ref: "#/components/schemas/ResponseGetMeasuresGardens",
+                                $ref: "#/components/schemas/ResponseGetSetting",
                             }
                         }
                     }
@@ -60,5 +60,5 @@ module.exports = {
                 }
             }
         }
-    }
+    },
 }

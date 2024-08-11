@@ -1,94 +1,37 @@
 module.exports = {
-    post: {
-        summary: "Register a user",
-        parameters: [],
-        tags: ["User"],
-        requestBody: {
-            description: "User's data",
-            content: {
-                "application/json": {
-                    schema: {
-                        $ref: "#/components/schemas/RequestCreateUser",
-                    }
-                }
-            }
-        },
-        responses: {
-            "201": {
-                description: "Expected response",
-                content: {
-                    "application/json": {
-                        schema: {
-                            type: "object",
-                            properties: {
-                                message: {
-                                type: "string",
-                                example: "Usuário cadastrado!",
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "400": {
-                description: "Validaton Error",
-                content: {
-                    "application/json": {
-                        schema: {
-                            type: "object",
-                            properties:{
-                                message:{
-                                    type: "string",
-                                    description: "Validation error message",
-                                    example: "Some of the information provided is poorly formatted"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "500": {
-                description: "Internal server error",
-                content: {
-                    "application/json": {
-                        schema: {
-                            type: "object",
-                            properties:{
-                                message:{
-                                    type: "string",
-                                    description: "Error message",
-                                    example: "Internal error while processing the request"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-
     get: {
-    summary: "View data of one registered user",
-        parameters: [],
+        summary: "View specifications of one irrigation setting",
+        parameters: [
+            {
+                name:"id",
+                in: "path",
+                description: "Irrigation ID (if not informed, route should behaves like /userSettings)",
+                required: false,
+                schema: {
+                    type:"string",
+                    example: "2"
+                }
+            }
+        ],
         security: [
             {
                 Token_Autenticação: [],
             },
         ],
-        tags: ["User"],
+        tags: ["Irrigation Settings"],
         responses: {
             "200": {
-                description: "Expected response",
+            description: "Expected response",
                 content: {
                     "application/json": {
                         schema: {
-                                $ref: "#/components/schemas/ResponseGetUser"
+                                $ref: "#/components/schemas/ResponseGetSetting"
                         }
                     }
                 }
             },
-            "401": {
-                description: "Authorization not received",
+            "400": {
+                description: "Bad request",
                 content: {
                     "application/json": {
                         schema: {
@@ -97,9 +40,9 @@ module.exports = {
                     }
                 }
             },
-            "404": {
-                description: "User not found",
-                content: {
+            "401": {
+                description: "Authorization not received",
+                    content: {
                     "application/json": {
                         schema: {
                             $ref: "#/components/schemas/ResponseError",
@@ -126,22 +69,32 @@ module.exports = {
             }
         }
     },
-
     patch: {
-        summary: "Update data of a registered user",
-        parameters: [],
+        summary: "Update specifications of one irrigation setting",
+        parameters: [
+            {
+                name:"id",
+                in: "path",
+                description: "Irrigation Setting ID",
+                required: true,
+                schema: {
+                    type:"string",
+                    example: "2"
+                }
+            }
+        ],
         security: [
             {
                 Token_Autenticação: [],
             },
         ],
-        tags: ["User"],
+        tags: ["Irrigation Settings"],
         requestBody: {
-            description: "User's new data",
+            description: "Irrigation Setting data",
             content: {
                 "application/json": {
                     schema: {
-                        $ref: "#/components/schemas/RequestUpdateUser",
+                        $ref: "#/components/schemas/RequestUpdateSetting",
                     }
                 }
             }
@@ -156,7 +109,7 @@ module.exports = {
                             properties: {
                                 message: {
                                 type: "string",
-                                example: "Usuário atualizado com sucesso",
+                                example: "Configuração atualizada com sucesso!",
                                 }
                             }
                         }
@@ -164,44 +117,17 @@ module.exports = {
                 }
             },
             "400": {
-                description: "Validaton Error",
+                description: "Bad request",
                 content: {
                     "application/json": {
                         schema: {
-                            type: "object",
-                            properties:{
-                                message:{
-                                    type: "string",
-                                    description: "Validation error message",
-                                    example: "Some of the information provided is poorly formatted"
-                                }
-                            }
+                            $ref: "#/components/schemas/ResponseError",
                         }
                     }
                 }
             },
             "401": {
-                description: "Authorization not received",
-                content: {
-                    "application/json": {
-                        schema: {
-                            $ref: "#/components/schemas/ResponseError",
-                        }
-                    }
-                }
-            },
-            "404": {
-                description: "User not found",
-                content: {
-                    "application/json": {
-                        schema: {
-                            $ref: "#/components/schemas/ResponseError",
-                        }
-                    }
-                }
-            },
-            "409": {
-                description: "Conflict in change email adress",
+                description: "Token Inválido",
                 content: {
                     "application/json": {
                         schema: {
@@ -226,19 +152,30 @@ module.exports = {
                         }
                     }
                 }
-            },
+            }
         }
     },
 
     delete: {
-        summary: "Detele a user (cannot be undone)",
-        parameters: [],
+        summary: "Detele a irrigation setting (cannot be undone)",
+        parameters: [
+            {
+                name:"id",
+                in: "path",
+                description: "Irrigation Setting ID",
+                required: true,
+                schema: {
+                    type:"string",
+                    example: "2"
+                }
+            }
+        ],
         security: [
             {
                 Token_Autenticação: [],
             },
         ],
-        tags: ["User"],
+        tags: ["Irrigation Settings"],
         responses: {
             "200": {
                 description: "Expected response",
@@ -249,15 +186,15 @@ module.exports = {
                             properties: {
                                 message: {
                                 type: "string",
-                                example: "Usuário deletado com sucesso!",
+                                example: "Configuração deletada com sucesso!",
                                 }
                             }
                         }
                     }
                 }
             },
-            "401": {
-                description: "Authorization not received",
+            "400": {
+                description: "Bad request",
                 content: {
                     "application/json": {
                         schema: {
@@ -266,9 +203,9 @@ module.exports = {
                     }
                 }
             },
-            "404": {
-                description: "User not found",
-                content: {
+            "401": {
+                description: "Invalid credential",
+                    content: {
                     "application/json": {
                         schema: {
                             $ref: "#/components/schemas/ResponseError",
@@ -295,5 +232,4 @@ module.exports = {
             }
         }
     }
-    
 }

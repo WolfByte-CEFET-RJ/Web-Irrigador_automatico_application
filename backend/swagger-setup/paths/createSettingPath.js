@@ -1,22 +1,35 @@
 module.exports = {
-    get: {
-        summary: "View data of all user's gardens",
+    post: {
+        summary: "Create a irrigation setting",
         parameters: [],
         security: [
             {
                 Token_Autenticação: [],
             },
         ],
-        tags: ["Garden"],
+        tags: ["Irrigation Settings"],
+        requestBody: {
+            description: "Irrigation setting data",
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/RequestCreateSetting",
+                    }
+                }
+            }
+        },
         responses: {
-            "200": {
+            "201": {
                 description: "Expected response",
                 content: {
                     "application/json": {
                         schema: {
-                            type: "array",
-                            items: {
-                                $ref: "#/components/schemas/ResponseGetMeasuresGardens",
+                            type: "object",
+                            properties: {
+                                message: {
+                                type: "string",
+                                example: "Configuração cadastrada!",
+                                }
                             }
                         }
                     }
@@ -34,7 +47,7 @@ module.exports = {
             },
             "401": {
                 description: "Authorization not received",
-                    content: {
+                content: {
                     "application/json": {
                         schema: {
                             $ref: "#/components/schemas/ResponseError",

@@ -1,5 +1,7 @@
 const knex = require('../database'); 
 const yup = require('yup'); 
+const { DuplicatedIrrigatonSettingName, InvalidHumidity, DefaultSettingNotDeleteable, UpdateUmidityValueError, IrrigationSettingAlreadyExists, NoValuePassed, UserIdNotEditable, InvalidUpdateFields, 
+    UnauthorizedIrrigationSettingOperation, NothingToDeleteError, IrrigationSettingNotFound, DefaultSettingNotEditable} = require('../errors/irrigationSettingError');
 
 // Define o esquema de validação para criar uma configuração de irrigação
 const settingSchema = yup.object().shape({
@@ -85,15 +87,15 @@ module.exports = {
             .join('configSensor', 'irrigationSetting.id', '=', 'configSensor.irrigationId')
             .where({ id });
 
-        // Verifica se o usuário é o proprietário da configuração
-        if (myId != setting[0].userId) {
-            throw new Error('Essa config não pertence a você!');
-        }
         // Verifica se a configuração existe
         if (!setting.length) {
-            throw new Error('Esta config não existe!');
+            throw new IrrigationSettingNotFound();
         }
-
+                
+        // Verifica se o usuário é o proprietário da configuração
+        if (myId != setting[0].userId && setting[0].id != 1) {
+            throw new UnauthorizedIrrigationSettingOperation();
+        }
         const sensors = {};
 
         // Pega o nome e o valor dos sensores da config
@@ -156,12 +158,12 @@ module.exports = {
         // Verifica se já existe uma configuração com o mesmo nome para o mesmo usuário
         const settingInfo = await knex('irrigationSetting').select("id").where({ name, userId }).first();
         if (settingInfo) {
-            throw new Error('Você já criou uma configuração de irrigação com este nome!');
+            throw new DuplicatedIrrigatonSettingName();
         }
 
         const humidityIsValid = validadeHumidityValue(humidityValue);
 
-        if (!humidityIsValid) throw new Error('Valor de umidade inválido!');
+        if (!humidityIsValid) throw new InvalidHumidity();
 
         // Insere a nova configuração de irrigação
         await knex('irrigationSetting').insert({
@@ -184,7 +186,7 @@ module.exports = {
 
         // Verifica se a configuração é a padrão
         if (id == 1) {
-            throw new Error('Você não pode alterar uma configuração padrão.');
+            throw new DefaultSettingNotEditable();
         }
         
         // Obtém a informação da configuração
@@ -192,41 +194,41 @@ module.exports = {
 
         // Verifica se o usuário é o proprietário da configuração
         if (myId != settingInfo.userId) {
-            throw new Error("Você só pode atualizar sua própria config.");
+            throw new UnauthorizedIrrigationSettingOperation();
         }
 
         if (Object.keys(settingData).length === 0){
-            throw new Error('Nenhum valor foi passado!');
+            throw new NoValuePassed();
         }
 
         // Verifica se o usuário está tentando alterar o userId (não permitido)
         if (settingData.userId) {
-            throw new Error('Você não pode alterar o userId.');
+            throw new UserIdNotEditable();
         }
 
-        if (!verifyUpdateData(settingData)) {throw new Error('Alguns campos inseridos não fazem parte da entrutura de uma configuração de irrigação!');}
+        if (!verifyUpdateData(settingData)) {throw new InvalidUpdateFields();}
 
         // Verifica e atualiza o nome da configuração, se fornecido
         if (settingData.name) {
             const settingInfo = await knex('irrigationSetting').select("id").where({ name: settingData.name, userId: myId }).first();
             if (settingInfo) {
-                throw new Error('Já existe uma configuração com esse nome!');
+                throw new IrrigationSettingAlreadyExists();
             }
 
             const settingForChange = await knex('irrigationSetting').where({ id }).update({ name: settingData.name });
             if (!settingForChange) {
-                throw new Error('Esta configuração não existe!');
+                throw new IrrigationSettingNotFound();
             }
         }
 
         // Verifica e atualiza o valor da umidade, se fornecido
         if (settingData.humidityValue) {
             const humidityIsValid = validadeHumidityValue(settingData.humidityValue);
-            if (!humidityIsValid) throw new Error('Valor de umidade inválido!');
+            if (!humidityIsValid) throw new InvalidHumidity();
 
             const humidityValue = await knex('configSensor').where({ irrigationId: settingInfo.id, sensorId: 1 }).update({ value: settingData.humidityValue });
             if (!humidityValue) {
-                throw new Error('Erro ao alterar o valor da umidade!');
+                throw new UpdateUmidityValueError();
             }
         }
 
@@ -238,15 +240,15 @@ module.exports = {
 
         // Verifica se a configuração é a padrão (não pode ser apagada)
         if (settingId == 1) {
-            throw new Error('Você não pode apagar uma configuração padrão!');
+            throw new DefaultSettingNotDeleteable()
         }
 
         // Obtém a configuração
         const setting = await this.getOneSetting(settingId, userId);
-    
+
         // Verifica se a configuração pertence ao usuário
         if (setting.userId != userId) {
-            throw new Error('Esta config não pertence a você!');
+            throw new UnauthorizedIrrigationSettingOperation();
         }
 
         // Verifica se a configuração está sendo usada em algum jardim e, se sim, remove a associação
@@ -263,13 +265,13 @@ module.exports = {
         // Deleta os valores dos sensores da configuração
         const deleteValues = await knex('configSensor').where({ irrigationId: settingId }).del();
         if (!deleteValues) {
-            throw new Error('Erro ao apagar valores da configuração!');
+            throw new NothingToDeleteError('Erro ao apagar valores da configuração!');
         }
 
         // Deleta o nome da configuração
         const deleteName = await knex('irrigationSetting').where({ id: settingId }).del();
         if (!deleteName) {
-            throw new Error('Erro ao apagar nome da configuração!');
+            throw new NothingToDeleteError('Erro ao apagar nome da configuração!');
         }
 
         return 'Configuração apagada com sucesso!';

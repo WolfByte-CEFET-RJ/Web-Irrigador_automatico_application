@@ -1,13 +1,16 @@
 const jwt = require('jsonwebtoken');
 const userService = require('../services/userService');
+const { HttpCode, HttpError } = require('../utils/app.error');
+const { InvalidCode } = require('../errors/userError')
+const { ValidationError } = require('yup');
 
 module.exports = {
     async getAllUsers(req, res) {
         try {
             const users = await userService.getAllUsers();
-            return res.status(200).json(users);
-        } catch (error) {
-            return res.status(400).json({message: error.message});
+            return res.status(HttpCode.OK).json(users);
+        } catch (e) {
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({message: e.message});
         }
     },
 
@@ -16,9 +19,13 @@ module.exports = {
 
         try{
             const user = await userService.getUser(userId);
-            return res.status(200).json(user);
-        } catch(error){
-            return res.status(400).json({message: error.message});
+            return res.status(HttpCode.OK).json(user);
+        } catch(e){
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
 
@@ -27,10 +34,18 @@ module.exports = {
         
         try {
             const response = await userService.createUser(name, email, password, humidityNotification);
-            return res.status(201).json({message: response});
+            return res.status(HttpCode.CREATED).json({message: response});
 
-        } catch (error) {
-          return res.status(400).json({message: error.message});
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async updateUser(req, res) {
@@ -42,11 +57,19 @@ module.exports = {
            
             const user = await userService.updateUser(id, userData);
             if(user){
-                res.json({message: 'Usuário atualizado com sucesso'})
+                res.status(HttpCode.OK).json({message: 'Usuário atualizado com sucesso'})
             }
 
-        } catch (error) {
-            return res.status(400).json({message: error.message});
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async deleteUser(req, res) {
@@ -56,22 +79,33 @@ module.exports = {
           
             const user = await userService.deleteUser(id);
             if(user){
-                res.json({message: 'Usuário deletado com sucesso!'})
+                res.status(HttpCode.OK).json({message: 'Usuário deletado com sucesso!'})
             }
 
         } catch (error) {
-            return res.status(400).json({message: error.message});
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async forgotPassword(req, res) {
         const { email } = req.body;
 
         try {
-            const response = await userService.fogotPassword(email);
-            return res.status(200).json({message: response});
-            
-        } catch (error) {
-            return res.status(400).json({message: error.message});
+            const response = await userService.forgotPassword(email);
+            return res.status(HttpCode.OK).json({message: response});
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            }
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async verifyCodeAndGenerateToken(req, res) {
@@ -81,25 +115,39 @@ module.exports = {
         try {
             const isValidCode = await userService.verifyCode(email, code);
             if (!isValidCode) {
-                return res.status(400).json({message: 'Código inválido!'});
+                throw new InvalidCode();
+            }
+            const resetToken = jwt.sign({ email, type: 'reset' }, process.env.TOKEN_KEY, { expiresIn: '15m' });
+            return res.status(HttpCode.OK).json({ resetToken });
+        } catch (e) {
+            if (e instanceof HttpError) {
+                res.status(e.httpCode).json(e);
             }
 
-            const token = jwt.sign({ email }, process.env.TOKEN_KEY, { expiresIn: '1h' });
-            
-            return res.status(200).json({ token });
-        } catch (error) {
-            return res.status(500).json({message: error.message});
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async resetPassword(req, res) {
-        const token = req.token;
         const { password, confirmPassword } = req.body;
+        const email = req.email;
+
         try {
-            const { email } = jwt.verify(token, process.env.TOKEN_KEY);
             const response = await userService.resetPassword(email, password, confirmPassword);
-            return res.status(200).json({message: response});
-        } catch (error) {
-            return res.status(400).json({message: error.message});
+            return res.status(HttpCode.OK).json({ message: response });
+        } catch (e) {
+            if (e instanceof HttpError) {
+                res.status(e.httpCode).json(e);
+            }
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     }
 };

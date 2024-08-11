@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const yup = require('yup');
 const sendEmail = require('../utils/sendEmail');
 const moment = require('moment/moment');
-
+const { CodeExpired, InvalidCode, NoCode, PasswordMismatch, UserNotFound, AlreadyExists, NotAllowedChangeEmail } = require('../errors/userError');
 
 module.exports = {
     // Método para obter todos os usuários
@@ -16,7 +16,7 @@ module.exports = {
     async getUser(id) {
         const user = await knex('user').select('id', 'name', 'email', 'humidityNotification').where({ id }).first();
         if (!user) {
-            throw new Error('Usuário não existe!');
+            throw new UserNotFound();
         }
         return user;
     },
@@ -33,7 +33,7 @@ module.exports = {
 
         const user = await knex('user').select('email').where({ email }).first();
         if (user) {
-            throw new Error('Usuário já existe!');
+            throw new AlreadyExists();
         }
 
         const salt = await bcrypt.genSalt();
@@ -59,14 +59,14 @@ module.exports = {
         });
 
         if (userData.email) {
-            throw new Error('Não é permitido alterar o email');
+            throw new NotAllowedChangeEmail();
         }
 
         await userUpdateSchema.validate(userData);
 
         const user = await this.getUser(userId);
         if (!user) {
-            throw new Error('Este usuário não existe!')
+            throw new UserNotFound();
         }
 
         if (userData.password) {
@@ -87,75 +87,82 @@ module.exports = {
         const user = await this.getUser(userId);
 
         if (!user) {
-            throw new Error('Este usuário não existe!')
+            throw new UserNotFound();
         }
 
         return knex('user').where({ id: userId }).del();
     },
 
-      async fogotPassword(email) {
-        const user = await knex('user').select('*').where({email}).first();
-        if (!user){
-            throw new Error('Este usuário não existe!')
-        }
+    async forgotPassword(email) {
+		const user = await knex('user').select('*').where({ email }).first();
+		if (!user){
+			throw new UserNotFound();
+		}
 
-        const code = Math.round(Math.random() * 9999);
-        const expirationDate = moment().add(1, 'hour').format('YYYY-MM-DD HH:mm:ss');
-       
-        await knex('user').where({email}).update({code, expirationDate});
-    
-        // chamar a função que enviará o código para o email
-        await sendEmail(email, code);
+		const code = Math.round(Math.random() * 9999);
+		const expirationDate = moment().add(1, 'hour').format('YYYY-MM-DD HH:mm:ss');
+		
+		await knex('user').where({email}).update({ code, expirationDate });
 
-        return 'Código enviado para o seu email!'
+		// chamar a função que enviará o código para o email
+		await sendEmail(email, code);
 
-      },
-      async verifyCode(email, code) {
-        const user = await knex('user').select('*').where({email}).first();
-        
-        if (!user) {
-            throw new Error('Este usuário não existe!')
-        }
-        if (typeof code != 'number' || user.code != code){
-            throw new Error('Código inválido');
-        }
+		return 'Código enviado para o seu email!'
 
-        const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
-        if (moment(currentDateTime).isAfter(user.expirationDate)) {
-            await knex('user').where({email}).update({code: null, expirationDate: null});
-            throw new Error('Código expirado! Por favor, solicite um novo código!');
-        }
-        
-        return true, 'Código válido! Você já pode recuperar sua senha!';
-        
-      },
-      async resetPassword(email, password, confirmPassword) {
-        const user = await knex('user').select('*').where({email}).first();
-        const passwordSchema = yup.string().min(8, 'A senha precisa ter pelo menos 8 caracteres');
-        if (!user) {
-            throw new Error('Este usuário não existe!')
-        }
+    },
 
-        if (password != confirmPassword) {
-            throw new Error('As senhas são diferentes!')
-        }
+    async verifyCode(email, code) {
+		const user = await knex('user').select('*').where({ email }).first();
+		
+		if (!user) {
+			throw new UserNotFound();
+		}
+		if (typeof code != 'number' || user.code != code){
+			throw new InvalidCode();
+		}
 
-        await passwordSchema.validate(password)
-        const salt = await bcrypt.genSalt();
-        const hash = await bcrypt.hash(password, salt);
-        
-        await knex('user').where({email}).update({
-            password: hash,
-            code: null,
-            expirationDate: null
-        })
-
-        return 'Senha alterada com sucesso!';
-      },
+		const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+		if (moment(currentDateTime).isAfter(user.expirationDate)) {
+			await knex('user').where({email}).update({ code: null, expirationDate: null });
+			throw new CodeExpired();
+		}
+		
+		return true, 'Código válido! Você já pode recuperar sua senha!';
       
-      // usar cron jobs ou algo do tipo para rodar regularmente.
-      async cleanExpiredCodes() {
-        const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
-        await knex('user').where('expirationDate', '<', currentDateTime).update({code: null, expirationDate: null});
-      }
+    },
+    
+    async resetPassword(email, password, confirmPassword) {
+		const user = await knex('user').select('*').where({email}).first();
+		const passwordSchema = yup.string().min(8, 'A senha precisa ter pelo menos 8 caracteres');
+		if (!user) {
+			throw new UserNotFound();
+		}
+
+		if (password != confirmPassword) {
+			throw new PasswordMismatch();
+		}
+
+		await passwordSchema.validate(password)
+
+		if (!user.code) {
+			throw new NoCode();
+		}
+			
+		const salt = await bcrypt.genSalt();
+		const hash = await bcrypt.hash(password, salt);
+		
+		await knex('user').where({email}).update({
+			password: hash,
+			code: null,
+			expirationDate: null
+		})
+
+		return 'Senha alterada com sucesso!';
+    },
+    
+    // usar cron jobs ou algo do tipo para rodar regularmente.
+    async cleanExpiredCodes() {
+      const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      await knex('user').where('expirationDate', '<', currentDateTime).update({code: null, expirationDate: null});
+    }
 };

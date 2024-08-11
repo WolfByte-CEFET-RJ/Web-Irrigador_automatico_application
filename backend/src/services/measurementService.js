@@ -1,4 +1,6 @@
 const knex = require('../database');
+const { UnauthorizedGardenReturn } = require('../errors/gardenError');
+const { SensorConfigurationNotFound } = require('../errors/measurementError');
 const irrigationSettingServicce = require("../services/irrigationSettingService");
 
 
@@ -12,7 +14,7 @@ async function returnConfigValues (irrigationId){
             }).first();
 
         if (!configSensorUmidade) {
-            throw new Error('A configuração do sensor não foi encontrada!');
+            throw new SensorConfigurationNotFound()
         }
 
         return { configHumidityValue: configSensorUmidade.value }
@@ -31,7 +33,7 @@ async function verifyMeasurements(humidityValue, configHumidityValue){
 module.exports = {
     async lastMeasures (userId, gardenUserId, gardenIrrigationId, gardenId) {
         if (userId !== gardenUserId){
-            throw new Error("Esta horta não pertence a você!");
+            throw new UnauthorizedGardenReturn();
         }
 
         let lastMeasures = [];
@@ -76,13 +78,13 @@ module.exports = {
             }
         }
 
-        // Caso o usuáerio tenha hortas com medidas, insere o status da horta e o nome da configuração de irrigação usada por ela 
+        // Caso o usuário tenha hortas com medidas, insere o status da horta e o nome da configuração de irrigação usada por ela 
         for (const obj of lastMeasuresGardens) {
             if (obj.lastMeasures.length) {
                 let { configHumidityValue } = await returnConfigValues(obj.irrigationId);
                 let message = await verifyMeasurements(obj.lastMeasures[0].measurement, configHumidityValue);
                 obj.message = message;
-                let irrigationSetting = await irrigationSettingServicce.getOneSetting(obj.irrigationId);
+                let irrigationSetting = await irrigationSettingServicce.getOneSetting(obj.irrigationId, obj.userId);
                 obj.settingName = irrigationSetting.name;
             }
         }

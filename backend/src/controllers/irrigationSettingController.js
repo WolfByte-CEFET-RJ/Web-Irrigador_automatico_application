@@ -1,4 +1,6 @@
 const irrigationSettingService = require('../services/irrigationSettingService');
+const { HttpCode, HttpError } = require('../utils/app.error');
+const { ValidationError } = require('yup');
 
 module.exports = {
     async getSettings(req, res) {
@@ -14,8 +16,12 @@ module.exports = {
         const setting = await irrigationSettingService.getOneSetting(id, myId);
         return res.status(200).json(setting);
 
-        } catch (error) {
-        return res.status(400).json({ message: error.message });
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+             
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }   
     },
     async getUserSettings(req, res) {
@@ -25,8 +31,12 @@ module.exports = {
             const setting = await irrigationSettingService.getUserSettings(userId);
             return res.status(200).json(setting);
     
-            } catch (error) {
-            return res.status(400).json({ message: error.message });
+            } catch (e) {
+                if(e instanceof HttpError) {
+                    return res.status(e.httpCode).json(e);
+                } 
+                 
+                return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
             }   
         },
     async createIrrigationSetting(req, res) {
@@ -35,10 +45,18 @@ module.exports = {
 
         try {
             const response = await irrigationSettingService.createIrrigationSetting(name, userId, humidityValue);
-            return res.status(201).json({ message: response });
+            return res.status(HttpCode.CREATED).json({ message: response });
 
-        } catch (error) {
-            return res.status(400).json({ message: error.message });
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+             
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async updateIrrigationSetting(req, res) {
@@ -52,23 +70,35 @@ module.exports = {
                 res.json({ message: setting });
             }
 
-        } catch (error) {
-            return res.status(400).json({ message: error.message });
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+             
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async deleteIrrigationSetting(req, res) {
         const userId = req.user_id;
-        const {settingId} = req.params;
+        const { id } = req.params;
 
         try {
           
-            const setting = await irrigationSettingService.deleteIrrigationSetting(settingId, userId);
+            const setting = await irrigationSettingService.deleteIrrigationSetting(id, userId);
             if(setting){
-                res.json({message: 'Config deletada com sucesso!'})
+                return res.status(HttpCode.OK).json({ message: 'Configuração deletada com sucesso!' });
             }
 
-        } catch (error) {
-            return res.status(400).json({message: error.message});
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+             
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     }
 

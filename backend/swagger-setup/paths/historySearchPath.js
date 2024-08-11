@@ -1,13 +1,24 @@
 module.exports = {
     get: {
-        summary: "View data of all user's gardens",
-        parameters: [],
+        summary: "Returns the irrigation history of a user's garden",
+        parameters: [
+            {
+                name: "name",
+                in: "query",
+                required: true,
+                description: "The name of the garden to search for",
+                schema: {
+                    type: "string",
+                    example: "Horta2"
+                }
+            }
+        ],
         security: [
             {
                 Token_Autenticação: [],
             },
         ],
-        tags: ["Garden"],
+        tags: ["Irrigation History"],
         responses: {
             "200": {
                 description: "Expected response",
@@ -16,7 +27,7 @@ module.exports = {
                         schema: {
                             type: "array",
                             items: {
-                                $ref: "#/components/schemas/ResponseGetMeasuresGardens",
+                                $ref: "#/components/schemas/ResponseGetHistory",
                             }
                         }
                     }
@@ -27,13 +38,13 @@ module.exports = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError",
+                            $ref: "#/components/schemas/ResponseError400History",
                         }
                     }
                 }
             },
             "401": {
-                description: "Authorization not received",
+                description: "Invalid credential",
                     content: {
                     "application/json": {
                         schema: {

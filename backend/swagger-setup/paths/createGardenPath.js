@@ -36,21 +36,45 @@ module.exports = {
                 }
             },
             "400": {
-                description: "Bad request",
+                description: "Validaton Error",
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError400",
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Validation error message",
+                                    example: "Some of the information provided is poorly formatted"
+                                }
+                            }
                         }
                     }
                 }
             },
             "401": {
-                description: "Token Inválido",
+                description: "Authorization not received",
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/ResponseError401",
+                            $ref: "#/components/schemas/ResponseError",
+                        }
+                    }
+                }
+            },
+            "500": {
+                description: "Internal server error",
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties:{
+                                message:{
+                                    type: "string",
+                                    description: "Error message",
+                                    example: "Internal error while processing the request"
+                                }
+                            }
                         }
                     }
                 }

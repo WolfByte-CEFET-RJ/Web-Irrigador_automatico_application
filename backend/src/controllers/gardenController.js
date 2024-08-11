@@ -1,5 +1,7 @@
+const { ValidationError } = require('yup');
 const gardenService = require('../services/gardenService');
 const measurementService = require('../services/measurementService');
+const { HttpCode, HttpError } = require('../utils/app.error');
 
 module.exports = {
 
@@ -10,38 +12,53 @@ module.exports = {
         try {
             if (!id) {
                 const gardens = await gardenService.getAllGardens();
-                return res.status(200).json(gardens);
+                return res.status(HttpCode.OK).json(gardens);
             }
 
             const garden = await gardenService.getOneGarden(id, userId);
-            return res.status(200).json(garden);
+            return res.status(HttpCode.OK).json(garden);
 
-        } catch (error) {
-            return res.status(400).json({ message: error.message });
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+            
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
     async getUserGardens(req, res) {
         const userId = req.user_id;
         try {
-
             const gardens = await gardenService.getUserGardens(userId);
-            return res.status(200).json(gardens);
+            return res.status(HttpCode.OK).json(gardens);
 
-        } catch (error) {
-            return res.status(400).json({ message: error.message });
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+            
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
 
     async createGarden(req, res) {
         const { name, description, identifier} = req.body;
         const userId = req.user_id;
-
+    
         try {
             const response = await gardenService.createGarden(name, description, identifier, userId);
-            return res.status(201).json({ message: response });
+            return res.status(HttpCode.CREATED).json({ message: response });
 
-        } catch (error) {
-            return res.status(400).json({ message: error.message });
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({ message: e.message });
+            }
+            
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
 
@@ -56,8 +73,16 @@ module.exports = {
                 res.json({ message: garden });
             }
 
-        } catch (error) {
-            return res.status(400).json({ message: error.message });
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+
+            if (e instanceof ValidationError){
+                return res.status(HttpCode.BAD_REQUEST).json({message: e.message});
+            }
+                
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
 
@@ -71,8 +96,12 @@ module.exports = {
                 res.json({ message: garden });
             }
 
-        } catch (error) {
-            return res.status(400).json({ message: error.message });
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+            
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     },
 
@@ -87,10 +116,14 @@ module.exports = {
             
             garden['lastMeasures'] = measurements;
 
-            return res.status(200).json(garden);
+            return res.status(HttpCode.OK).json(garden);
 
-        } catch (error) {
-            return res.status(400).json({ message: error.message });
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+                
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     }, 
 
@@ -101,10 +134,14 @@ module.exports = {
             let gardens = await gardenService.getUserGardens(userId);
             const measurements = await measurementService.lastMeasuresAllGardens(gardens);
 
-            return res.status(200).json(measurements);
+            return res.status(HttpCode.OK).json(measurements);
 
-        } catch (error) {
-            return res.status(400).json({ message: error.message });
+        } catch (e) {
+            if(e instanceof HttpError) {
+                return res.status(e.httpCode).json(e);
+            } 
+             
+            return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     }
 }

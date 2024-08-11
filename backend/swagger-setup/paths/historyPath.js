@@ -1,13 +1,13 @@
 module.exports = {
     get: {
-        summary: "View data of all user's gardens",
+        summary: "Returns the irrigation history of all user's gardens",
         parameters: [],
         security: [
             {
                 Token_Autenticação: [],
             },
         ],
-        tags: ["Garden"],
+        tags: ["Irrigation History"],
         responses: {
             "200": {
                 description: "Expected response",
@@ -16,7 +16,7 @@ module.exports = {
                         schema: {
                             type: "array",
                             items: {
-                                $ref: "#/components/schemas/ResponseGetMeasuresGardens",
+                                $ref: "#/components/schemas/ResponseGetHistory",
                             }
                         }
                     }
