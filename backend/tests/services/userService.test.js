@@ -3,10 +3,12 @@ const yup = require('yup');
 const bcrypt = require('bcryptjs');
 const { UserNotFound, AlreadyExists, NotAllowedChangeEmail, PasswordMismatch, NoCode, InvalidCode, CodeExpired } = require('../../src/errors/userError.js');
 const userService = require('../../src/services/userService.js');
+const sendEmail = require('../../src/utils/sendEmail.js');
 const moment = require('moment');
 
 jest.mock('../../src/database/index.js');
 jest.mock('bcryptjs');
+jest.mock('../../src/utils/sendEmail.js');
 
 describe("User Service", () => {
 
@@ -452,5 +454,37 @@ describe("User Service", () => {
             expect(whereKnexMock).toHaveBeenCalledWith({ email });
         });
     
+    })
+
+    describe("Forgot Password", () => {
+        it("should generate code, set expiration date, update user, and send email", async () => {
+        const email = 'test@example.com';
+
+        const mockUser = { email };
+
+        const mockFirst = jest.fn().mockResolvedValueOnce(mockUser);
+        const mockWhere = jest.fn().mockReturnValueOnce({ first: mockFirst });
+        const mockSelect = jest.fn().mockReturnValueOnce({ where: mockWhere });
+        knex.mockReturnValueOnce({ select: mockSelect });
+
+        const mockUpdate = jest.fn().mockResolvedValueOnce(1);
+        const mockWhereForUpdate = jest.fn().mockReturnValueOnce({ update: mockUpdate });
+        knex.mockReturnValueOnce({ where: mockWhereForUpdate });
+
+        const mockSendEmail = jest.fn().mockResolvedValueOnce(undefined);
+        sendEmail.mockImplementation(mockSendEmail);
+
+        const result = await userService.forgotPassword(email);
+
+        expect(result).toBe('Código enviado para o seu email!');
+        expect(mockSelect).toHaveBeenCalled();
+        expect(mockWhere).toHaveBeenCalledWith({ email });
+        expect(mockFirst).toHaveBeenCalled();
+        expect(mockUpdate).toHaveBeenCalledWith({
+            code: expect.any(Number),
+            expirationDate: expect.any(String),
+        });
+        expect(sendEmail).toHaveBeenCalledWith(email, expect.any(Number));
+    });
     })
 });

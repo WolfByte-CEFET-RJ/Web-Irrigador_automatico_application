@@ -475,5 +475,26 @@ describe("User Controller", () => {
             expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
             expect(res.json).toHaveBeenCalledWith({ message: "Unexpected error." });
         });
+
+        it('should return a previst http error', async () => {
+            const req = {
+                body: {
+                    email: 'test@example.com'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+        
+            const httpError = new HttpError({httpCode: 404, type: 'ERR_MOCKED', message: 'any previst erro message'});
+            userService.forgotPassword.mockRejectedValue(httpError);
+        
+            await userController.forgotPassword(req, res);
+        
+            expect(userService.forgotPassword).toHaveBeenCalledWith(req.body.email);
+            expect(res.status).toHaveBeenCalledWith(httpError.httpCode);
+            expect(res.json).toHaveBeenCalledWith(httpError);
+        });
     })
 })
