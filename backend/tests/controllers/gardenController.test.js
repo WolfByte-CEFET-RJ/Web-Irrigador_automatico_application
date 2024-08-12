@@ -243,5 +243,58 @@ describe("Garden Controller", () => {
             expect(res.json).toHaveBeenCalledWith({ message: error.message })
         });
     })
+
+    describe("Update Garden", () => {
+        it("should update an existing garden and return 200 status code", async () => {
+            const mockGardenId = 1;
+            const mockUserId = 1;
+            const mock_garden = {
+                name: "Alface",
+                description: "Minha horta de alface",
+                identifier: "2024030801",
+                irrigationId: 1
+            };
+
+            const req = {
+                params: { id: mockGardenId },
+                user_id: mockUserId,
+                body: {
+                    name: mock_garden.name,
+                    description: mock_garden.description,
+                    identifier: mock_garden.identifier,
+                    irrigationId: mock_garden.irrigationId
+                }
+            };
+
+            const res = {
+                json: jest.fn().mockReturnThis()
+            };
+
+            gardenService.updateGarden.mockResolvedValue("Horta atualizada com sucesso!")
+            await gardenController.updateGarden(req, res);
+
+            expect(res.json).toHaveBeenCalledWith({ message: "Horta atualizada com sucesso!" });
+            expect(gardenService.updateGarden).toHaveBeenCalledWith(mockUserId, mockGardenId, mock_garden);
+        })
+
+        it("should return an error message with status INTERNAL SERVER ERROR", async () => {
+            const req = {
+                params: { id: 1 },
+                user_id: 1
+            }
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            const error = new Error("mocked message");
+            gardenService.updateGarden.mockRejectedValue(error);
+
+            await gardenController.updateGarden(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+            expect(res.json).toHaveBeenCalledWith({ message: error.message });
+        })
+    })
     
 })
