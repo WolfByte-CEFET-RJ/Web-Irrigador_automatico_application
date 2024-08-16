@@ -1,5 +1,6 @@
 const gardenController = require("../../src/controllers/gardenController");
 const gardenService = require("../../src/services/gardenService");
+const measurementService = require("../../src/services/measurementService");
 const { HttpCode, HttpError } = require("../../src/utils/app.error");
 const { ValidationError } = require('yup');
 
@@ -296,5 +297,70 @@ describe("Garden Controller", () => {
             expect(res.json).toHaveBeenCalledWith({ message: error.message });
         })
     })
+
+    describe("getMeasuresAllGardens", () => {
+        let req, res, next;
+        let getUserGardensMock, lastMeasuresAllGardensMock;
     
+        beforeEach(() => {
+            req = {
+                user_id: 1
+            };
+            res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+            next = jest.fn();
+    
+            // Mock dos serviços
+            getUserGardensMock = jest.fn();
+            lastMeasuresAllGardensMock = jest.fn();
+    
+            gardenService.getUserGardens = getUserGardensMock;
+            measurementService.lastMeasuresAllGardens = lastMeasuresAllGardensMock;
+        });
+    
+        it("should return measurements for all gardens", async () => {
+            const mockGardens = [{ id: 1 }, { id: 2 }];
+            const mockMeasurements = [{ gardenId: 1, temp: 25 }, { gardenId: 2, temp: 26 }];
+    
+            getUserGardensMock.mockResolvedValue(mockGardens);
+            lastMeasuresAllGardensMock.mockResolvedValue(mockMeasurements);
+    
+            await gardenController.getMeasuresAllGardens(req, res, next);
+    
+            expect(getUserGardensMock).toHaveBeenCalledWith(req.user_id);
+            expect(lastMeasuresAllGardensMock).toHaveBeenCalledWith(mockGardens);
+            expect(res.status).toHaveBeenCalledWith(HttpCode.OK);
+            expect(res.json).toHaveBeenCalledWith(mockMeasurements);
+        });
+    
+        it("should handle HttpError and return the appropriate status and message", async () => {
+            const error = new HttpError({ 
+                httpCode: HttpCode.UNAUTHORIZED, 
+                type: 'UnauthorizedError', 
+                message: 'Unauthorized access' 
+            });
+    
+            getUserGardensMock.mockRejectedValue(error);
+    
+            await gardenController.getMeasuresAllGardens(req, res);
+    
+            expect(getUserGardensMock).toHaveBeenCalledWith(req.user_id);
+            expect(res.status).toHaveBeenCalledWith(HttpCode.UNAUTHORIZED);
+            expect(res.json).toHaveBeenCalledWith(error);
+        });
+    
+        it("should handle unexpected errors and return 500 status", async () => {
+            const error = new Error("Unexpected error");
+    
+            getUserGardensMock.mockRejectedValue(error);
+    
+            await gardenController.getMeasuresAllGardens(req, res, next);
+    
+            expect(getUserGardensMock).toHaveBeenCalledWith(req.user_id);
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+            expect(res.json).toHaveBeenCalledWith({ message: error.message });
+        });
+    });    
 })
