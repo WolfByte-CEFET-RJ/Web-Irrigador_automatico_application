@@ -19,10 +19,16 @@ const ForgotPassword = () => {
     const [isModalVisible, setModalVisible] = useState(false);
 
     const handleForgotPassword = async () => {
-        setModalVisible(true);
-        const forgotPasswordMessage = await api.post('/forgot_password', email);
-        if(forgotPasswordMessage.status === 200){
-            setModalVisible(true);
+        console.log(email);
+        // setModalVisible(true);
+        try{
+            const forgotPasswordMessage = await api.post('/forgot_password', {email});
+            console.log(forgotPasswordMessage);
+            if(forgotPasswordMessage.status === 200){
+                setModalVisible(true);
+            }
+        }catch(error){
+            console.log(error);
         }
     }
     return(
@@ -49,7 +55,7 @@ const ForgotPassword = () => {
                 />
             </View>
             <View style={styles.button_space}>
-                <Button title="Recuperar senha" onPress={() => handleForgotPassword()}/>
+                <Button title="Recuperar senha" onPress={async () => await handleForgotPassword()}/>
             </View>
                 <ButtonLight title="Voltar" onPress={()=>navigation.navigate("SignIn")}/>
             

@@ -6,11 +6,15 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { createAxiosInstance } from "../../services/api";
 import { useNavigation } from "@react-navigation/native";
 import OtpInput from "../inputCode/OtpInput";
+import { useAuth } from "../../contexts/AuthContext";
+
+
 
 const ForgotPasswordModal = ({ visible, onClose, texto, email }) => {
 
   const [otp, setOtp] = useState(['', '', '', '']);
   const navigation = useNavigation();
+  const { setReset } = useAuth();
 
   const inputs = [];
 
@@ -29,17 +33,26 @@ const ForgotPasswordModal = ({ visible, onClose, texto, email }) => {
   const api = createAxiosInstance();
 
   const handleConfirmClick = async () => {
-    onClose();
-    navigation.navigate("ConfirmPassword");
     const otpJoined = otp.join();
+    let code = Number(otpJoined.replace(/,/g, ""));
     console.log(otpJoined);
-    const verifyCode = await api.post(`/verify_code/${email}`);
-    console.log(verifyCode);
-    if(verifyCode){
-      navigation.navigate("ConfirmPassword");
-    }else{
-      console.log("Codigo invalido");
+    console.log(code);
+    try{
+      const verifyCode = await api.post(`/verify_code/${email}`, {code});
+      console.log(verifyCode);
+      //colocar resetToken no token.
+      setReset(verifyCode.data.resetToken);
+      //mudar token conforme auth..
+      if(verifyCode){
+        navigation.navigate("ConfirmPassword");
+      }else{
+        console.log("Codigo invalido");
+      }
+      onClose();
+    }catch(error){
+      console.log(error);
     }
+    
   }
 
   return (
@@ -70,7 +83,7 @@ const ForgotPasswordModal = ({ visible, onClose, texto, email }) => {
               title="Confirmar"
               buttonHeight={35}
               fontSize={15}
-              onPress={() => handleConfirmClick()}
+              onPress={async () =>  await handleConfirmClick()}
             />
           </View>
         </View>

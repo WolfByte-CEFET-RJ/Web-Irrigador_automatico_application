@@ -7,21 +7,26 @@ import Button from "../../components/button/Button";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import SucessComponent from "../../components/success/SuccessComponent";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../contexts/AuthContext";
+import { createAxiosInstance } from "../../services/apiResetToken";
 
 const Confirm_newPasswords = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
-    const [sucess, setSucess] = useState("");
-   const navigation = useNavigation();
+    const [sucess, setSuccess] = useState("");
+    const { unsetReset, resetToken } = useAuth();
+    const navigation = useNavigation();
+    const api = createAxiosInstance();
 
 
     const handleConfirmPassword = async () => {
         const data = {
           password: password,
+          confirmPassword: confirmPassword
         };
-    
-        if (
+        console.log("passoou aqui");
+        if(
           password === "" ||
           confirmPassword === ""
         ) {
@@ -29,21 +34,21 @@ const Confirm_newPasswords = () => {
           setTimeout(() => {
             setError("");
           }, 3000);
-        } else if (password != confirmPassword) {
-          setError("Senhas não coincidem");
-          setTimeout(() => {
-            setError("");
-          }, 3000);
         } else {
           try {
-            const response = await api.patch("/user", data); //solicitação PATCH (Atualizar dados) para a URL do backend
-            setSucess("Senha Atualizada com sucesso!");
+            console.log("entrou")
+            console.log(resetToken);
+            const response = await api.post("/reset_password", data); //solicitação PATCH (Atualizar dados) para a URL do backend
+            setSuccess("Senha Atualizada com sucesso!");
             setTimeout(() => {
-              setSucess("");
+              setSuccess("");
             }, 3000);
+            unsetReset();
             setTimeout(() => navigation.navigate("SignIn"), 2200); //retorna à tela de início após cadastro
           } catch (error) {
-            setError(error.response.data.message);
+            
+            console.log(error);
+            setError(error.message);
             setTimeout(() => {
               setError("");
             }, 3000);
@@ -71,14 +76,14 @@ const Confirm_newPasswords = () => {
                 <Input
                     // label={"Insira sua nova senha:"}
                     placeHolder="Digite uma senha"
-                    onChangeText={(event) => setPassword(event.target.value)}
+                    onChangeText={text =>setPassword(text)}
                     isPassword={true}
                     isLogin={true}
                 />
                 <Text style={styles.subtittle_confirm_input}>Confirme sua senha:</Text>
                 <Input
                     // label="Confirme sua senha:"
-                    onChangeText={(event) => setConfirmPassword(event.target.value)}
+                    onChangeText={text => setConfirmPassword(text)}
                     placeHolder="Confirme sua senha"
                     isPassword={true}
                     isLogin={true}
