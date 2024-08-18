@@ -85,13 +85,13 @@ module.exports = {
         if(gardenData.userId){throw new UnauthorizedUserIdUpdate()} // Se tentar alterar o ID do usuário, lança um erro
         
         if(gardenData.irrigationId){ // Se estiver atualizando a configuração de irrigação
-            const userSetting = await knex('irrigationSetting').select("*") .where({ id: gardenData.irrigationId }).first();
+            const userSetting = await knex('irrigationSetting').select("*").where({ id: gardenData.irrigationId }).first();
             if (!userSetting) {throw new IrrigationSettingNotFound('ERR_SERVICE_GARDEN-IRRIGATION_SETTING_NOT_FOUND')} // Se a configuração de irrigação não existe, lança um erro
             if (userSetting.userId != myId){throw new UnauthorizedIrrigationSettingOperation('ERR_SERVICE_GARDEN-UNAUTHORIZED_IRRIGATION_SETTING_OPERATION')} // Se a configuração não pertence ao usuário, lança um erro
         }
         
         if (gardenData.identifier) { // Se estiver atualizando o identificador
-            const identifierInformation = await verifyIdentifer(gardenData.identifier); // Verifica se o novo identificador já existe
+            const identifierInformation = await this.verifyIdentifer(gardenData.identifier); // Verifica se o novo identificador já existe
 
             await knex('identifier').where({ gardenId }).update({ gardenId: null }); // Remove o ID da horta do identificador antigo
             await knex('identifier').where({ id: identifierInformation.id }).update({ gardenId }); // Atualiza o ID da nova horta no identificador
