@@ -1,6 +1,6 @@
 const gardenService = require("../../src/services/gardenService");
 const knex = require('../../src/database');
-const { GardenNotFound, UnauthorizedGardenReturn, NoGardenRegistered, UnauthorizedGardenUpdate, UnauthorizedUserIdUpdate } = require("../../src/errors/gardenError");
+const { GardenNotFound, UnauthorizedGardenReturn, NoGardenRegistered, UnauthorizedGardenUpdate, UnauthorizedUserIdUpdate, UnauthorizedGardenDelete } = require("../../src/errors/gardenError");
 const { ValidationError } = require('yup');
 const { IrrigationSettingNotFound, UnauthorizedIrrigationSettingOperation } = require("../../src/errors/irrigationSettingError");
 
@@ -356,4 +356,80 @@ describe("Garden Service", () => {
         });
 
     });   
+
+    describe("Delete Garden", ()=>{
+        it("should delete garden sucessfully", async ()=>{
+            //mocking
+            const garden_id = 1;
+            const user_id = 1;
+
+            gardenService.getOneGarden = jest.fn().mockResolvedValue({userId: user_id});
+
+            whereKnexMock = jest.fn().mockReturnThis();
+            deleteKnexMock = jest.fn().mockResolvedValue(1);
+            updateKnexMock = jest.fn().mockResolvedValue(1);
+
+            knex.mockImplementation((table) => {
+                 if (table === 'identifier') {
+                    return {
+                        where: whereKnexMock,
+                        update: updateKnexMock,
+                    };
+                } else if(table === 'garden'){
+                    return {
+                        where: whereKnexMock,
+                        del: deleteKnexMock,
+                    };
+                } 
+                else return {};
+            });
+
+            //execução
+            const response = await gardenService.deleteGarden(user_id, garden_id)
+
+            //asserts
+            expect(response).toBe("Horta deletada com sucesso");
+        });
+
+        it("should throw an error when client is not the owner of the garden", async ()=>{
+            //mocking
+            const garden_id = 1;
+            const user_id = 1;
+
+            gardenService.getOneGarden = jest.fn().mockResolvedValue({userId: user_id*(-1)});
+
+            //execução e asserts
+            await expect(gardenService.deleteGarden(user_id, garden_id)).rejects.toThrow(new UnauthorizedGardenDelete());
+        });
+
+        it("should throw an error when garden not found", async ()=>{
+            //mocking
+            const garden_id = 1;
+            const user_id = 1;
+
+            gardenService.getOneGarden = jest.fn().mockResolvedValue({userId: user_id});
+
+            whereKnexMock = jest.fn().mockReturnThis();
+            deleteKnexMock = jest.fn().mockResolvedValue(null);
+            updateKnexMock = jest.fn().mockResolvedValue(1);
+
+            knex.mockImplementation((table) => {
+                 if (table === 'identifier') {
+                    return {
+                        where: whereKnexMock,
+                        update: updateKnexMock,
+                    };
+                } else if(table === 'garden'){
+                    return {
+                        where: whereKnexMock,
+                        del: deleteKnexMock,
+                    };
+                } 
+                else return {};
+            });
+
+            //execução e asserts
+            await expect(gardenService.deleteGarden(user_id, garden_id)).rejects.toThrow(new GardenNotFound());
+        });
+    })
 })

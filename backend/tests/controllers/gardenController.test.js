@@ -298,6 +298,65 @@ describe("Garden Controller", () => {
         })
     })
 
+    describe("Delete Gardens", () => {
+        it("should return a list of gardens with status OK", async () => {
+            //mocking
+            const req = { params: {user_id: 1} }
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            const delete_message = "Horta deletada com sucesso"
+            gardenService.deleteGarden.mockResolvedValue(delete_message)
+
+            //execução
+            await gardenController.deleteGarden(req, res)
+
+            //asserts
+            expect(res.status).toHaveBeenCalledWith(HttpCode.OK);
+            expect(res.json).toHaveBeenCalledWith({message: delete_message});
+        })
+
+        it('should return a previst http error', async () => {
+            // mocking
+            const req = { params: {user_id: 1} }
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            const httpError = new HttpError({httpCode: -1, type: 'ERR_MOCKED', message: 'any previst erro message'})
+            gardenService.deleteGarden.mockRejectedValue(httpError)
+
+            //execução
+            await gardenController.deleteGarden(req, res)
+        
+            // asserts
+            expect(res.status).toHaveBeenCalledWith(httpError.httpCode)
+            expect(res.json).toHaveBeenCalledWith(httpError)
+        });
+
+        it('should return an error message with status INTERNAL SERVER ERROR', async () => {
+            // mocking
+            const req = { params: {user_id: 1} }
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            const error = new Error("mocked message")
+            gardenService.deleteGarden.mockRejectedValue(error)
+            
+            //execução
+            await gardenController.deleteGarden(req, res)
+            
+            // asserts
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR)
+            expect(res.json).toHaveBeenCalledWith({ message: error.message })
+        });
+    })
+
     describe("getMeasuresAllGardens", () => {
         let req, res, next;
         let getUserGardensMock, lastMeasuresAllGardensMock;
