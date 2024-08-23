@@ -99,7 +99,7 @@ module.exports = {
 			throw new UserNotFound();
 		}
 
-		const code = Math.round(Math.random() * 9999);
+		const code = Math.round(Math.random() * 9999).toString().padStart(4, '0');
 		const expirationDate = moment().add(1, 'hour').format('YYYY-MM-DD HH:mm:ss');
 		
 		await knex('user').where({email}).update({ code, expirationDate });
@@ -113,11 +113,11 @@ module.exports = {
 
     async verifyCode(email, code) {
 		const user = await knex('user').select('*').where({ email }).first();
-		
+		const verifyCode = Number(code);
 		if (!user) {
 			throw new UserNotFound();
 		}
-		if (typeof code != 'number' || user.code != code){
+		if (typeof verifyCode != 'number' || user.code != code || code == ""){
 			throw new InvalidCode();
 		}
 
