@@ -16,7 +16,43 @@ describe("Measurement Service", () => {
 
     describe("Last Measures", () => {
         it("Should return all last measures of a garden", async () => {
-            
+            const userId = 1;
+            const gardenUserId = 1;
+            const gardenIrrigationId = 1;
+            const gardenId = 1;
+            const sensors = [{ id: 1 }, { id: 2 }];
+            const lastMeasures = [
+                { gardenId, sensorId: 1, measurement: 30, date: '2024-08-24' }
+            ];
+            const configHumidityValue = { value: '40' };
+
+            knex.mockImplementation(() => ({
+                select: jest.fn().mockReturnThis(),
+                where: jest.fn().mockReturnThis(),
+                orderBy: jest.fn().mockReturnThis(),
+                first: jest.fn()
+                    .mockResolvedValueOnce(sensors) 
+                    .mockResolvedValueOnce(lastMeasures[0]) 
+                    .mockResolvedValue(configHumidityValue) 
+            }));
+
+            const result = await measurementService.lastMeasures(userId, gardenUserId, gardenIrrigationId, gardenId);
+
+            expect(result).toEqual([
+                lastMeasures[0],
+                { message: 'Nível de umidade baixo. Sua planta precisa ser irrigada!' }
+            ]);
+        });
+
+        it("should throw UnauthorizedGardenReturn if userId does not match gardenUserId", async () => {
+            const userId = 1;
+            const gardenUserId = 2;
+            const gardenIrrigationId = 1;
+            const gardenId = 1;
+
+            await expect(measurementService.lastMeasures(userId, gardenUserId, gardenIrrigationId, gardenId))
+                .rejects
+                .toThrow(UnauthorizedGardenReturn);
         });
     });
 
