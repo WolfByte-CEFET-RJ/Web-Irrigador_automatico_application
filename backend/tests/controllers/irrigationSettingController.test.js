@@ -135,7 +135,80 @@ describe("Irrigation Setting Controller", () => {
                 expect(res.json).toHaveBeenCalledWith({ message: error.message });
                 expect(irrigationSettingService.getOneSetting).toHaveBeenCalled();
             });
+        }); 
+    })
+
+    describe("Create Irrigation Setting", () => {
+        it('Should create an irrigation setting', async () => {
+            const mockRequest = {
+                body: {
+                    name: 'New Irrigation Setting',
+                    humidityValue: '45'
+                },
+                user_id: 1 
+                };
             
-        });  
+                const mockResponse = 'Configuração cadastrada!';
+                const mockResponseBody = { message: mockResponse };
+            
+                const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+                };
+            
+                irrigationSettingService.createIrrigationSetting.mockResolvedValue(mockResponse);
+            
+                await irrigationSettingController.createIrrigationSetting(mockRequest, res);
+            
+                expect(res.status).toHaveBeenCalledWith(HttpCode.CREATED);
+                expect(res.json).toHaveBeenCalledWith(mockResponseBody);
+                expect(irrigationSettingService.createIrrigationSetting).toHaveBeenCalledWith(mockRequest.body.name, mockRequest.user_id, mockRequest.body.humidityValue);
+        });
+
+        it('Should return HttpError', async () => {
+            const mockRequest = {
+                body: {
+                name: 'New Irrigation Setting',
+                humidityValue: '45@'
+                },
+                user_id: 1 
+            };
+            
+            const httpError = new HttpError({httpCode: 400, type: 'ERR_MOCKED', message: 'any previst erro message'});
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+            
+            irrigationSettingService.createIrrigationSetting.mockRejectedValue(httpError);
+            
+            await irrigationSettingController.createIrrigationSetting(mockRequest, res);
+            
+            expect(res.status).toHaveBeenCalledWith(HttpCode.BAD_REQUEST);
+            expect(res.json).toHaveBeenCalledWith(httpError);
+        });
+
+        it('Should return Internal Server Error', async () => {
+            const mockRequest = {
+                body: {
+                name: 'New Irrigation Setting',
+                humidityValue: '45'
+                },
+                user_id: 1 
+            };
+            
+            const mockError = new Error('Error message');
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+            
+            irrigationSettingService.createIrrigationSetting.mockRejectedValue(mockError);
+            
+            await irrigationSettingController.createIrrigationSetting(mockRequest, res);
+            
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+            expect(res.json).toHaveBeenCalledWith({ message: mockError.message });
+        });
     });
 });
