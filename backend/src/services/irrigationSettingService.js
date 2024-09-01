@@ -67,7 +67,7 @@ module.exports = {
             .groupBy('irrigationSetting.id')
             .orderBy('irrigationSetting.id', 'asc');
 
-        const allSensors = await returnConfigSensors(settings);
+        const allSensors = await this.returnConfigSensors(settings);
 
         // Formata as configurações finais para retorno
         const finalSetting = settings.map((setting, index) => ({
@@ -275,5 +275,6 @@ module.exports = {
         }
 
         return 'Configuração apagada com sucesso!';
-    }
+    }, 
+    returnConfigSensors
 };
