@@ -127,8 +127,7 @@ describe("Irrigation Settings Service", ()=>{
             it("should create a new irrigation setting", async () => {
                 const mockSetting = { name: 'Configuração 1', userId: 1, humidityValue: '50' };
                 const { name, userId, humidityValue } = mockSetting;
-
-                // Configure o mock do knex corretamente
+                
                 const selectKnexMock = jest.fn().mockReturnThis();
                 const whereKnexMock = jest.fn().mockReturnThis();
                 const firstKnexMock = jest.fn()
