@@ -211,4 +211,77 @@ describe("Irrigation Setting Controller", () => {
             expect(res.json).toHaveBeenCalledWith({ message: mockError.message });
         });
     });
+
+
+    describe("deleteIrrigationSetting", () => {
+        let req, res;
+        const userId = 1;
+        const settingId = 1;
+
+        beforeEach(() => {
+            req = {
+                params: { id: settingId },
+                user_id: userId
+            };
+
+            res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+        });
+
+        it("should return status OK and success message when the deletion is successful", async () => {
+            // Mocking service call
+            irrigationSettingService.deleteIrrigationSetting.mockResolvedValue(true);
+
+            // Executando o controller
+            await irrigationSettingController.deleteIrrigationSetting(req, res);
+
+            // Assertions
+            expect(res.status).toHaveBeenCalledWith(HttpCode.OK);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Configuração deletada com sucesso!' });
+            expect(irrigationSettingService.deleteIrrigationSetting).toHaveBeenCalledWith(settingId, userId);
+        });
+
+        it("should return status INTERNAL SERVER ERROR when an unexpected error occurs", async () => {
+            // Mocking service call to throw an error
+            const error = new Error("mocked error message");
+            irrigationSettingService.deleteIrrigationSetting.mockRejectedValue(error);
+
+            // Executando o controller
+            await irrigationSettingController.deleteIrrigationSetting(req, res);
+
+            // Assertions
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+            expect(res.json).toHaveBeenCalledWith({ message: error.message });
+            expect(irrigationSettingService.deleteIrrigationSetting).toHaveBeenCalledWith(settingId, userId);
+        });
+
+        it("should return the expected HttpError with custom HTTP code", async () => {
+            // Mocking service call to throw an HttpError
+            const httpError = new HttpError({ httpCode: 404, type: 'ERR_NOT_FOUND', message: 'Setting not found' });
+            irrigationSettingService.deleteIrrigationSetting.mockRejectedValue(httpError);
+
+            // Executando o controller
+            await irrigationSettingController.deleteIrrigationSetting(req, res);
+
+            // Assertions
+            expect(res.status).toHaveBeenCalledWith(httpError.httpCode);
+            expect(res.json).toHaveBeenCalledWith(httpError);
+            expect(irrigationSettingService.deleteIrrigationSetting).toHaveBeenCalledWith(settingId, userId);
+        });
+
+        it("should return nothing if the setting does not exist", async () => {
+            // Mocking service call returning null or undefined
+            irrigationSettingService.deleteIrrigationSetting.mockResolvedValue(null);
+
+            // Executando o controller
+            await irrigationSettingController.deleteIrrigationSetting(req, res);
+
+            // Assertions
+            expect(res.status).not.toHaveBeenCalled();
+            expect(res.json).not.toHaveBeenCalled();
+            expect(irrigationSettingService.deleteIrrigationSetting).toHaveBeenCalledWith(settingId, userId);
+        });
+    });
 });
