@@ -354,4 +354,72 @@ describe("Irrigation Settings Service", ()=>{
 
     });
 
+    describe("Delete Irrigation Setting", () => {
+        let setting_id, user_id;
+    
+        beforeEach(() => {
+            setting_id = 1;
+            user_id = 1;
+    
+            // Mock do Knex
+            const deleteKnexMock = jest.fn().mockResolvedValue(1); // mock para deletar a configuração
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            const firstKnexMock = jest.fn().mockResolvedValue({ id: setting_id, userId: user_id });
+    
+            knex.mockImplementation((table) => {
+                if (table === 'irrigationSetting') {
+                    return {
+                        select: selectKnexMock,
+                        where: whereKnexMock,
+                        first: firstKnexMock,
+                        delete: deleteKnexMock,
+                    };
+                } else if (table === 'garden') {
+                    return { select: selectKnexMock, where: whereKnexMock }; // mocking for inUse check
+                } 
+                return {};
+            });
+        });
+    
+        it("should delete the irrigation setting successfully", async () => {
+            const message = await irrigationSettingService.deleteIrrigationSetting(setting_id, user_id);
+            expect(message).toBe("Configuração de irrigação deletada com sucesso!");
+            expect(knex).toHaveBeenCalledWith('irrigationSetting');
+            expect(knex).toHaveBeenCalledTimes(2);
+        });
+    
+        it("should throw an error if the irrigation setting is not found", async () => {
+            knex.mockImplementationOnce(() => ({ first: jest.fn().mockResolvedValue(null) }));
+            await expect(irrigationSettingService.deleteIrrigationSetting(setting_id, user_id))
+                .rejects
+                .toThrow(new IrrigationSettingNotFound());
+        });
+    
+        it("should throw an error if the user tries to delete a setting they do not own", async () => {
+            knex.mockImplementationOnce(() => ({ first: jest.fn().mockResolvedValue({ id: setting_id, userId: -1 }) }));
+            await expect(irrigationSettingService.deleteIrrigationSetting(setting_id, user_id))
+                .rejects
+                .toThrow(new UnauthorizedIrrigationSettingOperation());
+        });
+    
+        it("should throw an error if the setting is in use by a garden", async () => {
+            knex.mockImplementationOnce((table) => {
+                if (table === 'garden') {
+                    return { select: jest.fn().mockResolvedValue([{ id: 1 }]) }; // mock para garden em uso
+                }
+                return {};
+            });
+            await expect(irrigationSettingService.deleteIrrigationSetting(setting_id, user_id))
+                .rejects
+                .toThrow(new Error("Essa configuração de irrigação está em uso por um jardim"));
+        });
+    
+        it("should propagate database errors", async () => {
+            knex.mockImplementationOnce(() => ({ delete: jest.fn().mockRejectedValue(new Error("Database Error")) }));
+            await expect(irrigationSettingService.deleteIrrigationSetting(setting_id, user_id))
+                .rejects
+                .toThrow("Database Error");
+        });
+    });    
 });
