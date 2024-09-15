@@ -1,5 +1,6 @@
+const { ValidationError } = require("yup");
 const knex = require("../../src/database");
-const { IrrigationSettingNotFound, UnauthorizedIrrigationSettingOperation, DuplicatedIrrigatonSettingName } = require("../../src/errors/irrigationSettingError");
+const { IrrigationSettingNotFound, UnauthorizedIrrigationSettingOperation, DuplicatedIrrigatonSettingName, DefaultSettingNotEditable, NoValuePassed, UserIdNotEditable, InvalidUpdateFields, IrrigationSettingAlreadyExists, UpdateUmidityValueError, InvalidHumidity } = require("../../src/errors/irrigationSettingError");
 const irrigationSettingService = require("../../src/services/irrigationSettingService");
 
 jest.mock('../../src/database');
@@ -122,82 +123,235 @@ describe("Irrigation Settings Service", ()=>{
                 await expect(irrigationSettingService.getOneSetting(setting_id, user_id)).rejects.toThrow(new UnauthorizedIrrigationSettingOperation());
             })
         })
+    });
 
-        describe("Create Irrigation Setting", () => {
-            it("should create a new irrigation setting", async () => {
-                const mockSetting = { name: 'Configuração 1', userId: 1, humidityValue: '50' };
-                const { name, userId, humidityValue } = mockSetting;
-                
-                const selectKnexMock = jest.fn().mockReturnThis();
-                const whereKnexMock = jest.fn().mockReturnThis();
-                const firstKnexMock = jest.fn()
-                    .mockResolvedValueOnce(null) 
-                    .mockResolvedValueOnce({ id: 1 });  
-                const insertKnexMock = jest.fn().mockResolvedValue([1]); 
-
-                knex.mockImplementation(() => ({
-                    select: selectKnexMock,
-                    where: whereKnexMock,
-                    first: firstKnexMock,
-                    insert: insertKnexMock
-                }));
-
-                const result = await irrigationSettingService.createIrrigationSetting(name, userId, humidityValue);
-
-                expect(result).toBe("Configuração cadastrada!");
-                expect(knex).toHaveBeenCalledWith('irrigationSetting');
-                expect(selectKnexMock).toHaveBeenCalledWith('id');
-                expect(whereKnexMock).toHaveBeenCalledWith({ name, userId });
-                expect(firstKnexMock).toHaveBeenCalled();
-                expect(insertKnexMock).toHaveBeenCalledWith({ name, userId });
-            });
-
-            it("should throw DuplicatedIrrigatonSettingName", async () => {
-                const mockSetting = { name: 'Configuração 1', userId: 1, humidityValue: '50' };
-                const { name, userId, humidityValue } = mockSetting;
+    describe("Create Irrigation Setting", () => {
+        it("should create a new irrigation setting", async () => {
+            const mockSetting = { name: 'Configuração 1', userId: 1, humidityValue: '50' };
+            const { name, userId, humidityValue } = mockSetting;
             
-                const selectKnexMock = jest.fn().mockReturnThis();
-                const whereKnexMock = jest.fn().mockReturnThis();
-                const firstKnexMock = jest.fn().mockResolvedValue({ id: 1 }); 
-            
-                knex.mockImplementation(() => ({
-                    select: selectKnexMock,
-                    where: whereKnexMock,
-                    first: firstKnexMock
-                }));
-            
-                await expect(irrigationSettingService.createIrrigationSetting(name, userId, humidityValue))
-                  .rejects.toThrow(DuplicatedIrrigatonSettingName);
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            const firstKnexMock = jest.fn()
+                .mockResolvedValueOnce(null) 
+                .mockResolvedValueOnce({ id: 1 });  
+            const insertKnexMock = jest.fn().mockResolvedValue([1]); 
+
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock,
+                insert: insertKnexMock
+            }));
+
+            const result = await irrigationSettingService.createIrrigationSetting(name, userId, humidityValue);
+
+            expect(result).toBe("Configuração cadastrada!");
+            expect(knex).toHaveBeenCalledWith('irrigationSetting');
+            expect(selectKnexMock).toHaveBeenCalledWith('id');
+            expect(whereKnexMock).toHaveBeenCalledWith({ name, userId });
+            expect(firstKnexMock).toHaveBeenCalled();
+            expect(insertKnexMock).toHaveBeenCalledWith({ name, userId });
+        });
+
+        it("should throw DuplicatedIrrigatonSettingName", async () => {
+            const mockSetting = { name: 'Configuração 1', userId: 1, humidityValue: '50' };
+            const { name, userId, humidityValue } = mockSetting;
         
-                expect(knex).toHaveBeenCalledWith('irrigationSetting');
-                expect(selectKnexMock).toHaveBeenCalledWith('id');
-                expect(whereKnexMock).toHaveBeenCalledWith({ name, userId });
-                expect(firstKnexMock).toHaveBeenCalled();
-            });
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            const firstKnexMock = jest.fn().mockResolvedValue({ id: 1 }); 
+        
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock
+            }));
+        
+            await expect(irrigationSettingService.createIrrigationSetting(name, userId, humidityValue))
+                .rejects.toThrow(DuplicatedIrrigatonSettingName);
+    
+            expect(knex).toHaveBeenCalledWith('irrigationSetting');
+            expect(selectKnexMock).toHaveBeenCalledWith('id');
+            expect(whereKnexMock).toHaveBeenCalledWith({ name, userId });
+            expect(firstKnexMock).toHaveBeenCalled();
+        });
 
-            it("should propagate error if knex insert fails", async () => {
-                const mockSetting = { name: 'Configuração 1', userId: 1, humidityValue: '50' };
-                const { name, userId, humidityValue } = mockSetting;
-            
-                const selectKnexMock = jest.fn().mockReturnThis();
-                const whereKnexMock = jest.fn().mockReturnThis();
-                const firstKnexMock = jest.fn().mockResolvedValue(null);
-                const insertKnexMock = jest.fn().mockRejectedValue(new Error("Database insert failed"));
-            
-                knex.mockImplementation(() => ({
-                    select: selectKnexMock,
-                    where: whereKnexMock,
-                    first: firstKnexMock,
-                    insert: insertKnexMock
-                }));
-            
-                irrigationSettingService.validadeHumidityValue = jest.fn().mockReturnValue(true);
-            
-                await expect(irrigationSettingService.createIrrigationSetting(name, userId, humidityValue))
-                    .rejects.toThrow("Database insert failed");
-            });
+        it("should propagate error if knex insert fails", async () => {
+            const mockSetting = { name: 'Configuração 1', userId: 1, humidityValue: '50' };
+            const { name, userId, humidityValue } = mockSetting;
+        
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            const firstKnexMock = jest.fn().mockResolvedValue(null);
+            const insertKnexMock = jest.fn().mockRejectedValue(new Error("Database insert failed"));
+        
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock,
+                insert: insertKnexMock
+            }));
+        
+            irrigationSettingService.validadeHumidityValue = jest.fn().mockReturnValue(true);
+        
+            await expect(irrigationSettingService.createIrrigationSetting(name, userId, humidityValue))
+                .rejects.toThrow("Database insert failed");
+        });
+    })
+
+    describe("Update Irrigation Setting", () =>{
+        let setting_id, user_id;
+        let data = {};
+        let updateKnexMock, firstKnexMock;
+        
+        beforeEach(()=>{
+            //mocking perfect scenario
+            setting_id = 2;
+            user_id = 1;
+            data = {
+                name: "new name",
+                humidityValue: "55"
+            }
+
+            const setting = { id: setting_id, name: "mocked current setting", userId: user_id, Umidade: "50"}
+            irrigationSettingService.getOneSetting = jest.fn().mockResolvedValue(setting);
+
+            irrigationSettingService.validadeHumidityValue = jest.fn().mockReturnValue(true);
+
+            irrigationSettingService.verifyUpdateData = jest.fn().mockReturnValue(true);
+
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            firstKnexMock = jest.fn().mockResolvedValue(null); 
+            updateKnexMock = jest.fn()
+                .mockResolvedValueOnce([1]) 
+                .mockResolvedValueOnce([1]) 
+
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock,
+                update: updateKnexMock
+            }));
         })
 
-    })
+        it("should update an irrigation setting successfully and return an OK message", async ()=>{
+            const message = await irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data);
+
+            expect(message).toBe("Configuração atualizada com sucesso!");
+            expect(knex).toHaveBeenCalledTimes(3);
+        });
+
+        it("should return an error when tries to update the default setting", async ()=>{
+            setting_id = 1;
+            await expect(irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data)).rejects.toThrow(new DefaultSettingNotEditable);
+        });
+        
+        it("should return an error when tries to update a setting which not belongs to user", async ()=>{
+            user_id = -1;
+            await expect(irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data)).rejects.toThrow(new UnauthorizedIrrigationSettingOperation);
+        });
+
+        it("should return an error when the parameter data object is empty", async ()=>{
+            data = {};
+            await expect(irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data)).rejects.toThrow(new NoValuePassed);
+        });
+
+        it("should return an error when the parameter data object contains a new userId", async ()=>{
+            data.userId = 999;
+            await expect(irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data)).rejects.toThrow(new UserIdNotEditable);
+        });
+
+        it("should return an error when data filds are invalid", async ()=>{
+            irrigationSettingService.verifyUpdateData = jest.fn().mockReturnValue(false);
+
+            await expect(irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data)).rejects.toThrow(new InvalidUpdateFields);
+        });
+
+        it("should return an error when new irrigation name alredy exists", async ()=>{
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            firstKnexMock = jest.fn().mockResolvedValue({id: 3}) 
+            updateKnexMock = jest.fn()
+                .mockResolvedValueOnce([1]) 
+                .mockResolvedValueOnce([1]) 
+
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock,
+                update: updateKnexMock
+            }));
+
+            await expect(irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data)).rejects.toThrow(new IrrigationSettingAlreadyExists);
+        });
+
+        it("should return an error when update fails at finding the searched irrigation in database", async ()=>{
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            firstKnexMock = jest.fn().mockResolvedValue(null) 
+            updateKnexMock = jest.fn()
+                .mockResolvedValueOnce(null) 
+                .mockResolvedValueOnce([1]) 
+
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock,
+                update: updateKnexMock
+            }));
+
+            await expect(irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data)).rejects.toThrow(new IrrigationSettingNotFound);
+        });
+
+        it("should return an error when new humidity value are invalid", async ()=>{
+            irrigationSettingService.validadeHumidityValue = jest.fn().mockReturnValue(false);
+
+            await expect(irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data)).rejects.toThrow(new InvalidHumidity);
+        });
+
+        it("should return an error when update fails at changing irrigation humidity in database", async ()=>{
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            firstKnexMock = jest.fn().mockResolvedValue(null) 
+            updateKnexMock = jest.fn()
+                .mockResolvedValueOnce([1]) 
+                .mockResolvedValueOnce(null) 
+
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                first: firstKnexMock,
+                update: updateKnexMock
+            }));
+
+            await expect(irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data)).rejects.toThrow(new UpdateUmidityValueError);
+        });
+        
+        it("should call database less when new name is not informed", async ()=>{
+            data.name = undefined;
+            
+            const message = await irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data);
+
+            expect(message).toBe("Configuração atualizada com sucesso!");
+            expect(knex).toHaveBeenCalledTimes(1);
+        });
+
+        it("should call database less when new humidity value is not informed", async ()=>{
+            data.humidityValue = undefined;
+            
+            const message = await irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data);
+
+            expect(message).toBe("Configuração atualizada com sucesso!");
+            expect(knex).toHaveBeenCalledTimes(2);
+        });
+
+        it("should return an Validation Error when new irrigation's new name is not in correct format", async ()=>{
+            data.name = "a";
+            await expect(irrigationSettingService.updateIrrigationSetting(user_id, setting_id, data)).rejects.toThrow(new ValidationError("O nome deve ter pelo menos 3 caracteres"));
+        });
+
+    });
 
 });

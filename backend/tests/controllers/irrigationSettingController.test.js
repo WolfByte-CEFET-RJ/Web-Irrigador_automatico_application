@@ -1,3 +1,4 @@
+const { ValidationError } = require("yup");
 const irrigationSettingController = require("../../src/controllers/irrigationSettingController");
 const irrigationSettingService = require("../../src/services/irrigationSettingService");
 const { HttpCode, HttpError } = require("../../src/utils/app.error");
@@ -212,7 +213,6 @@ describe("Irrigation Setting Controller", () => {
         });
     });
 
-
     describe("deleteIrrigationSetting", () => {
         let req, res;
         const userId = 1;
@@ -283,5 +283,140 @@ describe("Irrigation Setting Controller", () => {
             expect(res.json).not.toHaveBeenCalled();
             expect(irrigationSettingService.deleteIrrigationSetting).toHaveBeenCalledWith(settingId, userId);
         });
+    });
+
+    describe("Update Irrigation Setting", () => {
+        it('Should update an existent irrigation setting and return an OK message', async () => {
+            const req = {
+                body: {
+                    name: 'New name of Irrigation Setting',
+                    humidityValue: '60'
+                },
+                params: {
+                    id: 2
+                },
+                user_id: 1 
+            };
+
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            irrigationSettingService.updateIrrigationSetting.mockResolvedValue("Configuração atualizada com sucesso!");
+        
+            await irrigationSettingController.updateIrrigationSetting(req, res)            
+            
+            expect(res.json).toHaveBeenCalledWith({message: "Configuração atualizada com sucesso!"});
+            expect(irrigationSettingService.updateIrrigationSetting).toHaveBeenCalledWith(req.user_id, req.params.id, req.body);
+        });
+
+        it('Should handle an previst http error', async () => {
+            const req = {
+                body: {
+                    name: 'New name of Irrigation Setting',
+                    humidityValue: '60'
+                },
+                params: {
+                    id: 2
+                },
+                user_id: 1 
+            };
+
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            const erro = new HttpError("mocked error")
+            irrigationSettingService.updateIrrigationSetting.mockRejectedValue(erro);
+        
+            await irrigationSettingController.updateIrrigationSetting(req, res);            
+            
+            expect(res.status).toHaveBeenCalledWith(erro.httpCode);
+            expect(res.json).toHaveBeenCalledWith(erro);
+            expect(irrigationSettingService.updateIrrigationSetting).toHaveBeenCalledWith(req.user_id, req.params.id, req.body);
+        });
+
+        it('Should handle a validation error', async () => {
+            const req = {
+                body: {
+                    name: 'New name of Irrigation Setting',
+                    humidityValue: '60'
+                },
+                params: {
+                    id: 2
+                },
+                user_id: 1 
+            };
+
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            const erro = new ValidationError("mocked validation error")
+            irrigationSettingService.updateIrrigationSetting.mockRejectedValue(erro);
+        
+            await irrigationSettingController.updateIrrigationSetting(req, res);            
+            
+            expect(res.status).toHaveBeenCalledWith(HttpCode.BAD_REQUEST);
+            expect(res.json).toHaveBeenCalledWith({message: erro.message});
+            expect(irrigationSettingService.updateIrrigationSetting).toHaveBeenCalledWith(req.user_id, req.params.id, req.body);
+        });
+
+        it('Should handle an unexpected internal server error', async () => {
+            const req = {
+                body: {
+                    name: 'New name of Irrigation Setting',
+                    humidityValue: '60'
+                },
+                params: {
+                    id: 2
+                },
+                user_id: 1 
+            };
+
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            const erro = new Error("mocked unexpected error")
+            irrigationSettingService.updateIrrigationSetting.mockRejectedValue(erro);
+        
+            await irrigationSettingController.updateIrrigationSetting(req, res);            
+            
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+            expect(res.json).toHaveBeenCalledWith({message: erro.message});
+            expect(irrigationSettingService.updateIrrigationSetting).toHaveBeenCalledWith(req.user_id, req.params.id, req.body);
+        });
+
+        it('Should return nothing when service return empty data', async () => {
+            const req = {
+                body: {
+                    name: 'New name of Irrigation Setting',
+                    humidityValue: '60'
+                },
+                params: {
+                    id: 2
+                },
+                user_id: 1 
+            };
+
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            irrigationSettingService.updateIrrigationSetting.mockResolvedValue(null)
+        
+            await irrigationSettingController.updateIrrigationSetting(req, res);            
+            
+            expect(res.status).toHaveBeenCalledTimes(0);
+            expect(res.json).toHaveBeenCalledTimes(0);
+            expect(irrigationSettingService.updateIrrigationSetting).toHaveBeenCalledWith(req.user_id, req.params.id, req.body);
+        });
+       
     });
 });
