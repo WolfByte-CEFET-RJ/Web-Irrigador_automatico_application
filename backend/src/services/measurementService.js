@@ -96,5 +96,7 @@ module.exports = {
             console.log('Erro capturado:', error);
             throw new Error('Database error');
         }
-    }
+    },
+    returnConfigValues,
+    verifyMeasurements
 }
