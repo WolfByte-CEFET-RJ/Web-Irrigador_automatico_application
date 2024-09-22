@@ -1,6 +1,15 @@
 const convertDate = require("../../src/utils/convertDate");
 
 describe("UTILS - Convert Date", () => {
+    
+    beforeEach(() => {
+        jest.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+    
+    afterEach(() => {
+        console.warn.mockRestore();
+    });
+
     it("should convert any date format to HH:mm:ss [de] DD/MM/YYYY (pt timezone)", () => {
         const datas = [
             "09/21/2024 10:00:00",           
