@@ -130,7 +130,7 @@ module.exports = {
             .groupBy('irrigationSetting.id')
             .orderBy('irrigationSetting.id', 'asc');
 
-        const allSensors = await returnConfigSensors(settings);
+        const allSensors = await this.returnConfigSensors(settings);
 
         // Obtém a configuração padrão
         const defaultConfig = await this.getOneSetting(1);

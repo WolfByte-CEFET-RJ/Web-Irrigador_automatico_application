@@ -125,6 +125,77 @@ describe("Irrigation Settings Service", ()=>{
         })
     });
 
+    describe("Get User Settings", ()=>{
+        const user_id = 1;
+        let settings_from_database, formatted_settings;
+        beforeEach(()=>{
+
+            settings_from_database = [
+                { id: 2, name: 'Configuração 1', userId: 1, sensors: '[{"sensorId": 1, "value": "40"}]' },
+                { id: 3, name: 'Configuração 2', userId: 2, sensors: '[{"sensorId": 2, "value": "60"}]' }
+            ];
+            
+            formatted_settings = [
+                { id: 1, name: 'Configuração 0', userId: null, Umidade: "50" },
+                { id: 2, name: 'Configuração 1', userId: 1, Umidade: "40" },
+                { id: 3, name: 'Configuração 2', userId: 2, Umidade: "60" }
+            ];
+
+            const selectKnexMock = jest.fn().mockReturnThis();
+            const whereKnexMock = jest.fn().mockReturnThis();
+            
+            const joinKnexMock = jest.fn().mockReturnThis();
+            const groupByKnexMock = jest.fn().mockReturnThis();
+            const orderByKnexMock = jest.fn().mockResolvedValue(settings_from_database);
+        
+            knex.mockImplementation(() => ({
+                select: selectKnexMock,
+                where: whereKnexMock,
+                join: joinKnexMock,
+                groupBy: groupByKnexMock,
+                orderBy: orderByKnexMock,
+            }));
+
+            irrigationSettingService.returnConfigSensors = jest.fn().mockResolvedValue(
+                [{ Umidade: "40" }, { Umidade: "60" }]);
+
+            irrigationSettingService.getOneSetting = jest.fn().mockResolvedValue(
+                { id: 1, name: 'Configuração 0', userId: null, Umidade: "50" }
+            );
+        })
+
+        it("should return user's irrigation settings data", async ()=>{
+            //execução
+            const response = await irrigationSettingService.getUserSettings(user_id);
+
+            //asserts
+            expect(knex).toHaveBeenCalled();
+            expect(irrigationSettingService.returnConfigSensors).toHaveBeenCalledWith(settings_from_database);
+            expect(irrigationSettingService.getOneSetting).toHaveBeenCalledWith(1);
+            expect(response).toEqual(formatted_settings)
+        });
+
+        it("should propagate errors throwed by returnConfigSensors", async () => {
+            // mocking
+            const erro = new Error("unexpected error")
+            irrigationSettingService.returnConfigSensors = jest.fn().mockRejectedValue(erro)
+            
+            // execução e asserts
+            await expect( irrigationSettingService.getUserSettings(user_id)).rejects.toThrow(erro);
+
+        });
+
+        it("should propagate errors throwed by getOneSetting", async () => {
+            // mocking
+            const erro = new Error("unexpected error")
+            irrigationSettingService.getOneSetting = jest.fn().mockRejectedValue(erro)
+            
+            // execução e asserts
+            await expect( irrigationSettingService.getUserSettings(user_id)).rejects.toThrow(erro);
+
+        });
+    })
+
     describe("Create Irrigation Setting", () => {
         it("should create a new irrigation setting", async () => {
             const mockSetting = { name: 'Configuração 1', userId: 1, humidityValue: '50' };

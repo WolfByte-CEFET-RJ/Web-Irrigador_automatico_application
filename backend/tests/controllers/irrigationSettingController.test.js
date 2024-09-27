@@ -64,8 +64,7 @@ describe("Irrigation Setting Controller", () => {
                 expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
                 expect(res.json).toHaveBeenCalledWith({ message: error.message });
                 expect(irrigationSettingService.getSettings).toHaveBeenCalled();
-            });
-            
+            });  
         })
 
         describe("Get One Setting", ()=>{
@@ -137,7 +136,83 @@ describe("Irrigation Setting Controller", () => {
                 expect(irrigationSettingService.getOneSetting).toHaveBeenCalled();
             });
         }); 
-    })
+    });
+
+    describe("Get All User's Irrigation Setting", ()=>{
+        let req, res;
+        const user_id = 1;
+        const mocked_settings = [
+            { id: 1, name: "Mocked Setting", userId: user_id, Umidade: "50" }, 
+            { id: 2, name: "Other Mocked Setting", userId: user_id, Umidade: "20" }
+        ];
+
+        it("should return a list of all user's irrigations settings with status OK", async ()=>{
+            //mocking
+            req = {
+                user_id: user_id
+            };
+
+            res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            irrigationSettingService.getUserSettings.mockResolvedValue(mocked_settings);
+
+            //execução
+            await irrigationSettingController.getUserSettings(req, res);
+
+            //asserts
+            expect(res.status).toHaveBeenCalledWith(HttpCode.OK);
+            expect(res.json).toHaveBeenCalledWith(mocked_settings);
+            expect(irrigationSettingService.getUserSettings).toHaveBeenCalled();
+        });
+
+        it("should handle a previst http error", async ()=>{
+            //mocking
+            req = {
+                user_id: user_id
+            };
+
+            res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            const httpError = new HttpError({httpCode: -1, type: 'ERR_MOCKED', message: 'any previst erro message'});
+            irrigationSettingService.getUserSettings.mockRejectedValue(httpError);
+
+            //execução
+            await irrigationSettingController.getUserSettings(req, res);
+
+            //asserts
+            expect(res.status).toHaveBeenCalledWith(httpError.httpCode);
+            expect(res.json).toHaveBeenCalledWith(httpError);
+            expect(irrigationSettingService.getUserSettings).toHaveBeenCalled();
+        })
+
+        it("should handle a imprevist internal server error", async ()=>{
+            //mocking
+            req = {
+                user_id: user_id
+            };
+
+            res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+
+            const error = new Error("mocked error");
+            irrigationSettingService.getUserSettings.mockRejectedValue(error);
+
+            //execução
+            await irrigationSettingController.getUserSettings(req, res);
+
+            //asserts
+            expect(res.status).toHaveBeenCalledWith(HttpCode.INTERNAL_SERVER_ERROR);
+            expect(res.json).toHaveBeenCalledWith({message: error.message});
+        })
+    });
 
     describe("Create Irrigation Setting", () => {
         it('Should create an irrigation setting', async () => {
