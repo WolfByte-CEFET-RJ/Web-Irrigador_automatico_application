@@ -2,7 +2,7 @@ const convertDate = require("../../src/utils/convertDate");
 
 describe("UTILS - Convert Date", () => {
     
-    beforeEach(() => {
+    beforeEach(() => { // mockando console.warn para não mostar o warn do moment sobre formatação em 'npm test' 
         jest.spyOn(console, 'warn').mockImplementation(() => {});
     });
     
