@@ -86,4 +86,34 @@ describe("MQTT Service", () => {
             expect(deleteKnexMock).toHaveBeenCalled();
         });
     });
+
+    describe("insertData", () => {
+        it("should insert measurement data at database", async () => {
+            knex.mockReturnValueOnce({
+                select: jest.fn().mockReturnThis(),
+                where: jest.fn().mockReturnThis(),
+                first: jest.fn().mockResolvedValueOnce({ id: 1 }), 
+              });
+              
+              knex.mockReturnValueOnce({
+                insert: jest.fn().mockResolvedValueOnce([1]), 
+              });
+          
+              const data = 'horta123, 45'; 
+              await expect(mqttService.insertData(data)).resolves.toBeUndefined();
+        });
+
+        it('should throw an error when garden is not found', async () => {
+            knex.mockReturnValueOnce({
+              select: jest.fn().mockReturnThis(),
+              where: jest.fn().mockReturnThis(),
+              first: jest.fn().mockResolvedValueOnce(null), 
+            });
+        
+            const data = '"hortaInvalida",45';
+            
+            await expect(mqttService.insertData(data)).rejects.toThrow('O identificador informado não pertence a uma horta!');
+          });
+        
+    });
 });
