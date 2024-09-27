@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { styles } from "./styles";
 import { Modal, View, Text } from "react-native";
 import ButtonOrange from "../buttonOrange/ButtonOrange";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createAxiosInstance } from "../../services/api";
 import { useNavigation } from "@react-navigation/native";
-import OtpInput from "../inputCode/OtpInput";
+// import OtpInput from "../inputCode/OtpInput";
 import { useAuth } from "../../contexts/AuthContext";
+import { TextInput } from "react-native-gesture-handler";
 
 
 
@@ -15,18 +16,17 @@ const ForgotPasswordModal = ({ visible, onClose, texto, email }) => {
   const [otp, setOtp] = useState(['', '', '', '']);
   const navigation = useNavigation();
   const { setReset } = useAuth();
-
-  const inputs = [];
+  const inputRefs = useRef([]);
 
   const handleOtpChange = (value, index) => {
     const newOtp = [...otp];
     // [1 , 5, 2, 8]
-
     newOtp[index] = value;
     setOtp(newOtp);
+    console.log(newOtp)
     // Move focus to the next box if the current one has a value
     if (value && index < newOtp.length - 1) {
-      this.inputs[index + 1].focus();
+      inputRefs.current[index + 1].focus();
     }
   };
 
@@ -73,11 +73,19 @@ const ForgotPasswordModal = ({ visible, onClose, texto, email }) => {
             onPress={onClose}
           />
           <Text style={styles.Modalmessage}>{texto}</Text>
-          <OtpInput
-            handleOtpChange={handleOtpChange}
-            otp={otp}
-            inputs={inputs}
-          />
+          <View style={styles.buttonCodecontainer}>
+            {otp.map((value, index) => (
+              <TextInput
+                key={index}
+                style={styles.boxInput}
+                ref={(input) => (inputRefs.current[index] = input)}
+                value={value}
+                onChangeText={(text) => handleOtpChange(text, index)}
+                keyboardType="numeric"
+                maxLength={1}
+              />
+            ))}
+        </View>
           <View style={styles.buttonConfirmPasswordContainer}>
             <ButtonOrange
               title="Confirmar"
