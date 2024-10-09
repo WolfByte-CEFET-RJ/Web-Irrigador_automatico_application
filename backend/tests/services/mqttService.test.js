@@ -1,7 +1,11 @@
 const knex = require('../../src/database');
 const mqttService = require('../../src/services/mqttService');
+const mqtt = require('mqtt');
+const { connectOptions } = require('../../src/use_mqtts.js');
+const { createMqttClient, extractValuesFromString } = require('../../src/services/mqttService');
 
 jest.mock('../../src/database');
+jest.mock('mqtt');
 
 describe("MQTT Service", () => {
 
@@ -288,5 +292,61 @@ describe("MQTT Service", () => {
                 expect.any(Function)
             );
         });
-    });        
+    });
+
+	describe("createMqttClient", () => {
+        it("should create a new MQTT client with correct options", () => {
+            mqtt.connect.mockReturnValue({ connected: true });
+
+            const client = createMqttClient();
+
+            expect(mqtt.connect).toHaveBeenCalledTimes(1);
+
+            const expectedUrl = `${connectOptions.protocol}://${connectOptions.host}:${connectOptions.port}`;
+            const expectedOptions = {
+                clientId: expect.any(String),
+                clean: true,
+                connectTimeout: 4000,
+                username: connectOptions.username,
+                password: connectOptions.password,
+                reconnectPeriod: 1000,
+                rejectUnauthorized: true,
+            };
+
+            expect(mqtt.connect).toHaveBeenCalledWith(expectedUrl, expectedOptions);
+            expect(client).toEqual({ connected: true });
+        });
+    });
+
+    describe("extractValuesFromString", () => {
+        it("should correctly extract identificador and valorUmidade from the message", () => {
+            const message = '12345, 67.89';
+            const result = extractValuesFromString(message);
+
+            expect(result).toEqual({
+                identificador: '12345',
+                valorUmidade: '67.89',
+            });
+        });
+
+        it("should handle messages with extra spaces and newlines", () => {
+            const message = ' 12345 , \n 67.89 \r ';
+            const result = extractValuesFromString(message);
+
+            expect(result).toEqual({
+                identificador: '12345',
+                valorUmidade: '67.89',
+            });
+        });
+
+        it("should return undefined for invalid message format", () => {
+            const message = 'invalidMessage';
+            const result = extractValuesFromString(message);
+
+            expect(result).toEqual({
+                identificador: 'invalidMessage',
+                valorUmidade: undefined,
+            });
+        });
+    });
 });
