@@ -28,6 +28,7 @@ describe("Auth Middleware", () => {
             json: jest.fn()
         }
         next = jest.fn()
+        jest.spyOn(console, 'log').mockImplementation(() => {});
     })
 
 

@@ -46,7 +46,7 @@ module.exports = {
         }
 
         // Busca a configuração de irrigação ativa da horta em questão
-        let { configHumidityValue } = await returnConfigValues(gardenIrrigationId);
+        let { configHumidityValue } = await this.returnConfigValues(gardenIrrigationId);
 
         // Verifica o status/mensagem da horta de acordo com as últimas medidas
         let message = await verifyMeasurements(lastMeasures[0].measurement, configHumidityValue);
@@ -56,8 +56,6 @@ module.exports = {
     },
 
     async lastMeasuresAllGardens(gardens) {
-        try {
-            console.log('Iniciando lastMeasuresAllGardens');    
             let lastMeasures = [];
             let lastMeasuresGardens = gardens;
             const sensors = await knex('sensor').select('id');
@@ -83,7 +81,7 @@ module.exports = {
             // Caso o usuário tenha hortas com medidas, insere o status da horta e o nome da configuração de irrigação usada por ela 
             for (const obj of lastMeasuresGardens) {
                 if (obj.lastMeasures.length) {
-                    let { configHumidityValue } = await returnConfigValues(obj.irrigationId);
+                    let { configHumidityValue } = await this.returnConfigValues(obj.irrigationId);
                     let message = await verifyMeasurements(obj.lastMeasures[0].measurement, configHumidityValue);
                     obj.message = message;
                     let irrigationSetting = await irrigationSettingServicce.getOneSetting(obj.irrigationId, obj.userId);
@@ -92,10 +90,6 @@ module.exports = {
             }
 
             return lastMeasuresGardens;
-        } catch (error) {
-            console.log('Erro capturado:', error);
-            throw new Error('Database error');
-        }
     },
     returnConfigValues,
     verifyMeasurements

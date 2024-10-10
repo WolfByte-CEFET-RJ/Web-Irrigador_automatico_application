@@ -10,6 +10,7 @@ describe("Irrigation Settings Service", ()=>{
     beforeEach(() => {
         jest.clearAllMocks();
         jest.clearAllTimers();
+        jest.spyOn(console, 'warn').mockImplementation(() => {});
     });
 
     describe("Get All or One Setting", ()=>{

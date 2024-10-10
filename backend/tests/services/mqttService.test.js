@@ -8,6 +8,7 @@ describe("MQTT Service", () => {
     beforeEach(() => {
         jest.clearAllMocks();
 		jest.clearAllTimers();
+        jest.spyOn(console, 'log').mockImplementation(() => {});
     });
 
     describe("recordIrrigationHistory", () => {

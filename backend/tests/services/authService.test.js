@@ -12,6 +12,7 @@ jest.mock("bcryptjs");
 describe("Auth Service", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        jest.spyOn(console, 'log').mockImplementation(() => {});
       });
 
       it("should log in a user and return a token", async () => {
