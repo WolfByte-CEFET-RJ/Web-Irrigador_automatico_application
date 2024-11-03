@@ -43,11 +43,11 @@ const LogIn = () => {
       } catch (error) {
         //* Verifica o erro e printa na tela para o usuário
 
-        console.error(error);
+        // console.error(error.response.data.message);
         setError(error.response.data.message);
         setTimeout(() => {
           setError("");
-        }, 3000);
+        }, 3000);3424
       }
     }
   };

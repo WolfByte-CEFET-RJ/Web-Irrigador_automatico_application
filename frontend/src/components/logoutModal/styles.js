@@ -23,12 +23,12 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     fontStyle: "normal",
     fontWeight: "700",
-    lineHeight: "normal",
+    // lineHeight: "normal",
     fontFamily: "Montserrat-Bold",
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "left",
     width: "100%",
   },
   iconHorta: {

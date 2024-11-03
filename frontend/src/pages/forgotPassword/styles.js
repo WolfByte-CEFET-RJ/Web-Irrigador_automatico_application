@@ -32,6 +32,7 @@ export const styles = StyleSheet.create({
     },
     input_container: {
         display: "flex",
+        alignItems: "center",
         width: "100%",
         marginBottom: "15%"
     },
@@ -43,8 +44,7 @@ export const styles = StyleSheet.create({
         fontSize: 11,
         color: "#40513b",
         fontFamily: "Montserrat-Bold",
-        marginBottom: "5%",
-
+        marginBottom: "5%"
     },
 
     button_space:{

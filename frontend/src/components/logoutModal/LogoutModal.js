@@ -31,7 +31,7 @@ const LogoutModal = ({ visible, onClose, onClick, texto, label }) => {
               onPress={onClick}
             />
           </View>
-        </View>
+        </View> 
       </View>
     </Modal>
   );

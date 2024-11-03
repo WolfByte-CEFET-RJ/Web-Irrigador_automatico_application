@@ -22,18 +22,17 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     fontStyle: "normal",
-    fontWeight: "700",
-    lineHeight: "normal",
+    // fontWeight: "700",
+    // lineHeight: "normal",
     fontFamily: "Montserrat-Bold",
   },
   buttonCodecontainer: {
     display: "flex",
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'left',
     alignItems: 'center',
     width: "100%",
     marginBottom: 10,
-    
   },
   boxInput:{
     height: 40,
@@ -45,13 +44,13 @@ export const styles = StyleSheet.create({
     color: "rgba(64,81,59,0.6)",
     borderColor: "#40513B",
     borderWidth: 1,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     alignItems: "center",
     fontFamily: "Montserrat-Bold",
   },
   buttonConfirmPasswordContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "left",
     width: "100%",
   },
   iconHorta: {

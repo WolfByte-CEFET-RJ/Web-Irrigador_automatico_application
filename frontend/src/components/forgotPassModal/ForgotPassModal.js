@@ -85,7 +85,7 @@ const ForgotPasswordModal = ({ visible, onClose, texto, email }) => {
                 maxLength={1}
               />
             ))}
-        </View>
+          </View>
           <View style={styles.buttonConfirmPasswordContainer}>
             <ButtonOrange
               title="Confirmar"
