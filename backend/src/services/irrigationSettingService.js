@@ -67,7 +67,7 @@ module.exports = {
             .groupBy('irrigationSetting.id')
             .orderBy('irrigationSetting.id', 'asc');
 
-        const allSensors = await returnConfigSensors(settings);
+        const allSensors = await this.returnConfigSensors(settings);
 
         // Formata as configurações finais para retorno
         const finalSetting = settings.map((setting, index) => ({
@@ -130,7 +130,7 @@ module.exports = {
             .groupBy('irrigationSetting.id')
             .orderBy('irrigationSetting.id', 'asc');
 
-        const allSensors = await returnConfigSensors(settings);
+        const allSensors = await this.returnConfigSensors(settings);
 
         // Obtém a configuração padrão
         const defaultConfig = await this.getOneSetting(1);
@@ -206,7 +206,7 @@ module.exports = {
             throw new UserIdNotEditable();
         }
 
-        if (!verifyUpdateData(settingData)) {throw new InvalidUpdateFields();}
+        if (!this.verifyUpdateData(settingData)) {throw new InvalidUpdateFields();}
 
         // Verifica e atualiza o nome da configuração, se fornecido
         if (settingData.name) {
@@ -223,7 +223,7 @@ module.exports = {
 
         // Verifica e atualiza o valor da umidade, se fornecido
         if (settingData.humidityValue) {
-            const humidityIsValid = validadeHumidityValue(settingData.humidityValue);
+            const humidityIsValid = this.validadeHumidityValue(settingData.humidityValue);
             if (!humidityIsValid) throw new InvalidHumidity();
 
             const humidityValue = await knex('configSensor').where({ irrigationId: settingInfo.id, sensorId: 1 }).update({ value: settingData.humidityValue });
@@ -275,5 +275,8 @@ module.exports = {
         }
 
         return 'Configuração apagada com sucesso!';
-    }
+    }, 
+    returnConfigSensors,
+    verifyUpdateData,
+    validadeHumidityValue
 };

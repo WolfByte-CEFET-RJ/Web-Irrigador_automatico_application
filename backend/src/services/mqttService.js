@@ -48,8 +48,8 @@ module.exports = {
 
     // Função para verificar se a planta deve ser irrigada
     async checkAndSendIrrigationMessage(data, mqttClient){
-        const {identificador, valorUmidade} = extractValuesFromString(data);
-        
+        const {identificador, valorUmidade} = this.extractValuesFromString(data);
+
         const garden = await knex('garden')
             .select('id', 'irrigationId')
             .where({identifier: identificador})

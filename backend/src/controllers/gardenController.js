@@ -93,7 +93,7 @@ module.exports = {
         try {
             const garden = await gardenService.deleteGarden(myId, id);
             if (garden) {
-                res.json({ message: garden });
+                res.status(HttpCode.OK).json({ message: garden });
             }
 
         } catch (e) {

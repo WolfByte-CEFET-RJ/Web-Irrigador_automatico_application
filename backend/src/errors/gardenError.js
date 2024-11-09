@@ -31,6 +31,15 @@ class GardenNotFound extends GardenError {
     }
 }
 
+class NoGardenRegistered extends GardenError {
+    constructor(){
+        super({
+            httpCode: HttpCode.NOT_FOUND,
+            message: 'O usuário não possui hortas criadas',
+            type: 'ERR_SERVICE_GARDEN-NO_GARDENS_CREATED'
+        });
+    }
+}
 
 class IdentifierAlreadyAssociated extends GardenError {
     constructor(){
@@ -89,6 +98,7 @@ module.exports = {
     UnauthorizedGardenUpdate,
     UnauthorizedUserIdUpdate,
     GardenNotFound,
+    NoGardenRegistered,
     UnauthorizedGardenDelete,
     UnauthorizedGardenReturn
 }
