@@ -481,10 +481,10 @@ describe("User Service", () => {
         expect(mockWhere).toHaveBeenCalledWith({ email });
         expect(mockFirst).toHaveBeenCalled();
         expect(mockUpdate).toHaveBeenCalledWith({
-            code: expect.any(Number),
+            code: expect.any(String),
             expirationDate: expect.any(String),
         });
-        expect(sendEmail).toHaveBeenCalledWith(email, expect.any(Number));
+        expect(sendEmail).toHaveBeenCalledWith(email, expect.any(String));
     });
     })
 });

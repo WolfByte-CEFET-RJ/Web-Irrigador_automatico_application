@@ -11,6 +11,10 @@ jest.mock('../../src/services/mqttService', () => ({
 }));
 
 describe('scheduleTasks', () => {
+
+  beforeEach(()=>{
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+  })
   it('should schedule a job to delete old irrigation history daily at midnight', async () => {
     const mockJob = jest.fn();
     schedule.scheduleJob.mockImplementation((time, callback) => {
