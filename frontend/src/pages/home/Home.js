@@ -1,41 +1,56 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, Pressable,TextInput} from "react-native";
-import { useNavigation } from '@react-navigation/native';
-import { styles } from './styles';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import axios from "axios";
-import BottomBar from '../../components/bottomBar/BottomBar'
+import { View, Text, Image, Pressable, TextInput } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { styles } from "./styles";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import BottomBar from "../../components/bottomBar/BottomBar";
 import DeleteModal from "../../components/deleteModal/DeleteModal";
-import { StatusBar } from 'expo-status-bar';
-import EditModal from "../../components/editModal/EditModal";
-import { useAuth } from '../../contexts/AuthContext';
-import { createAxiosInstance } from "../../services/api";
+import { StatusBar } from "expo-status-bar";
 import { useGarden } from "../../contexts/GardenContext";
+import { createAxiosInstance } from "../../services/api";
+import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
 
-// !ATENÇÃO: Para fazer as hortas rodarem você tem que digitar "json-server --watch hortas.json --port 3001" na pasta data
-const API_URL = 'http://localhost:3001';
-
-export default function Home(){
+export default function Home() {
   const api = createAxiosInstance();
   const navigation = useNavigation();
-  const [buscarHorta, setBuscarHorta] = useState('');
-  const { setGarden, gardenData, setSelectedGarden } = useGarden();
+  const [buscarHorta, setBuscarHorta] = useState("");
+  const { setGarden, gardenData, setSelectedGardenFunction } = useGarden();
+  const [name, setName] = useState("");
+  const { setIrrConfig } = useIrrigationSettings();
 
   useEffect(() => {
     async function fetchHortas() {
       try {
         const response = await api.get(`/myGardens`);
-        setGarden(response.data);
+        const gardens = response.data;
+        await setGarden(gardens);
+  
+        const userIrrigationSettings = await api.get(`/userSettings`);
+        setIrrConfig(userIrrigationSettings.data);
+        
       } catch (error) {
         console.error("Erro ao buscar hortas:", error);
       }
     }
     fetchHortas();
-  }, [gardenData]);
+  }, [gardenData.length]);
+
+  useEffect(() => {
+    async function fetchUsuario() {
+      try {
+        const response = await api.get(`/user`);
+        setName(response.data.name);
+      } catch (error) {
+        console.error("Erro na solicitação:", error);
+      }
+    }
+    fetchUsuario();
+  }, [name]);
+
 
   const filtrarHortas = () => {
     return gardenData.filter((garden) =>
-      garden.name.toLowerCase().includes(buscarHorta.toLowerCase())
+      garden.name.toLowerCase().includes(buscarHorta.toLowerCase()),
     );
   };
 
@@ -47,74 +62,84 @@ export default function Home(){
 
   const handleDelete = async (id) => {
     try {
-      const responseDelete = await api.delete(`/garden/${id}`);
-      const updatedGardenData = gardenData.filter(garden => garden.id !== id);
-      setGarden(updatedGardenData);
+      await api.delete(`/garden/${id}`);
+      const hortas = await api.get(`/myGardens`);
+      setGarden(hortas.data);
       setModalVisible(false);
     } catch (error) {
-      console.error('Erro ao excluir horta:', error);
+      console.error("Erro ao excluir horta:", error);
     }
   };
 
-  return(
+  return (
     <View style={styles.home_container}>
-      <StatusBar style="dark-content"/>
+      <StatusBar style="dark-content" />
       <View style={styles.home_title_container}>
-        <Text style={styles.home_title}>Bem-vindo, username</Text>
-        <Image style={styles.logo} source={require('../../../assets/android-chrome-192x192.png')}/>
+        <Text style={styles.home_title}>Bem-vindo, {name}</Text>
+        <Image
+          style={styles.logo}
+          source={require("../../../assets/android-chrome-192x192.png")}
+        />
       </View>
       <View style={styles.search_container}>
         <TextInput
           style={styles.searcher}
           onChangeText={(text) => setBuscarHorta(text)}
           placeholder={"Buscar por nome da horta"}
-          placeholderTextColor={"rgba(64,81,59,0.6)"} 
+          placeholderTextColor={"rgba(64,81,59,0.6)"}
         />
-        <Ionicons 
-            style={styles.iconHome} 
-            name={'search'} 
-            size={24} 
-            color={'rgba(64, 81, 59, 0.6)'}
-          />
+        <Ionicons
+          style={styles.iconHome}
+          name={"search"}
+          size={24}
+          color={"rgba(64, 81, 59, 0.6)"}
+        />
       </View>
       <Text style={styles.minhasHortas}>Minhas hortas</Text>
       <View style={styles.hortas_container}>
-      {filtrarHortas().map((garden) => (
-          <Pressable 
-            key={garden.id} 
-            style={styles.horta}
-            onPress={() => {
-              setSelectedGarden(garden)
-              navigation.navigate('ViewGarden')}
-            }
-          >
-            <View>
-              <Text style={styles.textoSuperior}>{garden.name}</Text>
-            </View>
-            <View style={styles.textoInferiorContainer}>
-              <Text style={styles.textoInferior}>Umidade: {}</Text>
-              <Text style={styles.textoInferior}>Água: {}</Text>
-            </View>
-            <Ionicons
-              style={styles.iconHorta}
-              name={'close-circle'}
-              size={30}
-              color={'#9DC08B'}
-              onPress={handleDeleteIconPress}
-            />
-            <DeleteModal
-              visible={isModalVisible}
-              onClose={() => setModalVisible(false)}
-              onDelete={() => handleDelete(garden.id)}
-              hortaToDelete={garden.id}
-              texto={"Deseja mesmo excluir esta horta?"}
-            />
-          </Pressable>
-        ))}
+        {gardenData != "O usuário ainda não possui hortas criadas." ? (
+          filtrarHortas().map((garden) => (
+            <Pressable
+              key={garden.id}
+              style={styles.horta}
+              onPress={async () => {
+                console.log(garden);
+                await setSelectedGardenFunction(garden);
+                navigation.navigate("ViewGarden");
+              }}
+            >
+              <View>
+                <Text style={styles.textoSuperior}>{garden.name}</Text>
+              </View>
+              <View style={styles.textoInferiorContainer}>
+                <Text style={styles.textoInferior}>Umidade: {garden.lastMeasures ? garden.lastMeasures[0].measurement : 0} %</Text>
+                {/*<Text style={styles.textoInferior}>Água: {}</Text>*/}
+              </View>
+              <Ionicons
+                style={styles.iconHorta}
+                name={"close-circle"}
+                size={30}
+                color={"#9DC08B"}
+                onPress={handleDeleteIconPress}
+              />
+              <DeleteModal
+                visible={isModalVisible}
+                onClose={() => setModalVisible(false)}
+                onClick={() => handleDelete(garden.id)}
+                texto={"Deseja mesmo excluir esta horta?"}
+              />
+              {/*<Button title="excluir horta" onPress={()=>handleDelete(garden.id)}/>*/}
+            </Pressable>
+          ))
+        ) : (
+          <Text style={styles.nenhumaHorta}>
+            Não há nenhuma horta cadastrada ainda.
+          </Text>
+        )}
       </View>
       <View style={styles.bottomBar_container}>
-        <BottomBar/>
+        <BottomBar />
       </View>
     </View>
-  )
+  );
 }

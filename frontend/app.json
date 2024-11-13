@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "##EDF1D6"
-      }
+      },
+      "package": "com.anonymous.frontend"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -34,7 +35,8 @@
             "./assets/fonts/Montserrat-Bold.ttf"
           ]
         }
-      ]
+      ],
+      "expo-build-properties"
     ]
   }
 }
