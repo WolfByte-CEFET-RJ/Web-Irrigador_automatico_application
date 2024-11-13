@@ -44,7 +44,8 @@ export const styles = StyleSheet.create({
         fontSize: 11,
         color: "#40513b",
         fontFamily: "Montserrat-Bold",
-        marginBottom: "5%"
+        marginBottom: "5%",
+        marginHorizontal: "13%"
     },
 
     button_space:{

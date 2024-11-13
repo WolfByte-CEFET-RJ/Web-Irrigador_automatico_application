@@ -5,6 +5,7 @@ import { createAxiosInstance } from "../../services/api.js";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import BottomBar from "../../components/bottomBar/BottomBar.js";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Notifications from "expo-notifications";
 
 export default function IrrigationHistory() {
   const [buscarHorta, setBuscarHorta] = useState("");
@@ -47,6 +48,24 @@ export default function IrrigationHistory() {
 
     }
     fetchHistory();
+    const handleCallNotifications = async ()=>{
+      // const { status } = await Notifications.getPermissionsAsync();
+  
+      // if( status !== 'granted'){
+      //   console.log("Voce n deixou as notificaçao ativa")
+      //   return;
+      // }
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Irrigação foi feita",
+          body: "Irrigação executada com sucesso"
+        },
+        trigger:{
+          seconds:5,
+        },
+      })
+    }
+    handleCallNotifications();
   },[historico.length, setHistorico])
   
 

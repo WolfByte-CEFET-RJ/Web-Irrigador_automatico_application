@@ -23,13 +23,15 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     fontStyle: "normal",
     fontWeight: "700",
-    lineHeight: "normal",
+    // lineHeight: "normal",
     fontFamily: "Montserrat-Bold",
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
     width: "100%",
+    right: "12%",
   },
   iconHorta: {
     position: "absolute",

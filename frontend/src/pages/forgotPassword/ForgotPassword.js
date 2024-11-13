@@ -24,10 +24,9 @@ const ForgotPassword = () => {
     const [success, setSucess] = useState("");
 
     const handleForgotPassword = async () => {
-        console.log(email.length);
         try{
             const forgotPasswordMessage = await api.post('/forgot_password', {email});
-            console.log(forgotPasswordMessage);
+            console.log(forgotPasswordMessage.status);
             if(forgotPasswordMessage.status === 200){
                 setSucess("Código enviado ao email")
                 setTimeout(()=>{

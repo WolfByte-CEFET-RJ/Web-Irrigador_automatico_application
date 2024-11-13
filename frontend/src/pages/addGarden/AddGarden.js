@@ -21,6 +21,7 @@ import { useGarden } from "../../contexts/GardenContext";
 import { useIrrigationSettings } from "../../contexts/IrrigationConfigContext";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useNavigation } from "@react-navigation/native";
+import * as Notifications from "expo-notifications";
 
 
 const AddGarden = () => {
@@ -47,6 +48,24 @@ const AddGarden = () => {
     key: irr.id,
     value: irr.name
   }))
+
+  const handleCallNotifications = async (nome)=>{
+    // const { status } = await Notifications.getPermissionsAsync();
+
+    // if( status !== 'granted'){
+    //   console.log("Voce n deixou as notificaçao ativa")
+    //   return;
+    // }
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: nome+"adicionada",
+        body: "Horta adicionada com sucesso"
+      },
+      trigger:{
+        seconds:5,
+      },
+    })
+  }
   
   const handleSubmit = async () => {
     const data = {
@@ -74,6 +93,7 @@ const AddGarden = () => {
         const attGarden = await api.get(`/myGardens`);
         setGarden(attGarden.data);
         
+        handleCallNotifications(name);
         setSucess("Horta cadastrada com sucesso!");
         setTimeout(() => {
           setSucess("");

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, StyleSheet, Animated, Text } from "react-native";
+import { View, Image, StyleSheet, Animated, Text, Alert } from "react-native";
 import Routes from "./src/routes/routes";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { GardenProvider } from "./src/contexts/GardenContext";
 import { IrrigationProvider } from "./src/contexts/IrrigationConfigContext";
 import { useFonts } from "expo-font";
 import globalStyles from "./src/style/globalStyles";
+import * as Notifications from "expo-notifications";
+
 
 const LoadingScreen = () => {
   const [fadeAnim] = useState(new Animated.Value(0));
@@ -38,6 +40,14 @@ const LoadingScreen = () => {
     </View>
   );
 };
+
+Notifications.setNotificationHandler({
+  handleNotification: async ( ) =>({
+    shouldPlaySound: true,
+    shouldSetBadge:true,
+    shouldShowAlert: true,
+  }),
+});
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
