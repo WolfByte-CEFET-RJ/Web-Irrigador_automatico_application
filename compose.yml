@@ -1,0 +1,53 @@
+version: "3.9"
+services:
+    datalake:
+      image: bitnami/mariadb
+      env_file: 
+        - .env
+      ports:
+        - 4000:3306
+      volumes:
+        - datalake:/bitnami/mariadb
+      environment:
+        MARIADB_DATABASE: ${DB_NAME}
+        ALLOW_EMPTY_PASSWORD: true
+        MARIADB_ROOT_USER: ${DB_USER}
+        MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+
+    backend:
+      depends_on:
+        - datalake
+      build:
+        context: ./backend
+        dockerfile: Dockerfile
+      ports:
+        - "5000:5000"
+      volumes:
+        - ./backend:/home/app
+      environment:
+        HOST: "0.0.0.0"
+        PORT: ${PORT}
+        DB_HOST: ${DB_HOST}
+        DB_PORT: ${DB_PORT}
+        DB_NAME: ${DB_NAME}
+        DB_USER: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
+        
+
+    # frontend:
+    #   depends_on:
+    #     - backend
+    #   build:
+    #     context: ./frontend
+    #     dockerfile: dockerfile
+    #   ports:
+    #     - "3000:3000"
+    #   volumes:
+    #     - ./frontend:/home/app
+    #   environment:
+    #     HOST: "0.0.0.0"
+    #     PORT: "3000"
+    #     API_URL: "backend:5000"
+
+volumes:
+  datalake:
